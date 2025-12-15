@@ -67,19 +67,19 @@ def process_message(text: str):
 
 
 
-
+# --- ساخت کلاینت ---
 client = TelegramClient('session_name', api_id, api_hash)
 
-
+# --- پردازش پیام‌های گذشته ---
 async def process_old_messages():
     async for message in client.iter_messages(source_channel, limit=None):
         text = message.message
        
         
-        
+        # ⛔ اگر پیام متن نداشت، رد شو
         if not text:
             continue
-        
+        # print(text)
         if text.startswith("📈 Last 24 hours results"):
             await safe_send_message(
                 client,
@@ -96,7 +96,26 @@ async def process_old_messages():
                     result
                 )
 
+# --- پردازش پیام‌های جدید ---
+@client.on(events.NewMessage(chats=source_channel))
+async def new_message_handler(event):
+    text = event.message.message
 
+    if not text:
+        return
+
+    if text.startswith("📈 Last 24 hours results"):
+        await client.send_message(
+            target_channel,
+            f"📥 received new message:\n\n{text}"
+        )
+
+        result = process_message(text)
+        print("new message found.")
+        await safe_send_message(client, target_channel, result)
+
+
+# --- اجرای کلاینت ---
 async def main():
     print("Processing old messages...")
     await process_old_messages()
