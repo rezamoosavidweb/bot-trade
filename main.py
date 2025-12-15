@@ -13,7 +13,8 @@ session = HTTP(
     api_key="xxxxxxxxxxxxxxxxxx",
     api_secret="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 )
-print(session.get_wallet_balance(
-    accountType="UNIFIED",
-    coin="BTC",
-))
+print(f"get_account_info:{session.get_account_info()}")
+print(
+    f"get_wallet_balance UNIFIED, BTC: {session.get_wallet_balance(accountType='UNIFIED', coin='BTC')}"
+)
+print(session.get_transaction_log(coin="BTC"))
