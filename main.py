@@ -6,10 +6,9 @@ load_dotenv()
 
 api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
-testnet = os.getenv("TESTNET") == "true"
 
 session = HTTP(
-    testnet=True,
+    demo=True,
     api_key="xxxxxxxxxxxxxxxxxx",
     api_secret="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 )
