@@ -8,7 +8,7 @@ from datetime import datetime
 load_dotenv()
 
 # Set demo mode (True = demo, False = live)
-is_demo = True
+is_demo = False
 
 # Load API keys from environment variables
 api_key = os.getenv("BYBIT_API_KEY")
