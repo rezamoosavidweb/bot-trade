@@ -13,8 +13,8 @@ is_demo = True
 # Load API keys from environment variables
 api_key = os.getenv("BYBIT_API_KEY")
 api_secret = os.getenv("BYBIT_API_SECRET")
-api_key_demo = os.getenv("BYBIT_DEMO_API_KEY")
-api_secret_demo = os.getenv("BYBIT_DEMO_API_SECRET")
+api_key_demo = os.getenv("BYBIT_API_KEY_DEMO")
+api_secret_demo = os.getenv("BYBIT_API_SECRET_DEMO")
 
 # Choose correct API keys based on demo mode
 if is_demo:
