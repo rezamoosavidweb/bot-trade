@@ -56,6 +56,7 @@ wallet_balance = session.get_wallet_balance(
 )
 transaction_log = session.get_transaction_log(coin="BTC")
 instruments_info = session.get_instruments_info(category="linear")
+fee_rates = session.get_fee_rates(category="linear")
 # Uncomment and use a valid symbol for demo/live
 # fee_rates = session.get_fee_rates(category="linear", symbol="BTCUSDT")
 
@@ -64,4 +65,5 @@ save_json(f"account_info_{timestamp}.json", account_info, is_demo)
 save_json(f"wallet_balance_BTC_{timestamp}.json", wallet_balance, is_demo)
 save_json(f"transaction_log_BTC_{timestamp}.json", transaction_log, is_demo)
 save_json(f"instruments_info_linear_{timestamp}.json", instruments_info, is_demo)
+save_json(f"fee_rates_{timestamp}.json", fee_rates, is_demo)
 # save_json(f"fee_rates_linear_BTCUSDT_{timestamp}.json", fee_rates, is_demo)
