@@ -1,9 +1,11 @@
-from pybit.unified_trading import HTTP
+from pybit.unified_trading import HTTP, WebSocket
 from dotenv import load_dotenv
 import os
 import json
 from datetime import datetime
 
+# WebSocket()
+# Load environment variables from .env file
 load_dotenv()
 
 # -------- MODE FLAGS --------
@@ -87,8 +89,8 @@ wallet_balance = session.get_wallet_balance(
     coin="BTC",
 )
 transaction_log = session.get_transaction_log(coin="BTC")
-instruments_info = session.get_instruments_info(category="linear")
-fee_rates = session.get_fee_rates(category="linear")
+instruments_info = session.stop(category="linear")
+fee_rates = session.web(category="linear")
 positions_info = session.get_positions(category="linear",symbol="DASHUSDT")
 # fee_rates = session.get_fee_rates(category="linear", symbol=selected_symbol)
 
