@@ -13,28 +13,29 @@
         "accountIMRateByMp": "0",
         "totalInitialMarginByMp": "0",
         "totalMaintenanceMargin": "0",
-        "totalEquity": "192604.75454",
-        "totalMarginBalance": "100000.65",
-        "totalAvailableBalance": "100000.65",
+        "totalEquity": "0",
+        "totalMarginBalance": "0",
+        "totalAvailableBalance": "0",
         "totalPerpUPL": "0",
-        "totalWalletBalance": "100000.65",
+        "totalWalletBalance": "0",
         "accountLTV": "0",
         "coin": [
           {
+            "spotBorrow": "0",
             "availableToBorrow": "",
             "bonus": "0",
             "accruedInterest": "0",
             "availableToWithdraw": "",
             "totalOrderIM": "0",
-            "equity": "1",
+            "equity": "0",
             "totalPositionMM": "0",
-            "usdValue": "89470.661968",
+            "usdValue": "0",
             "unrealisedPnl": "0",
             "collateralSwitch": false,
             "spotHedgingQty": "0",
             "borrowAmount": "0.000000000000000000",
             "totalPositionIM": "0",
-            "walletBalance": "1",
+            "walletBalance": "0",
             "cumRealisedPnl": "0",
             "locked": "0",
             "marginCollateral": true,
@@ -45,5 +46,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1765809391633
+  "time": 1765912788097
 }

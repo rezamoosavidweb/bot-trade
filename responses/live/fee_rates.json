@@ -149,139 +149,34 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "RVNUSDT",
+        "symbol": "KGENUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SAROSUSDT",
+        "symbol": "LSKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LISTAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "4USDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "SOLAYERUSDT",
+        "symbol": "DOGUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ARCUSDT",
+        "symbol": "MINAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HANAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MTLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "STBLUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "NEOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MOCAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000BONKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NXPCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ONDOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CATIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KNCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GASUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MONUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SCRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DOGEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AVNTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "STRKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RAYDIUMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BICOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HBARUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XRPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EULUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OXTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BLESSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
       },
       {
         "symbol": "CTKUSDT",
@@ -289,177 +184,7 @@
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "STORJUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AVAXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RONINUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XVGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ATOMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EGLDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VANAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SKLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IOTXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MEGAUSDT",
-        "takerFeeRate": "0.001",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ARPAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "INUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "AERGOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "STEEMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KMNOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AGLDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "THETAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZBTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IOSTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000BTTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GNOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "GALAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LINEAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WLFIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SYNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EVAAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "IPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RENDERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MAGICUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XCNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SCRTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TRUSTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "DEXEUSDT",
+        "symbol": "RVNUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -469,367 +194,22 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "AXLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ORDIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LDOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ORBSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BTRUSDT",
+        "symbol": "BLESSUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "CUDISUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "XVSUSDT",
+        "symbol": "MUBARAKUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "GODSUSDT",
+        "symbol": "DEXEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PEOPLEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TRBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USD1USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GMXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ENSOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BEATUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "PIPPINUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TAIKOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "UMAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZBCNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NAORISUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "TSTBSCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USUALUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AAVEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PNUTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "THEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MITOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "METUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALCHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BLUAIUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ACXUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "RECALLUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SPELLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALICEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BANUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "COREUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "JASMYUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CYBERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GMTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "10000QUBICUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "GRTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ENAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CLANKERUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ARBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000FLOKIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WAVESUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ATUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "HFTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KAITOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "10000ELONUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "VFYUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SONICUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PONKEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SUSHIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "10000SATSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XTZUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BELUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AINUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "DENTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ADAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DEEPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BRETTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DOODUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "TWTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CRVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ICXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ROAMUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "PROVEUSDT",
+        "symbol": "WAXPUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -839,22 +219,142 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ONTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HAEDALUSDT",
+        "symbol": "ALPINEUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "PROMUSDT",
+        "symbol": "SKYUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "LTCUSDT",
+        "symbol": "MUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SIRENUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "TURTLEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SXPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CUDISUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "DOODUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ALUUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CKBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XVSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WALUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CYSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CHZUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BICOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TOWNSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XTZUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ORDIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SAPIENUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "NEOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GRASSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BNBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RAVEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "HFTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LINKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ASTRUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -864,7 +364,367 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "CAMPUSDT",
+        "symbol": "ICNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AINUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CHRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LPTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BATUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RDNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LABUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "LIGHTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SAROSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CVCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CTCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PENGUUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "POPCATUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ATOMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "STBLUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "MEMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PUMPFUNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MAGICUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HMSTRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BLURUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XNYUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "USUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ZEREBROUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PONKEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EPICUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "APEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LUNA2USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NFPUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ONGUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "INJUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "APTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EDENUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HOLOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "FORMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "JASMYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SWARMSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DGBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SLPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AVAAIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IMXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOMIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TRBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MORPHOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DOTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CVXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RPLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ENSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BANANAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SPKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GUNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LYNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MANAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PUMPBTCUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "BEATUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ARKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GALAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "STORJUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ARKMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ORDERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SNXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IOTXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ROSEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SYSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "10000ELONUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "RAYDIUMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "STABLEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "COAIUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "TAIKOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XPLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "JCTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "KITEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -874,17 +734,82 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BLASTUSDT",
+        "symbol": "XANUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ZENTUSDT",
+        "symbol": "CATIUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "OKBUSDT",
+        "symbol": "ANKRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ARPAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HBARUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CROUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PYTHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MOVRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HIGHUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "VVVUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "KAIAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000000MOGUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000000BABYDOGEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KAVAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ANIMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AVAXUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -894,14 +819,139 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "1000TAGUSDT",
+        "symbol": "CHILLGUYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XLMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "COMPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "UNIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOPHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CETUSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "QUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "NILUSDT",
+        "symbol": "BLASTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MONUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ASTERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TAOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "METISUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SSVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "JSTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MERLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MEWUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "OPENUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "COMMONUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ZEUSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TRUTHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PORTALUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SCRTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "XCHUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ETHBTCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ASPUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "STRKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IRYSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
       },
       {
         "symbol": "AGIUSDT",
@@ -909,17 +959,417 @@
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "1000NEIROCTOUSDT",
+        "symbol": "HUMAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "OLUSDT",
+        "symbol": "RECALLUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
+        "symbol": "REQUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "IPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ACEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EPTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ZENTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DOLOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "FLRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
         "symbol": "ACHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BERAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "A2ZUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SOONUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AIOZUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "AKEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SUNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ARCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MAVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "INITUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZORAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "QTUMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HEIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XVGUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MOCAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HAEDALUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SOSOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "API3USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RIVERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KMNOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ATHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZROUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AAVEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NILUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AWEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PROMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZECUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "B3USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AIXBTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BANKUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ARBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "10000QUBICUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "NMRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "YBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "FIOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "MOVEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BCHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TSTBSCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ALTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SFPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ORBSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NEWTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "COOKUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "QNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RLCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CLOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ILVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PYRUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "VIRTUALUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "UBUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PTBUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "AVNTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "WIFUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RAREUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TRUSTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ARIAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PUNDIXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MASKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DBRUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "VFYUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "FARTCOINUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XCNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SKLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DASHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LRCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000CATUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BMTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "BUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ICPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SYNUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -929,12 +1379,117 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "TACUSDT",
+        "symbol": "ETHFIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SYRUPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "0GUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HIVEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KERNELUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ASRUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "MUSDT",
+        "symbol": "1000PEPEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BOMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "REZUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RONINUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BOBBOBUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "LAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ESPORTSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ZETAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000000CHEEMSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CELOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GNOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ICXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLAYERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BARDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SIGNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "JELLYJELLYUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
@@ -949,1412 +1504,12 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "APEXUSDT",
+        "symbol": "ENSOUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "AEROUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TREEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ETHFIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USELESSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SOLVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ARIAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MMTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PEAQUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "HUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PLUMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VIRTUALUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "UBUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "COMMONUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ZETAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XMRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TONUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DBRUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MLNUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "1INCHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000XECUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LISTAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000CATUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ARKMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "QUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "KITEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RAVEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "XLMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SOMIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "APTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "STGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CARVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CETUSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GUNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TAOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VELODROMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NEARUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TOWNSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZRXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "YFIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PYTHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BANKUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "FXSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FLUXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RIVERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ETHBTCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MOVRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PIXELUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EDENUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SAHARAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PRCLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LPTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VETUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SHIB1000USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AWEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "TRUUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GRIFFAINUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ESPORTSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ROSEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BANANAS31USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DGBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HEIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "JCTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MUBARAKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HIGHUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "HIVEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HUMAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OPENUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "IRYSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "AXSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HOLOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AIOZUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MORPHOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AVAAIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SOSOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ARKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EPTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "POLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MIRAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PUNDIXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "COWUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "EPICUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "XIONUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALPINEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "POLYXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BRUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "FLOCKUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CVCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000TURBOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZILUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BANANAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LSKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SPXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OGNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MERLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ACTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LRCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HPOS10IUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "DOLOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BSVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PYRUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ATHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LQTYUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MEMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RUNEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MAVIAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SAPIENUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ZKCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XAUTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VVVUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BROCCOLIUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "COMPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WOOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XNYUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SYSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ASPUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "RAREUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PENGUUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "INJUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WCTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NEWTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GOATUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "REZUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "INITUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SENTUSDT",
-        "takerFeeRate": "0.001",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "JTOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VANRYUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DAMUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CROUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ICNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MINAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USDCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NMRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "DIAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SWARMSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "JUPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SOPHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WLDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "COOKIEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZENUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CROSSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "AVAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XPLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "0GUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VELOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PARTIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZORAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NFPUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SANDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LUNA2USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CLOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "FORMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AKTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ILVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MASKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SUIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SAGAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ANKRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MOODENGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "POPCATUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TUTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LYNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZEUSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ASTERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NOTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "APRUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BATUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SNXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GPSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SUNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XAIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WALUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MYXUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "DODOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VELVETUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CTCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ONEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FARTCOINUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZROUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PUMPFUNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HYPERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "QTUMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SKYUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DUSKUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "B2USDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SEIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "B3USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000000CHEEMSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "YALAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "UAIUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "RESOLVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WIFUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GIGGLEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "1000XUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ONGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SXTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AVLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HYPEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KSMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ETHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IOTAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "4USDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BIOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BANDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KAIAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DEGENUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HEMIUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SOLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BOBBOBUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "NIGHTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALEOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TNSRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZECUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ZEREBROUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALLOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CHZUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TIAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000000MOGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KAVAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HOMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NKNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "C98USDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RPLUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USDEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RSRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DASHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RLSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PUFFERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XNOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000PEPEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CELOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AIXBTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HMSTRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DYDXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "STOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "RLUSDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SQDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ASTRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "KERNELUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MAVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SXPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GRASSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BMTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "FLUIDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "QNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AIOUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "CHRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ACEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IMXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TLMUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "EDUUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "COAIUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "METISUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "GLMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SPKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CVXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PHBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BOBAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "YBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BCHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "A2ZUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SSVUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SIRENUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "LUMIAUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "RLCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "YGGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BTCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BLURUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CGPTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "STXUSDT",
+        "symbol": "1000BONKUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2364,72 +1519,47 @@
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "AKEUSDT",
+        "symbol": "EIGENUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AIOUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "CHILLGUYUSDT",
+        "symbol": "PAXGUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ENJUSDT",
+        "symbol": "OKBUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "CYSUSDT",
+        "symbol": "MMTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BTRUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "NOMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DOTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ETCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALGOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TAUSDT",
+        "symbol": "UAIUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "NSUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SYRUPUSDT",
+        "symbol": "OGNUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "FLOWUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SAFEUSDT",
+        "symbol": "ZBCNUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2439,177 +1569,7 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SIGNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FWOGUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BERAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VICUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SOONUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "IDEXUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "KASUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "COOKUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "BIGTIMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "YZYUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ORDERUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XANUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "DYMUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BSUUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "PENDLEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "REDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FLRUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "2ZUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "AEVOUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ORCAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "VINEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ERAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PIEVERSEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "COTIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BNBUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PROMPTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "TURTLEUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "EIGENUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LIGHTUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "1000RATSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ENSUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "JSTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "USTCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NTRNUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CKBUSDT",
+        "symbol": "SONICUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2619,212 +1579,117 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PAXGUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OBTUSDT",
+        "symbol": "1000TAGUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "MANAUSDT",
+        "symbol": "IOSTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "STABLEUSDT",
+        "symbol": "DYMUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "FOLKSUSDT",
+        "symbol": "OXTUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "DOGUSDT",
+        "symbol": "AXSUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "LABUSDT",
+        "symbol": "NOTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DEGENUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BLUAIUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "APEUSDT",
+        "symbol": "OPUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BUSDT",
+        "symbol": "MOODENGUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NIGHTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NOMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PUFFERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ORCAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IDEXUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "1000000BABYDOGEUSDT",
+        "symbol": "1000RATSUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "TRXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ICPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "CAKEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "RDNTUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "UNIUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MOVEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "BOMEUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FFUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ASRUSDT",
+        "symbol": "FLOCKUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "ANIMEUSDT",
+        "symbol": "AGLDUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BARDUSDT",
+        "symbol": "OGUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MELANIAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "1000LUNCUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PORTALUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "FIOUSDT",
+        "symbol": "TACUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "REQUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SFPUSDT",
+        "symbol": "CAMPUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "CLOUDUSDT",
+        "symbol": "MIRAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PTBUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "TRUTHUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "XCHUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "SDUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "JELLYJELLYUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "GIGAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "PUMPBTCUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "MBOXUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "LINKUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ALUUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "PHAUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WETUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "WAXPUSDT",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SHELLUSDT",
+        "symbol": "MAVIAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2834,7 +1699,47 @@
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "ESUSDT",
+        "symbol": "HYPERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DENTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "GRTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NKNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BELUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DAMUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "DUSKUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "DODOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "APRUSDT",
         "takerFeeRate": "0.0011",
         "makerFeeRate": "0.0004"
       },
@@ -2844,42 +1749,42 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XDCUSDT",
-        "takerFeeRate": "0.0011",
-        "makerFeeRate": "0.0004"
-      },
-      {
-        "symbol": "ZKUSDT",
+        "symbol": "GRIFFAINUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SUPERUSDT",
+        "symbol": "ZENUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "POWRUSDT",
+        "symbol": "PNUTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "API3USDT",
+        "symbol": "AXLUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "FIDAUSDT",
+        "symbol": "SDUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "HOOKUSDT",
+        "symbol": "EDUUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "KGENUSDT",
+        "symbol": "SPXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SAGAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2889,17 +1794,222 @@
         "makerFeeRate": "0.0004"
       },
       {
-        "symbol": "SLPUSDT",
+        "symbol": "DOGEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MEWUSDT",
+        "symbol": "AVAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BABYUSDT",
+        "symbol": "WCTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AVLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VELOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "THEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TONUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KAITOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GPSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SPELLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ALCHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "METUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RLUSDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SENTUSDT",
+        "takerFeeRate": "0.001",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PIPPINUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "B2USDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "DIAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SHELLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "APEXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "YGGUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SAHARAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BOBAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "WLFIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ALGOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TRXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RUNEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KSMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GLMUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VETUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XDCUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "TIAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "C98USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CARVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000XECUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BTCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IOTAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AKTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NXPCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZRXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "2ZUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "UMAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MTLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SANDUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -2909,182 +2019,892 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SUIPERP",
+        "symbol": "XNOUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "VIRTUALPERP",
+        "symbol": "COREUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "HYPEPERP",
+        "symbol": "COWUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "AAVEPERP",
+        "symbol": "BANUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SPXPERP",
+        "symbol": "PEOPLEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ICNTPERP",
+        "symbol": "JTOUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "CRVPERP",
+        "symbol": "CAKEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BTCPERP",
+        "symbol": "CGPTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SOLPERP",
+        "symbol": "OLUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ALICEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PENDLEPERP",
+        "symbol": "TAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PIEVERSEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "WLDUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XLMPERP",
+        "symbol": "STGUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "IPPERP",
+        "symbol": "YFIUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SEIPERP",
+        "symbol": "TLMUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "TUTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "STXUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "TIAPERP",
+        "symbol": "LINEAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "1000NEIROCTOPERP",
+        "symbol": "FOLKSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "FLUIDUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ARBPERP",
+        "symbol": "PRCLUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "WLFIPERP",
+        "symbol": "TWTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "TAOPERP",
+        "symbol": "LUMIAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PROVEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BCHPERP",
+        "symbol": "FIDAUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "FARTCOINPERP",
+        "symbol": "XAUTUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BNBPERP",
+        "symbol": "SAFEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XRPPERP",
+        "symbol": "MYXUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "STEEMUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETCPERP",
+        "symbol": "OMUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHPERP",
+        "symbol": "PENDLEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "HBARPERP",
+        "symbol": "FLOWUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SAHARAPERP",
+        "symbol": "COOKIEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "INJPERP",
+        "symbol": "PIXELUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PENGUPERP",
+        "symbol": "VELVETUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ROAMUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "MITOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "SCUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "DOGEPERP",
+        "symbol": "XAIUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "STRKPERP",
+        "symbol": "PARTIUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "AEVOPERP",
+        "symbol": "SUSHIUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PNUTPERP",
+        "symbol": "GMXUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "1000PEPEPERP",
+        "symbol": "ENJUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "LINKPERP",
+        "symbol": "GASUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "PUMPFUNPERP",
+        "symbol": "BIGTIMEUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "LTCPERP",
+        "symbol": "PEAQUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "NSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "FFUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HPOS10IUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ONTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KASUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SHIB1000USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "STOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CYBERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ADAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "USUALUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ENAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "USD1USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "USDEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GIGGLEUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "BABYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "POWRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MLNUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "RSRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ERAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZBTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "JUPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MEGAUSDT",
+        "takerFeeRate": "0.001",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "1000XUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "TREEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZKCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BROCCOLIUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "NEARUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RESOLVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "POLYXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ONDOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MBOXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BNTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000NEIROCTOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BANDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000FLOKIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RLSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VICUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PLUMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GMTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "USDCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "FWOGUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "FXSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GODSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SXTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "INUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "NAORISUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ACTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ACXUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XMRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EGLDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CLOUDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VINEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ONEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BSVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DYDXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GIGAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HANAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PHAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SUPERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TNSRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "KNCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HOOKUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NTRNUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ALEOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WETUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "FLUXUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "YALAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "PROMPTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "1000TURBOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BANANAS31USDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HYPEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EULUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BRETTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "COTIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RENDERUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SUIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CROSSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "REDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "1INCHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "YZYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "FUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "THETAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XIONUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WAVESUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000LUNCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BIOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TRUUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LTCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SQDUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VANRYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PHBUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LQTYUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DEEPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "10000SATSUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000BTTUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "POLUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CRVUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ZILUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SEIUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "OBTUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "LDOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ALLOUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "AEROUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AERGOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HEMIUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "AEVOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ESUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "USTCUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WOOUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "GOATUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VELODROMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "VANAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "EVAAUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "CLANKERUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "ATUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "USELESSUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "BRUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "XRPUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SCRUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MELANIAUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BSUUSDT",
+        "takerFeeRate": "0.0011",
+        "makerFeeRate": "0.0004"
+      },
+      {
+        "symbol": "HOMEUSDT",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BBUSDT",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3094,67 +2914,17 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ENAPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "NOTPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "SHIB1000PERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "OPPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MOODENGPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "ETHFIPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "POPCATPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "HPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
         "symbol": "TRUMPPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "RESOLVPERP",
+        "symbol": "AAVEPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "WLDPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "TONPERP",
-        "takerFeeRate": "0.00055",
-        "makerFeeRate": "0.0002"
-      },
-      {
-        "symbol": "MNTPERP",
+        "symbol": "XLMPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3164,7 +2934,32 @@
         "makerFeeRate": "0.0002"
       },
       {
+        "symbol": "VIRTUALPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PUMPFUNPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "1000NEIROCTOPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
         "symbol": "POLPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DOGEPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WLFIPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3174,12 +2969,102 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "UNIPERP",
+        "symbol": "ETHPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "WIFPERP",
+        "symbol": "ICNTPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "IPPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MOODENGPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PENGUPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "OPPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "WLDPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SPXPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "HPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ENAPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BTCPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "NOTPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "CRVPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BCHPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "RESOLVPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "PENDLEPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LINKPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "TIAPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "LTCPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "INJPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3189,92 +3074,117 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MNTUSDT-26DEC25",
+        "symbol": "ARBPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MNTUSDT-19DEC25",
+        "symbol": "TONPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-26DEC25",
+        "symbol": "HYPEPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-27FEB26",
+        "symbol": "SUIPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XRPUSDT-02JAN26",
+        "symbol": "SEIPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-19DEC25",
+        "symbol": "1000PEPEPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MNTUSDT-30JAN26",
+        "symbol": "PNUTPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "DOGEUSDT-26DEC25",
+        "symbol": "XRPPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-02JAN26",
+        "symbol": "TAOPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BTCUSDT-30JAN26",
+        "symbol": "WIFPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SOLUSDT-26DEC25",
+        "symbol": "MNTPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XRPUSDT-26DEC25",
+        "symbol": "STRKPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "DOGEUSDT-02JAN26",
+        "symbol": "SAHARAPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BTCUSDT-26JUN26",
+        "symbol": "POPCATPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-25SEP26",
+        "symbol": "UNIPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BTCUSDT-19DEC25",
+        "symbol": "FARTCOINPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "XRPUSDT-30JAN26",
+        "symbol": "SHIB1000PERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-27MAR26",
+        "symbol": "HBARPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "AEVOPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BNBPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETCPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLPERP",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHFIPERP",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3284,7 +3194,52 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "DOGEUSDT-30JAN26",
+        "symbol": "MNTUSDT-02JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BTCUSDT-19DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT-25SEP26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XRPUSDT-30JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLUSDT-19DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "BTCUSDT-30JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DOGEUSDT-02JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLUSDT-02JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLUSDT-26DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT-27FEB26",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3299,17 +3254,17 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SOLUSDT-30JAN26",
+        "symbol": "DOGEUSDT-26DEC25",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SOLUSDT-02JAN26",
+        "symbol": "ETHUSDT-27MAR26",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "SOLUSDT-19DEC25",
+        "symbol": "XRPUSDT-26DEC25",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3319,12 +3274,12 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "MNTUSDT-02JAN26",
+        "symbol": "MNTUSDT-19DEC25",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETHUSDT-26JUN26",
+        "symbol": "MNTUSDT-26DEC25",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3334,7 +3289,7 @@
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "BTCUSDT-26DEC25",
+        "symbol": "ETHUSDT-26JUN26",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3344,12 +3299,52 @@
         "makerFeeRate": "0.0002"
       },
       {
+        "symbol": "BTCUSDT-26JUN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "XRPUSDT-02JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT-19DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT-26DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
         "symbol": "BTCUSDT-02JAN26",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
       {
-        "symbol": "ETH-26DEC25",
+        "symbol": "BTCUSDT-26DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "DOGEUSDT-30JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "MNTUSDT-30JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "SOLUSDT-30JAN26",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETHUSDT-02JAN26",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
       },
@@ -3357,9 +3352,14 @@
         "symbol": "BTC-26DEC25",
         "takerFeeRate": "0.00055",
         "makerFeeRate": "0.0002"
+      },
+      {
+        "symbol": "ETH-26DEC25",
+        "takerFeeRate": "0.00055",
+        "makerFeeRate": "0.0002"
       }
     ]
   },
   "retExtInfo": {},
-  "time": 1765819420892
+  "time": 1765912788944
 }
