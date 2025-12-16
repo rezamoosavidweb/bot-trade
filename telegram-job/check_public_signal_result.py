@@ -21,12 +21,12 @@ profit_count = 0.0
 # --- regex سیگنال و درصد ---
 SIGNAL_REGEX = re.compile(
     r"""
-    (Long|Short)\s+.*?               # جهت معامله
-    Lev\s*x\d+.*?                    # لوریج
-    Entry:\s*[\d.]+\s*-\s*           # قیمت ورود
-    Stop\s*Loss:\s*[\d.]+.*?         # استاپ لاس
-    Targets:\s*                      # تارگت‌ها
-    (?:[\d.]+\s*-\s*)+[\d.]+         # چند تارگت با -
+    (Long|Short)\s+.*?
+    Lev\s*x\d+.*?
+    Entry:\s*[\d.]+\s*-\s*           
+    Stop\s*Loss:\s*[\d.]+.*?
+    Targets:\s*         
+    (?:[\d.]+\s*-\s*)+[\d.]+
     """,
     re.IGNORECASE | re.DOTALL | re.VERBOSE
 )
