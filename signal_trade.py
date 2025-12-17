@@ -16,7 +16,7 @@ TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
 
 SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL")
-TARGET_CHANNEL = os.getenv("SOURCE_CHANNEL")
+TARGET_CHANNEL = os.getenv("TARGET_CHANNEL")
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
 BYBIT_API_KEY_DEMO = os.getenv("BYBIT_API_KEY_DEMO")
@@ -161,16 +161,28 @@ async def handle_signal(message):
 # ---------------- TELETHON ---------------- #
 client = TelegramClient("session_name", TELEGRAM_API_ID, TELEGRAM_API_HASH)
 
+async def resolve_target_channel(client, target):
+    entity = await client.get_entity(target)
+    return entity.id
 
 @client.on(events.NewMessage(chats=selected_source_channel))
 async def new_message_handler(event):
-    if is_signal_message(event.message.message):
-        await handle_signal(event.message)
+    if event.chat_id == TARGET_CHANNEL_ID:
+        print("Message from target channel ==========")
+        print(event.message.message)
+        print("======================================")
+        if is_signal_message(event.message.message):
+            await handle_signal(event.message)
 
 
 # ---------------- RUN ---------------- #
 async def main():
     await client.start()
+    global TARGET_CHANNEL_ID
+    TARGET_CHANNEL_ID = await resolve_target_channel(client, TARGET_CHANNEL)
+
+    print("Resolved TARGET_CHANNEL_ID:", TARGET_CHANNEL_ID)
+    print("Bot is running...")
     print("Bot is running...")
     await client.run_until_disconnected()
 
