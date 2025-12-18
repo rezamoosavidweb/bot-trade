@@ -1,7 +1,7 @@
 import re
 import asyncio
 from telethon import TelegramClient, events
-from pybit.unified_trading import HTTP, WebSocketTrading
+from pybit.unified_trading import HTTP, WebSocket
 import os
 from dotenv import load_dotenv
 
@@ -195,13 +195,15 @@ def parse_signal(text):
 
 
 # ---------------- CREATE SIGNAL ---------------- #
-# WSTrading = WebSocketTrading(
-#     demo=is_demo,
-#     testnet=False,
-#     api_key=selected_api_key,
-#     api_secret=selected_api_secret,
-# )
-# WSTrading.order_stream(closed_position_callback)
+WSPrivate = WebSocket(
+    demo=is_demo,
+    testnet=False,
+    channel_type="private",
+    api_key=selected_api_key,
+    api_secret=selected_api_secret,
+    # trace_logging=True
+)
+WSPrivate.order_stream(closed_position_callback)
 
 
 # ---------------- HANDLE SIGNAL ---------------- #
@@ -230,7 +232,8 @@ async def handle_signal(message):
         category=order_category,
         symbol=symbol,
         side=signal["side"],
-        orderType="Market",
+        orderType="limit",
+        price=signal["entry"],
         qty=str(qty),
         leverage=MAX_LEVERAGE,
     )
@@ -253,7 +256,7 @@ async def handle_signal(message):
     # Send order info to Telegram
     await client.send_message(
         TARGET_CHANNEL,
-        f"🚀 New Order Placed:\nSymbol: {symbol}\nSide: {signal['side']}\nQty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}",
+        f"🚀 New Order Placed:\nSymbol: {symbol}\nSide: {signal['side']}\nENR: {signal["entry"]}\nQty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}",
     )
 
 

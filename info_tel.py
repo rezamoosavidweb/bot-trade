@@ -23,6 +23,7 @@ client = TelegramClient('bot', TELEGRAM_API_ID, TELEGRAM_API_HASH)
 # ---------------- HELPER FUNCTIONS ---------------- #
 def get_open_positions():
     """لیست پوزیشن‌های باز"""
+    print("get open positions caleed")
     res = session.get_positions(category="linear")
     open_positions = []
     for p in res["result"]["list"]:
@@ -57,6 +58,7 @@ def get_closed_positions():
 async def positions_handler(event):
     try:
         open_pos = get_open_positions()
+        print(f"open_pos:{open_pos}")
         msg = "📊 **Open Positions:**\n"
         if not open_pos:
             msg += "No open positions.\n"
