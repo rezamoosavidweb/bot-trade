@@ -2,8 +2,32 @@
   "retCode": 0,
   "retMsg": "OK",
   "result": {
-    "nextPageCursor": "17077%3A0%2C1811%3A0",
+    "nextPageCursor": "21165%3A0%2C1811%3A0",
     "list": [
+      {
+        "transSubType": "",
+        "symbol": "ALGOUSDT",
+        "side": "Buy",
+        "funding": "0",
+        "orderLinkId": "",
+        "orderId": "364dc9db-f816-4f4c-8d20-7b27e9712d77",
+        "fee": "5.06198282",
+        "change": "226.82801318",
+        "cashFlow": "231.889996",
+        "transactionTime": "1766077737242",
+        "type": "TRADE",
+        "feeRate": "0.00055",
+        "bonusChange": "0",
+        "size": "0",
+        "qty": "83714.8",
+        "cashBalance": "49606.51244227",
+        "currency": "USDT",
+        "id": "532068572_ALGOUSDT_140667078435792_0",
+        "category": "linear",
+        "tradePrice": "0.10994",
+        "extraFees": "",
+        "tradeId": "0f431360-464e-4dbb-b7ce-01075a830e70"
+      },
       {
         "transSubType": "",
         "symbol": "ALGOUSDT",
@@ -367,5 +391,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1766075097921
+  "time": 1766077926408
 }

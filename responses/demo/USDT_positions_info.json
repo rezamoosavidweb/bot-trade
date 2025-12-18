@@ -1,0 +1,49 @@
+{
+  "retCode": 0,
+  "retMsg": "OK",
+  "result": {
+    "nextPageCursor": "GRTUSDT%2C1766073600047%2C0",
+    "category": "linear",
+    "list": [
+      {
+        "symbol": "GRTUSDT",
+        "leverage": "10",
+        "autoAddMargin": 0,
+        "avgPrice": "0.03748",
+        "liqPrice": "",
+        "riskLimitValue": "100000",
+        "takeProfit": "0.03824",
+        "positionValue": "12944.107792",
+        "isReduceOnly": false,
+        "positionIMByMp": "1281.47793015",
+        "tpslMode": "Full",
+        "riskId": 506,
+        "trailingStop": "0",
+        "unrealisedPnl": "-193.401824",
+        "markPrice": "0.03692",
+        "adlRankIndicator": 2,
+        "cumRealisedPnl": "-6.48155742",
+        "positionMM": "261.42145271",
+        "createdTime": "1766071523211",
+        "positionIdx": 0,
+        "positionIM": "1281.47793015",
+        "positionMMByMp": "261.42145271",
+        "seq": 140667078255288,
+        "updatedTime": "1766073600047",
+        "side": "Buy",
+        "bustPrice": "",
+        "positionBalance": "0",
+        "leverageSysUpdatedTime": "",
+        "curRealisedPnl": "-6.48155742",
+        "size": "345360.4",
+        "positionStatus": "Normal",
+        "mmrSysUpdatedTime": "",
+        "stopLoss": "0.0361",
+        "tradeMode": 0,
+        "sessionAvgPrice": ""
+      }
+    ]
+  },
+  "retExtInfo": {},
+  "time": 1766077926802
+}
