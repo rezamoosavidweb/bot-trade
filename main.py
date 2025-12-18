@@ -9,7 +9,7 @@ from datetime import datetime
 load_dotenv()
 
 # -------- MODE FLAGS --------
-is_demo = False
+is_demo = True
 is_testnet = False   # ← اگر تست‌نت است True
 
 # -------- API KEYS --------
@@ -89,8 +89,8 @@ wallet_balance = session.get_wallet_balance(
     coin="BTC",
 )
 transaction_log = session.get_transaction_log(coin="BTC")
-instruments_info = session.stop(category="linear")
-fee_rates = session.web(category="linear")
+instruments_info = session.get_instruments_info(category="linear")
+# fee_rates = session.get_fee_rates(category="linear")
 positions_info = session.get_positions(category="linear",symbol="DASHUSDT")
 # fee_rates = session.get_fee_rates(category="linear", symbol=selected_symbol)
 
@@ -99,6 +99,6 @@ save_json(f"account_info.json", account_info, is_demo,is_testnet)
 save_json(f"{coin}_wallet_balance.json", wallet_balance, is_demo,is_testnet)
 save_json(f"{coin}_transaction_log.json", transaction_log, is_demo,is_testnet)
 save_json(f"instruments_info_linear.json", instruments_info, is_demo,is_testnet)
-save_json(f"fee_rates.json", fee_rates, is_demo,is_testnet)
+# save_json(f"fee_rates.json", fee_rates, is_demo,is_testnet)
 save_json(f"{selected_symbol}_positions_info.json", positions_info, is_demo,is_testnet)
 

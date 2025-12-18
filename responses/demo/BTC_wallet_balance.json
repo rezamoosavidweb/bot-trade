@@ -4,20 +4,20 @@
   "result": {
     "list": [
       {
-        "accountIMRate": "0",
-        "totalMaintenanceMarginByMp": "0",
-        "totalInitialMargin": "0",
+        "accountIMRate": "0.0873",
+        "totalMaintenanceMarginByMp": "485.71570006",
+        "totalInitialMargin": "8718.82892896",
         "accountType": "UNIFIED",
-        "accountMMRate": "0",
-        "accountMMRateByMp": "0",
-        "accountIMRateByMp": "0",
-        "totalInitialMarginByMp": "0",
-        "totalMaintenanceMargin": "0",
-        "totalEquity": "190565.388986",
-        "totalMarginBalance": "99988.15",
-        "totalAvailableBalance": "99988.15",
-        "totalPerpUPL": "0",
-        "totalWalletBalance": "99988.15",
+        "accountMMRate": "0.0048",
+        "accountMMRateByMp": "0.0048",
+        "accountIMRateByMp": "0.0873",
+        "totalInitialMarginByMp": "8718.82892896",
+        "totalMaintenanceMargin": "485.71570006",
+        "totalEquity": "189392.43276589",
+        "totalMarginBalance": "99863.74155489",
+        "totalAvailableBalance": "91144.91262592",
+        "totalPerpUPL": "-62.7775804",
+        "totalWalletBalance": "99926.51913529",
         "accountLTV": "0",
         "coin": [
           {
@@ -28,7 +28,7 @@
             "totalOrderIM": "0",
             "equity": "1",
             "totalPositionMM": "0",
-            "usdValue": "87635.243316",
+            "usdValue": "86694.617462",
             "unrealisedPnl": "0",
             "collateralSwitch": false,
             "spotHedgingQty": "0",
@@ -45,5 +45,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1765912720884
+  "time": 1766043621274
 }

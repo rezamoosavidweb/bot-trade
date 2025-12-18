@@ -636,9 +636,9 @@
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00010",
-          "maxPrice": "1999.99980",
-          "tickSize": "0.00010"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "290000",
@@ -1069,16 +1069,16 @@
         "launchTime": "1759412287000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "50.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "156000",
@@ -2081,16 +2081,16 @@
         "launchTime": "1726735815000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "29000",
@@ -2125,16 +2125,16 @@
         "launchTime": "1632355200000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "50.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "800000.0",
@@ -2301,16 +2301,16 @@
         "launchTime": "1706181459000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "1421800",
@@ -2609,16 +2609,16 @@
         "launchTime": "1761221867000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "125000",
@@ -3188,9 +3188,9 @@
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.000010",
-          "maxPrice": "199.999980",
-          "tickSize": "0.000010"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "2372900",
@@ -3225,16 +3225,16 @@
         "launchTime": "1718269304000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "1500000",
@@ -10485,16 +10485,16 @@
         "launchTime": "1678953508000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "280000",
@@ -11673,16 +11673,16 @@
         "launchTime": "1739525015000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "165000.0",
@@ -12641,16 +12641,16 @@
         "launchTime": "1684822236000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "5.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "1536000",
@@ -16689,16 +16689,16 @@
         "launchTime": "1676960331000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "12.50",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "854600",
@@ -17701,16 +17701,16 @@
         "launchTime": "1711963329000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "3",
+        "priceScale": "4",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.001",
-          "maxPrice": "19999.998",
-          "tickSize": "0.001"
+          "minPrice": "0.0001",
+          "maxPrice": "1999.9998",
+          "tickSize": "0.0001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "15000.0",
@@ -18625,16 +18625,16 @@
         "launchTime": "1726654249000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "50.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "150000",
@@ -18669,16 +18669,16 @@
         "launchTime": "1725525013000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "75.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "2500000",
@@ -20385,16 +20385,16 @@
         "launchTime": "1642140231000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "3298400",
@@ -20781,16 +20781,16 @@
         "launchTime": "1635724800000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "50.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "2086500",
@@ -20913,16 +20913,16 @@
         "launchTime": "1648633843000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "73960.0",
@@ -21140,9 +21140,9 @@
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00010",
-          "maxPrice": "1999.99980",
-          "tickSize": "0.00010"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "2454600",
@@ -21441,16 +21441,16 @@
         "launchTime": "1647937788000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "2291900",
@@ -22008,5 +22008,5 @@
     "nextPageCursor": "first%3D0GUSDT%26last%3DSOLUSDT-30JAN26"
   },
   "retExtInfo": {},
-  "time": 1765912721258
+  "time": 1766043621645
 }

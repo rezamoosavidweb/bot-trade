@@ -2,9 +2,34 @@
   "retCode": 0,
   "retMsg": "OK",
   "result": {
-    "nextPageCursor": null,
-    "list": []
+    "nextPageCursor": "1811%3A0%2C1811%3A0",
+    "list": [
+      {
+        "transSubType": "",
+        "symbol": "BTCUSDT",
+        "side": "Sell",
+        "funding": "0",
+        "orderLinkId": "",
+        "orderId": "8794e0ce-b583-4556-ac2c-319ccaa4a7a3",
+        "fee": "47.647875",
+        "change": "-47.647875",
+        "cashFlow": "0",
+        "transactionTime": "1766041794265",
+        "type": "TRADE",
+        "feeRate": "0.00055",
+        "bonusChange": "0",
+        "size": "-1",
+        "qty": "1",
+        "cashBalance": "49952.352125",
+        "currency": "USDT",
+        "id": "532068572_BTCUSDT_140667076867688_0",
+        "category": "linear",
+        "tradePrice": "86632.5",
+        "extraFees": "",
+        "tradeId": "392776ea-ec4b-4107-9fdb-312be518e3f5"
+      }
+    ]
   },
   "retExtInfo": {},
-  "time": 1765912721061
+  "time": 1766043621451
 }

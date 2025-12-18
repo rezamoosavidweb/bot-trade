@@ -20,7 +20,7 @@
         "riskId": 686,
         "trailingStop": "0",
         "unrealisedPnl": "",
-        "markPrice": "40.92",
+        "markPrice": "37.81",
         "adlRankIndicator": 0,
         "cumRealisedPnl": "0",
         "positionMM": "",
@@ -45,5 +45,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1765912789626
+  "time": 1766043088293
 }
