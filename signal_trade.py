@@ -107,50 +107,50 @@ def get_symbol_info(symbol):
 # -------------------- GET BALANCE ---------------------- #
 def get_usdt_balance():
     wallet = session.get_wallet_balance(accountType="UNIFIED")
+    print(f"wallet: {wallet}")
     coins = wallet["result"]["list"][0]["coin"]
     for c in coins:
         if c["coin"] == "USDT":
-            return float(c["availableToWithdraw"])
+            # استفاده از walletBalance به جای availableToWithdraw
+            val = c.get("walletBalance") or c.get("totalAvailableBalance") or 0.0
+            try:
+                return float(val)
+            except:
+                return 0.0
     return 0.0
 
 
+# -------------------- NORMALIZE QUANTITY ----------------- #
+def normalize_qty(qty, step):
+    precision = len(str(step).split(".")[1]) if "." in str(step) else 0
+    qty = int(qty / step) * step
+    return round(qty, precision)
+
+
 # -------------------- CALCULATE QUANTITY ----------------- #
-def calculate_qty(symbol, entry, sl):
+def calculate_risk_qty(symbol, entry, sl):
     info = get_symbol_info(symbol)
     balance = get_usdt_balance()
 
     risk_amount = balance * RISK_PERCENT
     sl_distance = abs(entry - sl)
 
-    if sl_distance == 0:
+    if sl_distance <= 0:
         return None
 
     raw_qty = risk_amount / sl_distance
+    qty = normalize_qty(raw_qty, info["qty_step"])
 
-    # truncate to step
-    step = info["qty_step"]
-    qty = int(raw_qty / step) * step
-
-    # enforce min qty
+    print(f"qty:{qty}", f"min_qt:{info["min_qty"]}")
+    # min qty
     if qty < info["min_qty"]:
         return None
 
-    # enforce min notional
+    # min notional
     if qty * entry < info["min_notional"]:
         return None
-    print(
-        {
-            "============================",
-            f"balance: {balance}\n"
-            f"risk_amount: {risk_amount}\n"
-            f"sl_distance: {sl_distance}\n"
-            f"raw_qty: {raw_qty}\n"
-            f"step: {step}\n"
-            f"qty: {qty}\n"
-            "============================",
-        }
-    )
-    return round(qty, 8)
+
+    return qty
 
 
 # -------------------- CLOSED ORDER HANDLER ----------------- #
@@ -180,149 +180,72 @@ def closed_position_callback(msg):
         print("Position WS error:", e)
 
 
+# -------------------- PARSE SIGNAL ----------------- #
+def parse_signal(text):
+    symbol_match = re.search(r"#\s*([A-Z0-9]+)\s*/\s*(USDT|USDC|USD)", text, re.I)
+    side_match = re.search(r"(Long|Short)", text, re.I)
+    entry_match = re.search(r"Entry:\s*([\d.]+)", text)
+    sl_match = re.search(r"Stop\s*Loss:\s*([\d.]+)", text)
+    targets = [float(x) for x in re.findall(r"Targets:\s*([^\n]+)", text)[0].split("-")]
+
+    if not all([symbol_match, side_match, entry_match, sl_match]):
+        return None
+
+    symbol = symbol_match.group(1).upper() + symbol_match.group(2).upper()
+    side = "Buy" if side_match.group(1).lower() == "long" else "Sell"
+
+    return {
+        "symbol": symbol,
+        "side": side,
+        "entry": float(entry_match.group(1)),
+        "sl": float(sl_match.group(1)),
+        "targets": targets,
+    }
+
+
 # -------------------- SIGNAL HANDLER ----------------- #
 async def handle_signal(message):
     text = message.message
+    signal = parse_signal(text)
 
-    # ----------- SYMBOL FIRST ----------- #
-    symbol_match = re.search(
-        r"#\s*([A-Z0-9]+)\s*/\s*(USDT|USDC|USD)", text, re.IGNORECASE
-    )
-
-    if not symbol_match:
-        print("❌ Symbol not found")
+    if not signal:
+        print("❌ Invalid signal")
         return
 
-    base = symbol_match.group(1).upper()
-    quote = symbol_match.group(2).upper()
-    symbol = f"{base}{quote}"
+    symbol = signal["symbol"]
 
-    # ----------- DUPLICATE POSITION CHECK ----------- #
     if symbol in open_positions:
         print(f"⛔ Already in position: {symbol}")
         return
 
-    # ----------- CONTINUE PARSING ----------- #
-    side_match = re.search(r"(Long|Short)", text, re.IGNORECASE)
-    leverage_match = re.search(r"Lev\s*x(\d+)", text)
-    entry_match = re.search(r"Entry:\s*([\d.]+)", text)
-    sl_match = re.search(r"Stop\s*Loss:\s*([\d.]+)", text)
-    targets_match = re.findall(r"[\d.]+", text)
-
-    if not (side_match and leverage_match and entry_match and sl_match):
-        print("❌ Incomplete signal")
+    qty = calculate_risk_qty(symbol, signal["entry"], signal["sl"])
+    print({qty})
+    if not qty:
+        print("❌ Qty calculation failed")
         return
 
-    if symbol_match:
-        base = symbol_match.group(1).upper()
-        quote = symbol_match.group(2).upper()
-        symbol = f"{base}{quote}"  # FILUSDT
-        coin = base  # FIL
-    else:
-        symbol = None
-        coin = None
+    print(f"🚀 OPEN {symbol} | qty={qty}")
 
-    if not (
-        side_match and leverage_match and entry_match and sl_match and targets_match
-    ):
-        return
-
-    raw_side = side_match.group(1).lower()
-
-    if raw_side == "long":
-        side = "Buy"
-    elif raw_side == "short":
-        side = "Sell"
-    else:
-        return
-    leverage = int(leverage_match.group(1)) // 2
-    if leverage > 15:
-        leverage = 15
-
-    entry_price = float(entry_match.group(1))
-    sl_price = float(sl_match.group(1))
-    targets = [float(t) for t in re.findall(r"[\d.]+", targets_match[0])]
-
-    raw_qty = POSITION_USDT / entry_price
-    qty = round(raw_qty, 3)
-    print(
-        "=================== will open orde ==================\n"
-        f"order_category: {order_category}\n"
-        f"side: {side}\n"
-        f"leverage: {leverage}\n"
-        f"entry_match: {entry_match}\n"
-        f"sl_price: {sl_price}\n"
-        f"targets: {targets}\n"
-        f"symbol: {symbol}\n"
-        f"qty: {qty}\n"
-        "=====================================================\n"
-    )
-    # ----------- باز کردن پوزیشن ----------- #
     order = session.place_order(
         category=order_category,
         symbol=symbol,
-        side=side,
-        orderType="Market",
-        qty=qty,
-        leverage=leverage,
+        side=signal["side"],
+        price=signal["entry"],
+        orderType="Limit",
+        timeInForce="PostOnly",
+        qty=str(qty),
     )
-    print("Order created:", order)
-    open_positions.add(symbol)
 
-    # ----------- ثبت SL کل پوزیشن ----------- #
-    sl_resp = session.set_trading_stop(
+    open_positions.add(symbol)
+    session.set_trading_stop(
         category="linear",
         symbol=symbol,
         tpslMode="Full",
-        stopLoss=str(sl_price),
+        price=signal["targets[0]"],
+        stopLoss=str(signal["sl"]),
         positionIdx=0,
     )
-    print("SL set:", sl_resp)
-
-    # ----------- ثبت TP1 برای 50٪ ----------- #
-    tp1_resp = session.set_trading_stop(
-        category="linear",
-        symbol=symbol,
-        tpslMode="Partial",
-        takeProfit=str(targets[0]),
-        tpSize="0.5",
-        positionIdx=0,
-    )
-    print("TP1 set:", tp1_resp)
-
-    # ----------- وب‌سوکت برای گوش دادن به وضعیت سفارش ----------- #
-    def order_callback(msg):
-        try:
-            data = msg["data"][0]
-            closed_position_callback(msg)
-            if (
-                data["orderStatus"] == "Filled"
-                and float(data.get("cumExecQty", 0)) >= 0.5 * qty
-            ):
-                # ست کردن TP2 برای 30٪ حجم باقی مانده
-                session.set_trading_stop(
-                    category="linear",
-                    symbol=symbol,
-                    tpslMode="Partial",
-                    takeProfit=str(targets[1]),
-                    tpSize="0.3",
-                    positionIdx=0,
-                )
-                # ست کردن TP3 برای 100٪ باقی مانده
-                session.set_trading_stop(
-                    category="linear",
-                    symbol=symbol,
-                    tpslMode="Partial",
-                    takeProfit=str(targets[2]),
-                    tpSize="0.2",
-                    positionIdx=0,
-                )
-                print("TP2 and TP3 set")
-        except Exception as e:
-            print("WebSocket callback error:", e)
-
-    ws = WebSocketTrading(api_key=selected_api_key, api_secret=selected_api_secret)
-    ws.order_stream(order_callback)
+    #send opended Order to target channel here
 
 
 # ---------------- TELETHON ---------------- #
