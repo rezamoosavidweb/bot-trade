@@ -14,18 +14,16 @@ BYBIT_API_KEY = os.getenv("BYBIT_API_KEY_DEMO")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET_DEMO")
 IS_DEMO = True
 
-
 # ---------------- BYBIT CLIENT ---------------- #
 session = HTTP(demo=IS_DEMO, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
 
 # ---------------- TELEGRAM CLIENT ---------------- #
-client = TelegramClient('bot', TELEGRAM_API_ID, TELEGRAM_API_HASH).start(bot_token=TELEGRAM_BOT_TOKEN)
-
+client = TelegramClient('bot', TELEGRAM_API_ID, TELEGRAM_API_HASH)
 
 # ---------------- HELPER FUNCTIONS ---------------- #
 def get_open_positions():
     """لیست پوزیشن‌های باز"""
-    res = session.get_positions(category="linear")  # یا "inverse" بسته به قرارداد
+    res = session.get_positions(category="linear")
     open_positions = []
     for p in res["result"]["list"]:
         if float(p["size"]) > 0:
@@ -38,7 +36,6 @@ def get_open_positions():
                 "unrealized_pnl": p["unrealisedPnl"]
             })
     return open_positions
-
 
 def get_closed_positions():
     """لیست پوزیشن‌های بسته (آخرین 50 معامله)"""
@@ -55,12 +52,10 @@ def get_closed_positions():
             })
     return closed_positions
 
-
 # ---------------- COMMAND HANDLER ---------------- #
 @client.on(events.NewMessage(pattern="/positions"))
 async def positions_handler(event):
     try:
-        # پوزیشن‌های باز
         open_pos = get_open_positions()
         msg = "📊 **Open Positions:**\n"
         if not open_pos:
@@ -77,7 +72,6 @@ async def positions_handler(event):
                     "-------------------------\n"
                 )
 
-        # پوزیشن‌های بسته
         closed_pos = get_closed_positions()
         msg += "\n✅ **Closed Positions (last 50):**\n"
         if not closed_pos:
@@ -101,10 +95,6 @@ async def positions_handler(event):
 
 # ---------------- RUN ---------------- #
 async def main():
-    print("Bot is running...")
+    print("Bot (info_tel) is running...")
+    await client.start(bot_token=TELEGRAM_BOT_TOKEN)
     await client.run_until_disconnected()
-
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
