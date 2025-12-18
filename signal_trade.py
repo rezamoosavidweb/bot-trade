@@ -36,12 +36,12 @@ if is_demo:
     selected_api_key = BYBIT_API_KEY_DEMO
     selected_api_secret = BYBIT_API_SECRET_DEMO
     mode_name = "demo"
-    selected_source_channel = TARGET_CHANNEL
+    selected_source_channel = SOURCE_CHANNEL
 else:
     selected_api_key = BYBIT_API_KEY
     selected_api_secret = BYBIT_API_SECRET
     mode_name = "live"
-    selected_source_channel = TARGET_CHANNEL
+    selected_source_channel = SOURCE_CHANNEL
 
 print(
     "==================== Env =============================\n"
