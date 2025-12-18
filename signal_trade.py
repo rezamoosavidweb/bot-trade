@@ -26,7 +26,7 @@ POSITION_USDT = 50
 order_category = "linear"
 RISK_PERCENT = 0.01  # 1% risk per trade
 MAX_LEVERAGE = 15
-
+settleCoin="USDT"
 symbol_cache = {}
 open_positions = set()
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
@@ -138,6 +138,7 @@ def closed_position_callback(msg):
         symbol_ws = data.get("symbol")
         size = float(data.get("size", 0))
         closed_pnl = float(data.get("closedPnl", 0))
+        print(f"✅ Message on WS is received: {symbol_ws} / {size} / {closed_pnl}")
 
         if symbol_ws in open_positions and size == 0:
             open_positions.discard(symbol_ws)

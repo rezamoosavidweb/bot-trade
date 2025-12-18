@@ -9,7 +9,7 @@ load_dotenv()
 TELEGRAM_API_ID = int(os.getenv("TELEGRAM_API_ID"))
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # بات توکن
-
+settleCoin = "USDT"
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY_DEMO")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET_DEMO")
 IS_DEMO = True
@@ -18,47 +18,75 @@ IS_DEMO = True
 session = HTTP(demo=IS_DEMO, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
 
 # ---------------- TELEGRAM CLIENT ---------------- #
-client = TelegramClient('bot', TELEGRAM_API_ID, TELEGRAM_API_HASH)
+client = TelegramClient("bot", TELEGRAM_API_ID, TELEGRAM_API_HASH)
+
 
 # ---------------- HELPER FUNCTIONS ---------------- #
 def get_open_positions():
     """لیست پوزیشن‌های باز"""
-    print("get open positions caleed")
-    res = session.get_positions(category="linear")
+    print("get open positions called")
+
+    res = session.get_positions(category="linear", settleCoin=settleCoin)
+
     open_positions = []
     for p in res["result"]["list"]:
-        if float(p["size"]) > 0:
-            open_positions.append({
-                "symbol": p["symbol"],
-                "side": "Buy" if p["side"].lower() == "buy" else "Sell",
-                "size": p["size"],
-                "entry_price": p["entryPrice"],
-                "liq_price": p["liqPrice"],
-                "unrealized_pnl": p["unrealisedPnl"]
-            })
+        size = float(p.get("size", 0))
+        if size <= 0:
+            continue
+
+        open_positions.append(
+            {
+                "symbol": p.get("symbol"),
+                "side": p.get("side"),
+                "size": size,
+                "entry_price": float(p.get("avgPrice", 0)),
+                "liq_price": p.get("liqPrice", "-"),
+                "unrealized_pnl": float(p.get("unrealisedPnl", 0)),
+                "mark_price": float(p.get("markPrice", 0)),
+                "leverage": p.get("leverage"),
+            }
+        )
+
     return open_positions
 
-def get_closed_positions():
-    """لیست پوزیشن‌های بسته (آخرین 50 معامله)"""
-    res = session.get_execution_list(category="linear", limit=50)
-    closed_positions = []
-    for e in res["result"]["list"]:
-        if e["execType"].lower() == "trade":
-            closed_positions.append({
-                "symbol": e["symbol"],
-                "side": "Buy" if e["side"].lower() == "buy" else "Sell",
-                "size": e["execQty"],
-                "price": e["execPrice"],
-                "realized_pnl": float(e.get("closedPnl", 0.0))
-            })
-    return closed_positions
+
+
+def get_profit_loos():
+    """Query user's closed profit and loss records"""
+    res = session.get_closed_pnl(category="linear", limit=50)
+
+    profit_loss = []
+
+    items = res.get("result", {}).get("list", [])
+    for p in items:
+        closed_size = float(p.get("closedSize", 0))
+        if closed_size <= 0:
+            continue
+
+        profit_loss.append(
+            {
+                "symbol": p.get("symbol"),
+                "side": p.get("side"),
+                "size": closed_size,
+                "entry_price": float(p.get("avgEntryPrice", 0)),
+                "exit_price": float(p.get("avgExitPrice", 0)),
+                "closed_pnl": float(p.get("closedPnl", 0)),
+                "open_fee": float(p.get("openFee", 0)),
+                "close_fee": float(p.get("closeFee", 0)),
+                "leverage": p.get("leverage"),
+                "time": p.get("updatedTime"),
+            }
+        )
+
+    return profit_loss
+
+
 
 # ---------------- COMMAND HANDLER ---------------- #
 @client.on(events.NewMessage(pattern="/positions"))
 async def positions_handler(event):
     try:
         open_pos = get_open_positions()
-        print(f"open_pos:{open_pos}")
         msg = "📊 **Open Positions:**\n"
         if not open_pos:
             msg += "No open positions.\n"
@@ -74,20 +102,23 @@ async def positions_handler(event):
                     "-------------------------\n"
                 )
 
-        closed_pos = get_closed_positions()
-        msg += "\n✅ **Closed Positions (last 50):**\n"
-        if not closed_pos:
-            msg += "No closed positions.\n"
+        profits_losses = get_profit_loos()
+        msg += "\n✅ **Closed Profit & Loss (last 50):**\n"
+
+        if not profits_losses:
+            msg += "No closed profit and loss records.\n"
         else:
-            for p in closed_pos:
+            for p in profits_losses:
+                emoji = "🟢" if p["closed_pnl"] > 0 else "🔴"
                 msg += (
-                    f"Symbol: {p['symbol']}\n"
-                    f"Side: {p['side']}\n"
+                    f"{emoji} Symbol: {p['symbol']}\n"
+                    f"Side: {p['side']} | Lev: {p['leverage']}x\n"
                     f"Size: {p['size']}\n"
-                    f"Price: {p['price']}\n"
-                    f"Realized PnL: {p['realized_pnl']}\n"
+                    f"Entry: {p['entry_price']} → Exit: {p['exit_price']}\n"
+                    f"PnL: {p['closed_pnl']}\n"
+                    f"Fees: {p['open_fee'] + p['close_fee']}\n"
                     "-------------------------\n"
-                )
+                )   
 
         await event.respond(msg)
 
