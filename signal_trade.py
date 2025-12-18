@@ -233,10 +233,10 @@ async def handle_signal(message):
         category=order_category,
         symbol=symbol,
         side=signal["side"],
-        orderType="limit",
-        price=signal["entry"],
+        orderType="Maket",
         qty=str(qty),
-        leverage=MAX_LEVERAGE,
+        # price=signal["entry"],
+        # leverage=MAX_LEVERAGE,
     )
     open_positions.add(symbol)
 
