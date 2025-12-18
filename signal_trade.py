@@ -71,7 +71,7 @@ async def handle_signal(message):
 
     side_match = re.search(r"(Long|Short)", text, re.IGNORECASE)
     leverage_match = re.search(r"Lev\s*x(\d+)", text)
-    entry_match = re.search(r"Entry:\s*([\d.]+)\s*-\s*([\d.]+)", text)
+    entry_match = re.search(r"Entry:\s*([\d.]+)(?:\s*-\s*([\d.]+))?", text)
     sl_match = re.search(r"Stop\s*Loss:\s*([\d.]+)", text)
     targets_match = re.findall(r"Targets:\s*((?:[\d.]+\s*-\s*)*[\d.]+)", text)
 
@@ -81,15 +81,12 @@ async def handle_signal(message):
         f"entry_match: {entry_match}\n"
         f"sl_match: {sl_match}\n"
         f"targets_match: {targets_match}"
-    )    
-    
+    )
 
     if not (
         side_match and leverage_match and entry_match and sl_match and targets_match
     ):
         return
-    
-
 
     side = side_match.group(1).capitalize()
     leverage = int(leverage_match.group(1)) // 2
@@ -175,9 +172,9 @@ client = TelegramClient("session_name", TELEGRAM_API_ID, TELEGRAM_API_HASH)
 
 @client.on(events.NewMessage(chats=selected_source_channel))
 async def new_message_handler(event):
-    print('new event')
+    print("new event")
     if is_signal_message(event.message.message):
-        print('is signal')
+        print("is signal")
         await handle_signal(event.message)
 
 
