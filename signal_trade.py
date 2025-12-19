@@ -26,7 +26,7 @@ POSITION_USDT = 50
 order_category = "linear"
 RISK_PERCENT = 0.01  # 1% risk per trade
 MAX_LEVERAGE = 15
-settleCoin="USDT"
+settleCoin = "USDT"
 symbol_cache = {}
 open_positions = set()
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
@@ -271,6 +271,11 @@ async def new_message_handler(event):
     if is_signal_message(event.message.message):
         print("[INFO] Signal detected")
         await handle_signal(event.message)
+    else:
+        await client.send_message(
+            TARGET_CHANNEL,
+            f"⛔ New Message is't signal:\n{event.message.message}",
+        )
 
 
 # ---------------- RUN ---------------- #
@@ -278,5 +283,3 @@ async def main():
     await client.start()
     print("[INFO] Bot is running...")
     await client.run_until_disconnected()
-
-
