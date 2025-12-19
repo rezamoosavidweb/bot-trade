@@ -50,6 +50,44 @@ def get_open_positions():
     return open_positions
 
 
+def get_pending_orders():
+    """Pending entry orders (Limit + Stop not triggered yet)"""
+    print("get pending orders called")
+
+    res = session.get_open_orders(
+        category="linear",
+        settleCoin=settleCoin,
+        openOnly=0,
+        limit=50,
+    )
+
+    pending_orders = []
+
+    for o in res.get("result", {}).get("list", []):
+        status = o.get("orderStatus")
+
+        # Pending entry conditions
+        if status not in ("New", "Untriggered"):
+            continue
+
+        pending_orders.append(
+            {
+                "symbol": o.get("symbol"),
+                "side": o.get("side"),
+                "order_type": o.get("orderType"),
+                "order_status": status,
+                "qty": o.get("qty"),
+                "price": o.get("price"),
+                "trigger_price": o.get("triggerPrice"),
+                "takeProfit": o.get("takeProfit"),
+                "stopLoss": o.get("stopLoss"),
+                "stop_type": o.get("stopOrderType"),
+                "created_time": o.get("createdTime"),
+            }
+        )
+
+    return pending_orders
+
 
 def get_profit_loos():
     """Query user's closed profit and loss records"""
@@ -86,8 +124,10 @@ def get_profit_loos():
 @client.on(events.NewMessage(pattern="/positions"))
 async def positions_handler(event):
     try:
+        # -------- OPEN POSITIONS --------
         open_pos = get_open_positions()
         msg = "📊 **Open Positions:**\n"
+
         if not open_pos:
             msg += "No open positions.\n"
         else:
@@ -102,6 +142,26 @@ async def positions_handler(event):
                     "-------------------------\n"
                 )
 
+        # -------- PENDING ORDERS --------
+        pending_orders = get_pending_orders()
+        msg += "\n⏳ **Pending Entry Orders:**\n"
+
+        if not pending_orders:
+            msg += "No pending orders.\n"
+        else:
+            for o in pending_orders:
+                msg += (
+                    f"Symbol: {o['symbol']}\n"
+                    f"Side: {o['side']} | Type: {o['order_type']}\n"
+                    f"Qty: {o['qty']}\n"
+                    f"Price: {o['price']}\n"
+                    f"Trigger: {o['trigger_price'] or '-'}\n"
+                    f"Take Profit: {o['takeProfit'] or '-'}\n"
+                    f"Stop Loss: {o['stopLoss'] or '-'}\n"
+                    "-------------------------\n"
+                )
+
+        # -------- CLOSED PNL --------
         profits_losses = get_profit_loos()
         msg += "\n✅ **Closed Profit & Loss (last 50):**\n"
 
@@ -118,12 +178,12 @@ async def positions_handler(event):
                     f"PnL: {p['closed_pnl']}\n"
                     f"Fees: {p['open_fee'] + p['close_fee']}\n"
                     "-------------------------\n"
-                )   
+                )
 
         await event.respond(msg)
 
     except Exception as e:
-        await event.respond(f"[ERROR] Failed to fetch positions: {e}")
+        await event.respond(f"❌ [ERROR] Failed to fetch data: {e}")
 
 
 # ---------------- RUN ---------------- #

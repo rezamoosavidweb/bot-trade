@@ -4,6 +4,8 @@ from telethon import TelegramClient, events
 from pybit.unified_trading import HTTP, WebSocket
 import os
 from dotenv import load_dotenv
+import traceback
+import datetime
 
 load_dotenv()
 
@@ -14,7 +16,7 @@ is_demo = True
 TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
 
-SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL")
+SOURCE_CHANNEL = os.getenv("TARGET_CHANNEL")
 TARGET_CHANNEL = int(os.getenv("TARGET_CHANNEL"))
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
@@ -131,16 +133,22 @@ def calculate_risk_qty(symbol, entry, sl):
     return qty
 
 
-# ---------------- CLOSED ORDER CALLBACK ---------------- #
-def closed_position_callback(msg):
-    try:
-        data = msg["data"][0]
-        symbol_ws = data.get("symbol")
-        size = float(data.get("size", 0))
-        closed_pnl = float(data.get("closedPnl", 0))
-        print(f"✅ Message on WS is received: {symbol_ws} / {size} / {closed_pnl}")
+# ---------------- TELETHON ---------------- #
+client = TelegramClient("session_name", TELEGRAM_API_ID, TELEGRAM_API_HASH)
 
-        if symbol_ws in open_positions and size == 0:
+telegram_queue = asyncio.Queue()
+
+async def process_telegram_queue():
+    while True:
+        item = await telegram_queue.get()
+        symbol_ws = item["symbol"]
+        closed_pnl = item["closed_pnl"]
+        data = item["data"]
+        is_closed = item["is_closed"]
+        takeProfit = item["takeProfit"]
+        stopLoss = item["stopLoss"]
+        
+        if is_closed:
             open_positions.discard(symbol_ws)
             stats["total"] += 1
             stats["pnl"] += closed_pnl
@@ -149,28 +157,64 @@ def closed_position_callback(msg):
             else:
                 stats["loss"] += 1
 
-            print(f"[INFO] Position closed: {symbol_ws} | PnL: {closed_pnl}")
-            print(f"[INFO] Stats: {stats}")
+            await client.send_message(
+                TARGET_CHANNEL,
+                f"✅ Position Closed:\n"
+                f"Symbol: {symbol_ws}\n"
+                f"PnL: {closed_pnl}\n"
+                f"Total Trades: {stats['total']}\n"
+                f"Wins: {stats['win']}\n"
+                f"Losses: {stats['loss']}\n"
+                f"Total PnL: {stats['pnl']:.2f}",
+            )
+        else:
+            await client.send_message(
+                TARGET_CHANNEL,
+                "⏳ **Get new message (WS)**\n\n"
+                f"Symbol: {data['symbol']}\n"
+                f"Side: {data['side']}\n"
+                f"Type: {data['orderType']} / {data.get('stopOrderType', '-')}\n"
+                f"Status: {data['orderStatus']}\n"
+                f"Time in Force: {data['timeInForce']}\n\n"
+                f"Qty: {data['qty']}\n"
+                f"Limit Price: {data['price']}\n"
+                f"Trigger Price: {data.get('triggerPrice', '-')}\n"
+                f"Take Profit: {takeProfit}\n"
+                f"Stop Loss: {stopLoss}\n"
+                f"Filled: {data['cumExecQty']} / {data['qty']}\n\n"
+                f"Last Price on Create: {data.get('lastPriceOnCreated', '-')}\n\n"
+                f"Order ID:\n{data['orderId']}\n\n"
+                f"Created At: {data['createdTime']}"
+            )
 
-            # Send result to Telegram channel
-            async def send_result():
-                await client.send_message(
-                    TARGET_CHANNEL,
-                    f"✅ Position Closed:\n"
-                    f"Symbol: {symbol_ws}\n"
-                    f"PnL: {closed_pnl}\n"
-                    f"Total Trades: {stats['total']}\n"
-                    f"Wins: {stats['win']}\n"
-                    f"Losses: {stats['loss']}\n"
-                    f"Total PnL: {stats['pnl']:.2f}",
-                )
+        telegram_queue.task_done()
 
-            # Run async task from sync function
-            asyncio.create_task(send_result())
+# ---------------- CLOSED ORDER CALLBACK (Refactored) ---------------- #
+def closed_position_callback(msg):
+    try:
+        data = msg["data"][0]
+        symbol_ws = data.get("symbol")
+        size = float(data.get("size", 0))
+        closed_pnl = float(data.get("closedPnl", 0))
+        takeProfit = float(data["takeProfit"])
+        stopLoss = float(data["stopLoss"])
+        print(f"✅ Message on WS is received: {symbol_ws} / {size} / {closed_pnl} / {stopLoss}/ {takeProfit}")
+        
+        
+        telegram_queue.put_nowait({
+            "symbol": symbol_ws,
+            "size": size,
+            "closed_pnl": closed_pnl,
+            "takeProfit": takeProfit,
+            "stopLoss": stopLoss,
+            "data": data,
+            "is_closed": symbol_ws in open_positions and size == 0
+        })
 
     except Exception as e:
-        print(f"[ERROR] Position WS error: {e}")
-
+        asyncio.get_event_loop().create_task(
+            send_error_to_telegram(e, context="WS position callback")
+        )
 
 # ---------------- PARSE SIGNAL ---------------- #
 def parse_signal(text):
@@ -195,91 +239,147 @@ def parse_signal(text):
     }
 
 
-# ---------------- CREATE SIGNAL ---------------- #
-WSPrivate = WebSocket(
-    demo=is_demo,
-    testnet=False,
-    channel_type="private",
-    api_key=selected_api_key,
-    api_secret=selected_api_secret,
-    # trace_logging=True
-)
-WSPrivate.order_stream(closed_position_callback)
+
+async def send_error_to_telegram(error: Exception, context: str = ""):
+    try:
+        tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+        msg = (
+            "🚨 **BOT ERROR**\n\n"
+            f"🕒 Time: {datetime.datetime.utcnow()} UTC\n"
+            f"📍 Context: {context}\n\n"
+            f"❌ Type: {type(error).__name__}\n"
+            f"📝 Message: {str(error)}\n\n"
+            f"📌 Traceback:\n"
+            f"```{tb[-3500:]}```"
+        )
+        await client.send_message(TARGET_CHANNEL, msg)
+    except Exception as e:
+        print("[FATAL] Failed to send error to Telegram:", e)
 
 
 # ---------------- HANDLE SIGNAL ---------------- #
 async def handle_signal(message):
-    text = message.message
-    signal = parse_signal(text)
-    if not signal:
-        print("[WARN] Invalid signal")
-        return
+    try:
+        text = message.message
+        signal = parse_signal(text)
+        if not signal:
+            print("[WARN] Invalid signal")
+            return
 
-    symbol = signal["symbol"]
+        symbol = signal["symbol"]
 
-    if symbol in open_positions:
-        print(f"[INFO] Already in position: {symbol}")
-        return
+        if symbol in open_positions:
+            print(f"[INFO] Already in position: {symbol}")
+            return
 
-    qty = calculate_risk_qty(symbol, signal["entry"], signal["sl"])
-    if not qty:
-        print("[WARN] Qty calculation failed")
-        return
+        qty = calculate_risk_qty(symbol, signal["entry"], signal["sl"])
+        if not qty:
+            print("[WARN] Qty calculation failed")
+            return
 
-    print(f"[INFO] Opening {symbol} | qty={qty}")
+        print(f"[INFO] Opening {symbol} | qty={qty}")
 
-    # Place market order
-    order = session.place_order(
-        category=order_category,
-        symbol=symbol,
-        side=signal["side"],
-        orderType="Maket",
-        qty=str(qty),
-        # price=signal["entry"],
-        # leverage=MAX_LEVERAGE,
-    )
-    open_positions.add(symbol)
+        # Place market order
+        order = session.place_order(
+            category=order_category,
+            symbol=symbol,
+            side=signal["side"],
+            orderType="Market",
+            qty=str(qty),
+            # price=signal["entry"],
+            # leverage=MAX_LEVERAGE,
+        )
+        open_positions.add(symbol)
 
-    # Set SL + first TP
-    session.set_trading_stop(
-        category=order_category,
-        symbol=symbol,
-        tpslMode="Full",
-        stopLoss=str(signal["sl"]),
-        takeProfit=str(signal["targets"][0]),
-        positionIdx=0,
-    )
+        # Set SL + first TP
+        session.set_trading_stop(
+            category=order_category,
+            symbol=symbol,
+            tpslMode="Full",
+            stopLoss=str(signal["sl"]),
+            takeProfit=str(signal["targets"][0]),
+            positionIdx=0,
+        )
 
-    print(
-        f"[SUCCESS] Order placed: {symbol} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
-    )
+        print(
+            f"[SUCCESS] Order placed: {symbol} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
+        )
 
-    # Send order info to Telegram
-    await client.send_message(
-        TARGET_CHANNEL,
-        f"🚀 New Order Placed:\nSymbol: {symbol}\nSide: {signal['side']}\nENR: {signal["entry"]}\nQty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}",
-    )
-
-
-# ---------------- TELETHON ---------------- #
-client = TelegramClient("session_name", TELEGRAM_API_ID, TELEGRAM_API_HASH)
+        # Send order info to Telegram
+        await client.send_message(
+            TARGET_CHANNEL,
+            f"🚀 New Order Placed:\nSymbol: {symbol}\nSide: {signal['side']}\nENR: {signal["entry"]}\nQty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}",
+        )
+    except Exception as e:
+        await send_error_to_telegram(e, context="handle_signal")
 
 
+# ---------------- HANDLE NEW MESSAGE ---------------- #
 @client.on(events.NewMessage(chats=selected_source_channel))
 async def new_message_handler(event):
     print("[INFO] New event received")
-    if is_signal_message(event.message.message):
+
+    message_text = event.message.message or ""
+
+    if is_signal_message(message_text):
         print("[INFO] Signal detected")
-        await handle_signal(event.message)
+
+        await client.send_message(
+            TARGET_CHANNEL,
+            (
+                "📡 **New Signal Message Detected**\n"
+                "━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                "📨 **Original Message:**\n"
+                "```\n"
+                f"{message_text}\n"
+                "```"
+            )
+        )
+
+        try:
+            await handle_signal(event.message)
+        except Exception as e:
+            await send_error_to_telegram(e, context="handle_signal")
+
     else:
         await client.send_message(
             TARGET_CHANNEL,
-            f"⛔ New Message is't signal:\n{event.message.message}",
+            (
+                "⛔ **Non-Signal Message Received**\n"
+                "━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                "📨 **Message Content:**\n"
+                "```\n"
+                f"{message_text}\n"
+                "```"
+            )
         )
+
 
 
 # ---------------- RUN ---------------- #
 async def main():
     await client.start()
-    print("[INFO] Bot is running...")
+    print("[INFO] Telegram client started")
+
+    # وب‌سوکت
+    WSPrivate = WebSocket(
+        demo=is_demo,
+        testnet=False,
+        channel_type="private",
+        api_key=selected_api_key,
+        api_secret=selected_api_secret,
+    )
+    WSPrivate.order_stream(closed_position_callback)
+    
+    def handle_global_exception(loop, context):
+        error = context.get("exception")
+        if error:
+            asyncio.create_task(
+                send_error_to_telegram(error, context="GLOBAL")
+            )
+    loop = asyncio.get_event_loop()
+    loop.set_exception_handler(handle_global_exception)
+    # start processing queue
+    asyncio.create_task(process_telegram_queue())
+
     await client.run_until_disconnected()
