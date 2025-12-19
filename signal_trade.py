@@ -6,8 +6,10 @@ import os
 from dotenv import load_dotenv
 import traceback
 import datetime
+from zoneinfo import ZoneInfo
 
 load_dotenv()
+
 
 # -------- MODE FLAGS --------
 is_demo = True
@@ -16,6 +18,7 @@ is_demo = True
 TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
 
+# SOURCE_CHANNEL = int(os.getenv("TARGET_CHANNEL"))
 SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL")
 TARGET_CHANNEL = int(os.getenv("TARGET_CHANNEL"))
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
@@ -320,6 +323,8 @@ async def new_message_handler(event):
     print("[INFO] New event received")
 
     message_text = event.message.message or ""
+    msg_time = event.message.date.astimezone(ZoneInfo("Asia/Tehran"))
+    formatted_time = msg_time.strftime("%Y-%m-%d | %H:%M:%S")
 
     if is_signal_message(message_text):
         print("[INFO] Signal detected")
@@ -331,7 +336,8 @@ async def new_message_handler(event):
                 "━━━━━━━━━━━━━━━━━━━━━━\n\n"
                 "📨 **Original Message:**\n"
                 "```\n"
-                f"{message_text}\n"
+                f"{message_text}\n\n"
+                f"⏰ **Time:** `{formatted_time}`\n"
                 "```"
             )
         )
@@ -349,7 +355,8 @@ async def new_message_handler(event):
                 "━━━━━━━━━━━━━━━━━━━━━━\n\n"
                 "📨 **Message Content:**\n"
                 "```\n"
-                f"{message_text}\n"
+                f"{message_text}\n\n"
+                f"⏰ **Time:** `{formatted_time}`\n"
                 "```"
             )
         )
