@@ -58,7 +58,7 @@ def get_pending_orders():
         category="linear",
         settleCoin=settleCoin,
         openOnly=0,
-        limit=50,
+        limit=10,
     )
 
     pending_orders = []
@@ -91,7 +91,7 @@ def get_pending_orders():
 
 def get_profit_loos():
     """Query user's closed profit and loss records"""
-    res = session.get_closed_pnl(category="linear", limit=50)
+    res = session.get_closed_pnl(category="linear", limit=10)
 
     profit_loss = []
 

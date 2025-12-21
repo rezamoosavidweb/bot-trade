@@ -7,9 +7,16 @@ from dotenv import load_dotenv
 import traceback
 import datetime
 from zoneinfo import ZoneInfo
+import time
 
 load_dotenv()
 
+
+try:
+    main_loop = asyncio.get_running_loop()
+except RuntimeError:
+    main_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(main_loop)
 
 # -------- MODE FLAGS --------
 is_demo = True
@@ -35,6 +42,7 @@ settleCoin = "USDT"
 symbol_cache = {}
 open_positions = set()
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
+MAX_POSITION_USDT = 100  # حتی بهتر
 
 # -------- SELECT API KEYS --------
 if is_demo:
@@ -79,17 +87,18 @@ def get_symbol_info(symbol):
     if symbol in symbol_cache:
         return symbol_cache[symbol]
 
-    res = session.get_instruments_info(category=order_category, symbol=symbol)
+    res = session.get_instruments_info(category="linear", symbol=symbol)
     item = res["result"]["list"][0]
 
     info = {
         "min_qty": float(item["lotSizeFilter"]["minOrderQty"]),
+        "max_order_qty": float(item["lotSizeFilter"]["maxOrderQty"]),
         "qty_step": float(item["lotSizeFilter"]["qtyStep"]),
         "min_notional": float(item["lotSizeFilter"]["minNotionalValue"]),
         "tick_size": float(item["priceFilter"]["tickSize"]),
         "max_leverage": float(item["leverageFilter"]["maxLeverage"]),
     }
-    print(symbol, info)
+
     symbol_cache[symbol] = info
     return info
 
@@ -107,6 +116,54 @@ def get_usdt_balance():
                 return 0.0
     return 0.0
 
+# ---------------- GET OPEN POSITION ---------------- #
+def is_position_open(symbol):
+    try:
+        res = session.get_positions(
+            category="linear",
+            symbol=symbol,
+        )
+        positions = res["result"]["list"]
+        if not positions:
+            return False
+
+        size = float(positions[0]["size"])
+        return size != 0
+    except Exception as e:
+        print(f"[WARN] position check failed: {e}")
+        return False
+
+# ---------------- GET TRANSACTIONS LOG ---------------- #
+async def get_last_transactions(symbol: str, limit: int = 5):
+    """
+    گرفتن آخرین transaction ها برای یک symbol
+    """
+    end_time = int(time.time() * 1000)
+    start_time = end_time - 7 * 24 * 60 * 60 * 1000  # 7 روز
+
+    resp = session.get_transaction_log(
+        accountType="UNIFIED",
+        category="linear",
+        currency="USDT",
+        startTime=start_time,
+        endTime=end_time,
+        limit=50,
+    )
+
+    transactions = resp.get("result", {}).get("list", [])
+    
+    # فقط symbol مورد نظر
+    symbol_txs = [tx for tx in transactions if tx.get("symbol") == symbol]
+
+    # جدیدترین → قدیمی‌ترین
+    symbol_txs.sort(
+        key=lambda x: int(x.get("transactionTime", 0)),
+        reverse=True
+    )
+
+    return symbol_txs[:limit]
+
+
 
 # ---------------- QUANTITY CALC ---------------- #
 def normalize_qty(qty, step):
@@ -114,25 +171,35 @@ def normalize_qty(qty, step):
     qty = int(qty / step) * step
     return round(qty, precision)
 
-
 def calculate_risk_qty(symbol, entry, sl):
     info = get_symbol_info(symbol)
     balance = get_usdt_balance()
+
     risk_amount = balance * RISK_PERCENT
     sl_distance = abs(entry - sl)
 
-    if sl_distance <= 0:
+    if sl_distance <= 0 or entry <= 0:
         return None
 
-    raw_qty = risk_amount / sl_distance
+    # qty based on risk
+    raw_qty = (risk_amount * MAX_LEVERAGE) / (sl_distance * entry)
     qty = normalize_qty(raw_qty, info["qty_step"])
 
-    print(f"[INFO] qty: {qty}, min_qty: {info['min_qty']}")
+    # 🧠 cap based on order limit
+    qty = min(qty, info["max_order_qty"])
+
+    # 🧠 cap based on position USDT
+    qty_cap_by_usdt = MAX_POSITION_USDT / entry
+    qty = min(qty, qty_cap_by_usdt)
+
+    qty = normalize_qty(qty, info["qty_step"])
 
     if qty < info["min_qty"]:
         return None
+
     if qty * entry < info["min_notional"]:
         return None
+
     return qty
 
 
@@ -144,80 +211,148 @@ telegram_queue = asyncio.Queue()
 async def process_telegram_queue():
     while True:
         item = await telegram_queue.get()
+
         symbol_ws = item["symbol"]
         closed_pnl = item["closed_pnl"]
         data = item["data"]
         is_closed = item["is_closed"]
         takeProfit = item["takeProfit"]
         stopLoss = item["stopLoss"]
-        
-        if is_closed:
-            open_positions.discard(symbol_ws)
-            stats["total"] += 1
-            stats["pnl"] += closed_pnl
-            if closed_pnl > 0:
-                stats["win"] += 1
-            else:
-                stats["loss"] += 1
 
-            await client.send_message(
-                TARGET_CHANNEL,
-                f"✅ Position Closed:\n"
-                f"Symbol: {symbol_ws}\n"
-                f"PnL: {closed_pnl}\n"
-                f"Total Trades: {stats['total']}\n"
-                f"Wins: {stats['win']}\n"
-                f"Losses: {stats['loss']}\n"
-                f"Total PnL: {stats['pnl']:.2f}",
-            )
-        else:
-            await client.send_message(
-                TARGET_CHANNEL,
-                "⏳ **Get new message (WS)**\n\n"
-                f"Symbol: {data['symbol']}\n"
-                f"Side: {data['side']}\n"
-                f"Type: {data['orderType']} / {data.get('stopOrderType', '-')}\n"
-                f"Status: {data['orderStatus']}\n"
-                f"Time in Force: {data['timeInForce']}\n\n"
-                f"Qty: {data['qty']}\n"
-                f"Limit Price: {data['price']}\n"
-                f"Trigger Price: {data.get('triggerPrice', '-')}\n"
-                f"Take Profit: {takeProfit}\n"
-                f"Stop Loss: {stopLoss}\n"
-                f"Filled: {data['cumExecQty']} / {data['qty']}\n\n"
-                f"Last Price on Create: {data.get('lastPriceOnCreated', '-')}\n\n"
-                f"Order ID:\n{data['orderId']}\n\n"
-                f"Created At: {data['createdTime']}"
-            )
+        try:
+            # ================= POSITION CLOSED =================
+            if is_closed:
+                open_positions.discard(symbol_ws)
+
+                # ---------- stats ----------
+                stats["total"] += 1
+                stats["pnl"] += closed_pnl
+                if closed_pnl > 0:
+                    stats["win"] += 1
+                else:
+                    stats["loss"] += 1
+
+                # ⏳ صبر برای Sync شدن Transaction Log در Bybit
+                await asyncio.sleep(2)
+
+                # ---------- get last transactions ----------
+                transactions_data = await get_last_transactions(
+                    symbol=symbol_ws,
+                    limit=2
+                )
+
+                # ---------- header message ----------
+                header_msg = (
+                    f"✅ **POSITION CLOSED**\n\n"
+                    "```\n"
+                    f"Symbol: {symbol_ws}\n"
+                    f"Closed PnL: {closed_pnl}\n"
+                    f"Take Profit: {takeProfit}\n"
+                    f"Stop Loss: {stopLoss}\n\n"
+                    f"Total Trades: {stats['total']}\n"
+                    f"Wins: {stats['win']}\n"
+                    f"Losses: {stats['loss']}\n"
+                    f"Total PnL: {stats['pnl']:.2f}\n"
+                    "```"
+                )
+
+                await client.send_message(TARGET_CHANNEL, header_msg)
+
+                # ---------- loop on transactions ----------
+                for idx, tx in enumerate(transactions_data, start=1):
+                    cash_flow = float(tx.get("cashFlow", 0))
+                    funding = float(tx.get("funding", 0))
+                    fee = float(tx.get("fee", 0))
+                    change = float(tx.get("change", 0))
+
+                    tx_msg = (
+                        f"📄 **Transaction #{idx}**\n\n"
+                        "```\n"
+                        f"Type: {tx.get('type')}\n"
+                        f"Side: {tx.get('side')}\n"
+                        f"Qty: {tx.get('qty')}\n"
+                        f"Price: {tx.get('tradePrice')}\n"
+                        f"Cash Flow: {cash_flow}\n"
+                        f"Funding: {funding}\n"
+                        f"Fee: {fee}\n"
+                        f"Change: {change}\n"
+                        f"Balance After: {tx.get('cashBalance')}\n"
+                        f"Order ID: {tx.get('orderId')}\n"
+                        f"Trade ID: {tx.get('tradeId')}\n"
+                        f"Time: {tx.get('transactionTime')}\n"
+                        "```"
+                    )
+
+                    await client.send_message(TARGET_CHANNEL, tx_msg)
+                    await asyncio.sleep(0.2)  # جلوگیری از flood
+
+            # ================= ACTIVE / NEW ORDER =================
+            else:
+                msg_text = (
+                    f"⏳ **WS New / Active Order**\n\n"
+                    "```\n"
+                    f"Symbol: {symbol_ws}\n"
+                    f"Order ID: {data['orderId']}\n"
+                    f"Side: {data['side']}\n"
+                    f"Type: {data['orderType']} / {data.get('stopOrderType', '-')}\n"
+                    f"Status: {data['orderStatus']}\n"
+                    f"Qty: {data['qty']}\n"
+                    f"Filled Qty: {data['cumExecQty']}\n"
+                    f"Price: {data.get('price')}\n"
+                    f"Avg Price: {data.get('avgPrice', '-')}\n"
+                    f"Take Profit: {takeProfit}\n"
+                    f"Stop Loss: {stopLoss}\n"
+                    f"Reduce Only: {data.get('reduceOnly')}\n"
+                    f"Created At: {data.get('createdTime')}\n"
+                    "```"
+                )
+
+                await client.send_message(TARGET_CHANNEL, msg_text)
+
+        except Exception as e:
+            print("[ERROR] Telegram send failed:", e)
 
         telegram_queue.task_done()
 
-# ---------------- CLOSED ORDER CALLBACK (Refactored) ---------------- #
-def closed_position_callback(msg):
+# ---------------- CLOSED ORDER CALLBACK ---------------- #
+def order_callback_ws(msg):
     try:
         data = msg["data"][0]
         symbol_ws = data.get("symbol")
         size = float(data.get("size", 0))
         closed_pnl = float(data.get("closedPnl", 0))
-        takeProfit = float(data["takeProfit"])
-        stopLoss = float(data["stopLoss"])
-        print(f"✅ Message on WS is received: {symbol_ws} / {size} / {closed_pnl} / {stopLoss}/ {takeProfit}")
+        takeProfit = float(data.get("takeProfit") or 0)
+        stopLoss = float(data.get("stopLoss") or 0)
+
+        # print(f"✅ WS data: {data}")
+        print(f"✅ WS message: symbol_ws:{symbol_ws} / size:{size} / closed_pnl:{closed_pnl}")
+
+        # تشخیص اینکه پوزیشن بسته شده است یا خیر
+        is_closed = (
+            (data.get("reduceOnly") in [True, "True"] and data.get("closeOnTrigger") in [True, "True"])
+            or float(data.get("closedPnl", 0)) != 0
+        )
+
         
-        
-        telegram_queue.put_nowait({
-            "symbol": symbol_ws,
-            "size": size,
-            "closed_pnl": closed_pnl,
-            "takeProfit": takeProfit,
-            "stopLoss": stopLoss,
-            "data": data,
-            "is_closed": symbol_ws in open_positions and size == 0
-        })
+        asyncio.run_coroutine_threadsafe(
+            telegram_queue.put({
+                "symbol": symbol_ws,
+                "size": size,
+                "closed_pnl": closed_pnl,
+                "takeProfit": takeProfit,
+                "stopLoss": stopLoss,
+                "data": data,
+                "is_closed": is_closed,
+            }),
+            main_loop
+        )
 
     except Exception as e:
-        asyncio.get_event_loop().create_task(
-            send_error_to_telegram(e, context="WS position callback")
+        asyncio.run_coroutine_threadsafe(
+            send_error_to_telegram(e, context="WS position callback"),
+            main_loop
         )
+
 
 # ---------------- PARSE SIGNAL ---------------- #
 def parse_signal(text):
@@ -231,6 +366,7 @@ def parse_signal(text):
         return None
 
     symbol = symbol_match.group(1).upper() + symbol_match.group(2).upper()
+
     side = "Buy" if side_match.group(1).lower() == "long" else "Sell"
 
     return {
@@ -242,10 +378,11 @@ def parse_signal(text):
     }
 
 
-
 async def send_error_to_telegram(error: Exception, context: str = ""):
     try:
-        tb = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+        tb = "".join(
+            traceback.format_exception(type(error), error, error.__traceback__)
+        )
         msg = (
             "🚨 **BOT ERROR**\n\n"
             f"🕒 Time: {datetime.datetime.utcnow()} UTC\n"
@@ -271,10 +408,19 @@ async def handle_signal(message):
 
         symbol = signal["symbol"]
 
-        if symbol in open_positions:
+        # ---------- بررسی وضعیت واقعی پوزیشن ----------
+        position_open = is_position_open(symbol)
+        if symbol in open_positions or position_open:
+            # اگر پوزیشن در Bybit باز است ولی open_positions محلی خالی بود، آن را اضافه می‌کنیم
+            open_positions.add(symbol)
             print(f"[INFO] Already in position: {symbol}")
+            await client.send_message(
+                TARGET_CHANNEL,
+                f"ℹ️ Ignore Signal. Already have an open position for {symbol}"
+            )
             return
 
+        # ---------- محاسبه مقدار سفارش ----------
         qty = calculate_risk_qty(symbol, signal["entry"], signal["sl"])
         if not qty:
             print("[WARN] Qty calculation failed")
@@ -282,37 +428,48 @@ async def handle_signal(message):
 
         print(f"[INFO] Opening {symbol} | qty={qty}")
 
-        # Place market order
+        # ---------- ثبت سفارش بازار ----------
         order = session.place_order(
             category=order_category,
             symbol=symbol,
             side=signal["side"],
             orderType="Market",
             qty=str(qty),
+            stopLoss=str(signal["sl"]),
+            takeProfit=str(signal["targets"][0])
             # price=signal["entry"],
             # leverage=MAX_LEVERAGE,
         )
+
+        # ثبت موفق → به cache اضافه شود
         open_positions.add(symbol)
 
-        # Set SL + first TP
-        session.set_trading_stop(
-            category=order_category,
-            symbol=symbol,
-            tpslMode="Full",
-            stopLoss=str(signal["sl"]),
-            takeProfit=str(signal["targets"][0]),
-            positionIdx=0,
-        )
+        # ---------- تنظیم SL و اولین TP ----------
+        # session.set_trading_stop(
+        #     category=order_category,
+        #     symbol=symbol,
+        #     tpslMode="Full",
+        #     stopLoss=str(signal["sl"]),
+        #     takeProfit=str(signal["targets"][0]),
+        #     positionIdx=0,
+        # )
 
         print(
             f"[SUCCESS] Order placed: {symbol} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
         )
 
-        # Send order info to Telegram
+        # ---------- ارسال اطلاعات به تلگرام ----------
         await client.send_message(
             TARGET_CHANNEL,
-            f"🚀 New Order Placed:\nSymbol: {symbol}\nSide: {signal['side']}\nENR: {signal["entry"]}\nQty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}",
+            f"🚀 New Order Placed:\n"
+            f"Symbol: {symbol}\n"
+            f"Side: {signal['side']}\n"
+            f"Entry: {signal['entry']}\n"
+            f"Qty: {qty}\n"
+            f"SL: {signal['sl']}\n"
+            f"TP: {signal['targets'][0]}"
         )
+
     except Exception as e:
         await send_error_to_telegram(e, context="handle_signal")
 
@@ -339,7 +496,7 @@ async def new_message_handler(event):
                 f"{message_text}\n\n"
                 f"⏰ **Time:** `{formatted_time}`\n"
                 "```"
-            )
+            ),
         )
 
         try:
@@ -358,15 +515,16 @@ async def new_message_handler(event):
                 f"{message_text}\n\n"
                 f"⏰ **Time:** `{formatted_time}`\n"
                 "```"
-            )
+            ),
         )
-
 
 
 # ---------------- RUN ---------------- #
 async def main():
     await client.start()
     print("[INFO] Telegram client started")
+    global main_loop
+    main_loop = asyncio.get_event_loop()
 
     # وب‌سوکت
     WSPrivate = WebSocket(
@@ -375,15 +533,15 @@ async def main():
         channel_type="private",
         api_key=selected_api_key,
         api_secret=selected_api_secret,
+        # trace_logging=True 
     )
-    WSPrivate.order_stream(closed_position_callback)
-    
+    WSPrivate.order_stream(order_callback_ws)
+
     def handle_global_exception(loop, context):
         error = context.get("exception")
         if error:
-            asyncio.create_task(
-                send_error_to_telegram(error, context="GLOBAL")
-            )
+            asyncio.create_task(send_error_to_telegram(error, context="GLOBAL"))
+
     loop = asyncio.get_event_loop()
     loop.set_exception_handler(handle_global_exception)
     # start processing queue
