@@ -505,18 +505,19 @@ async def new_message_handler(event):
             await send_error_to_telegram(e, context="handle_signal")
 
     else:
-        await client.send_message(
-            TARGET_CHANNEL,
-            (
-                "⛔ **Non-Signal Message Received**\n"
-                "━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                "📨 **Message Content:**\n"
-                "```\n"
-                f"{message_text}\n\n"
-                f"⏰ **Time:** `{formatted_time}`\n"
-                "```"
-            ),
-        )
+        print("is not signal messahe")
+        # await client.send_message(
+        #     TARGET_CHANNEL,
+        #     (
+        #         "⛔ **Non-Signal Message Received**\n"
+        #         "━━━━━━━━━━━━━━━━━━━━━━\n\n"
+        #         "📨 **Message Content:**\n"
+        #         "```\n"
+        #         f"{message_text}\n\n"
+        #         f"⏰ **Time:** `{formatted_time}`\n"
+        #         "```"
+        #     ),
+        # )
 
 
 # ---------------- RUN ---------------- #
