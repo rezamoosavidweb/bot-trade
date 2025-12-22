@@ -42,7 +42,7 @@ settleCoin = "USDT"
 symbol_cache = {}
 open_positions = set()
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
-MAX_POSITION_USDT = 100  # حتی بهتر
+MAX_POSITION_USDT =2000  
 
 # -------- SELECT API KEYS --------
 if is_demo:
