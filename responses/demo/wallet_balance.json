@@ -1,0 +1,50 @@
+{
+  "retCode": 0,
+  "retMsg": "OK",
+  "result": {
+    "list": [
+      {
+        "accountIMRate": "0.002",
+        "totalMaintenanceMarginByMp": "20.87920645",
+        "totalInitialMargin": "199.94227989",
+        "accountType": "UNIFIED",
+        "accountMMRate": "0.0002",
+        "accountMMRateByMp": "0.0002",
+        "accountIMRateByMp": "0.002",
+        "totalInitialMarginByMp": "199.94227989",
+        "totalMaintenanceMargin": "20.87920645",
+        "totalEquity": "189064.62471888",
+        "totalMarginBalance": "98750.15259488",
+        "totalAvailableBalance": "98550.21031498",
+        "totalPerpUPL": "3.10606682",
+        "totalWalletBalance": "98747.04652805",
+        "accountLTV": "0",
+        "coin": [
+          {
+            "spotBorrow": "0",
+            "availableToBorrow": "",
+            "bonus": "0",
+            "accruedInterest": "0",
+            "availableToWithdraw": "",
+            "totalOrderIM": "0",
+            "equity": "1",
+            "totalPositionMM": "0",
+            "usdValue": "87372.142874",
+            "unrealisedPnl": "0",
+            "collateralSwitch": false,
+            "spotHedgingQty": "0",
+            "borrowAmount": "0.000000000000000000",
+            "totalPositionIM": "0",
+            "walletBalance": "1",
+            "cumRealisedPnl": "0",
+            "locked": "0",
+            "marginCollateral": true,
+            "coin": "BTC"
+          }
+        ]
+      }
+    ]
+  },
+  "retExtInfo": {},
+  "time": 1766595980820
+}

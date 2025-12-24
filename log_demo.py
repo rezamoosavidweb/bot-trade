@@ -9,7 +9,7 @@ from datetime import datetime
 load_dotenv()
 
 # -------- MODE FLAGS --------
-is_demo = True
+is_demo = False
 is_testnet = False   # ← اگر تست‌نت است True
 
 # -------- API KEYS --------
@@ -91,16 +91,18 @@ wallet_balance = session.get_wallet_balance(
     accountType="UNIFIED",
     coin="BTC",
 )
-transaction_log = session.get_transaction_log(coin="BTC")
+transaction_log = session.get_transaction_log()
 instruments_info = session.get_instruments_info(category="linear")
-# fee_rates = session.get_fee_rates(category="linear")
+fee_rates = session.get_fee_rates(category="linear")
 positions_info = session.get_positions(category="linear",settleCoin=settleCoin)
 # fee_rates = session.get_fee_rates(category="linear", symbol=selected_symbol)
+closed_pnl = session.get_closed_pnl(category="linear")
 
 # ---------- Save responses ----------
 save_json(f"account_info.json", account_info, is_demo,is_testnet)
-save_json(f"{coin}_wallet_balance.json", wallet_balance, is_demo,is_testnet)
-save_json(f"{coin}_transaction_log.json", transaction_log, is_demo,is_testnet)
+save_json(f"wallet_balance.json", wallet_balance, is_demo,is_testnet)
+save_json(f"transaction_log.json", transaction_log, is_demo,is_testnet)
 save_json(f"instruments_info_linear.json", instruments_info, is_demo,is_testnet)
-# save_json(f"fee_rates.json", fee_rates, is_demo,is_testnet)
+save_json(f"closed_pnl.json", closed_pnl, is_demo,is_testnet)
+save_json(f"fee_rates.json", fee_rates, is_demo,is_testnet)
 save_json(f"{settleCoin}_positions_info.json", positions_info, is_demo,is_testnet)

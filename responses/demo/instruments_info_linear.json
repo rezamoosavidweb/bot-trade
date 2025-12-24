@@ -2409,7 +2409,7 @@
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
-        "fundingInterval": 120,
+        "fundingInterval": 60,
         "settleCoin": "USDT",
         "copyTrading": "both",
         "upperFundingRate": "0.02",
@@ -2961,16 +2961,16 @@
         "launchTime": "1650369703000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "300000",
@@ -3709,16 +3709,16 @@
         "launchTime": "1701941550000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "75600",
@@ -4416,7 +4416,7 @@
         "priceScale": "4",
         "leverageFilter": {
           "minLeverage": "1",
-          "maxLeverage": "25.00",
+          "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
@@ -4436,8 +4436,8 @@
         "fundingInterval": 60,
         "settleCoin": "USDT",
         "copyTrading": "both",
-        "upperFundingRate": "0.02",
-        "lowerFundingRate": "-0.02",
+        "upperFundingRate": "0.025",
+        "lowerFundingRate": "-0.025",
         "isPreListing": false,
         "preListingInfo": null,
         "riskParameters": {
@@ -4457,16 +4457,16 @@
         "launchTime": "1655445585000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "12.50",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "65000",
@@ -4721,16 +4721,16 @@
         "launchTime": "1758708305000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "12.50",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "550000",
@@ -5205,16 +5205,16 @@
         "launchTime": "1739535111000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "325000",
@@ -5549,13 +5549,13 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "BTCUSDT-19DEC25",
+        "symbol": "BTCUSDT-09JAN26",
         "contractType": "LinearFutures",
         "status": "Trading",
         "baseCoin": "BTC",
         "quoteCoin": "USDT",
-        "launchTime": "1764316800000",
-        "deliveryTime": "1766131200000",
+        "launchTime": "1766131200000",
+        "deliveryTime": "1767945600000",
         "deliveryFeeRate": "0",
         "priceScale": "2",
         "leverageFilter": {
@@ -6217,16 +6217,16 @@
         "launchTime": "1641367582000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "260000.0",
@@ -7801,16 +7801,16 @@
         "launchTime": "1711971483000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "6",
+        "priceScale": "7",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.000001",
-          "maxPrice": "19.999998",
-          "tickSize": "0.000001"
+          "minPrice": "0.0000001",
+          "maxPrice": "1.9999998",
+          "tickSize": "0.0000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "15000000",
@@ -8189,13 +8189,13 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "DOGEUSDT-19DEC25",
+        "symbol": "DOGEUSDT-09JAN26",
         "contractType": "LinearFutures",
         "status": "Trading",
         "baseCoin": "DOGE",
         "quoteCoin": "USDT",
-        "launchTime": "1764316800000",
-        "deliveryTime": "1766131200000",
+        "launchTime": "1766131200000",
+        "deliveryTime": "1767945600000",
         "deliveryFeeRate": "0",
         "priceScale": "5",
         "leverageFilter": {
@@ -9729,13 +9729,13 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "ETHUSDT-19DEC25",
+        "symbol": "ETHUSDT-09JAN26",
         "contractType": "LinearFutures",
         "status": "Trading",
         "baseCoin": "ETH",
         "quoteCoin": "USDT",
-        "launchTime": "1764316800000",
-        "deliveryTime": "1766131200000",
+        "launchTime": "1766131200000",
+        "deliveryTime": "1767945600000",
         "deliveryFeeRate": "0",
         "priceScale": "2",
         "leverageFilter": {
@@ -10309,16 +10309,16 @@
         "launchTime": "1624950900000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "3",
+        "priceScale": "4",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.001",
-          "maxPrice": "19999.998",
-          "tickSize": "0.001"
+          "minPrice": "0.0001",
+          "maxPrice": "1999.9998",
+          "tickSize": "0.0001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "295750.0",
@@ -11453,16 +11453,16 @@
         "launchTime": "1743426729000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "5",
+        "priceScale": "6",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "20.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.00001",
-          "maxPrice": "199.99998",
-          "tickSize": "0.00001"
+          "minPrice": "0.000001",
+          "maxPrice": "19.999998",
+          "tickSize": "0.000001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "1000000",
@@ -12377,16 +12377,16 @@
         "launchTime": "1745323627000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "388000",
@@ -13357,11 +13357,11 @@
           "tickSize": "0.000001"
         },
         "lotSizeFilter": {
-          "maxOrderQty": "31000000",
+          "maxOrderQty": "4500000",
           "minOrderQty": "100",
           "qtyStep": "100",
-          "postOnlyMaxOrderQty": "31000000",
-          "maxMktOrderQty": "6200000",
+          "postOnlyMaxOrderQty": "4500000",
+          "maxMktOrderQty": "2000000",
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
@@ -14393,50 +14393,6 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "LITENTRYUSDT",
-        "contractType": "LinearPerpetual",
-        "status": "Trading",
-        "baseCoin": "LITENTRY",
-        "quoteCoin": "USDT",
-        "launchTime": "1766051750000",
-        "deliveryTime": "0",
-        "deliveryFeeRate": "",
-        "priceScale": "4",
-        "leverageFilter": {
-          "minLeverage": "1",
-          "maxLeverage": "16.67",
-          "leverageStep": "0.01"
-        },
-        "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
-        },
-        "lotSizeFilter": {
-          "maxOrderQty": "248710",
-          "minOrderQty": "1",
-          "qtyStep": "1",
-          "postOnlyMaxOrderQty": "248710",
-          "maxMktOrderQty": "26580",
-          "minNotionalValue": "5"
-        },
-        "unifiedMarginTrade": true,
-        "fundingInterval": 240,
-        "settleCoin": "USDT",
-        "copyTrading": "none",
-        "upperFundingRate": "0.03",
-        "lowerFundingRate": "-0.03",
-        "isPreListing": false,
-        "preListingInfo": null,
-        "riskParameters": {
-          "priceLimitRatioX": "0.05",
-          "priceLimitRatioY": "0.1"
-        },
-        "displayName": "",
-        "symbolType": "",
-        "forbidUplWithdrawal": false
-      },
-      {
         "symbol": "LPTUSDT",
         "contractType": "LinearPerpetual",
         "status": "Trading",
@@ -14885,16 +14841,16 @@
         "launchTime": "1636329600000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "4",
+        "priceScale": "5",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.0001",
-          "maxPrice": "1999.9998",
-          "tickSize": "0.0001"
+          "minPrice": "0.00001",
+          "maxPrice": "199.99998",
+          "tickSize": "0.00001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "650000.0",
@@ -15249,11 +15205,11 @@
           "tickSize": "0.00001"
         },
         "lotSizeFilter": {
-          "maxOrderQty": "300000.0",
+          "maxOrderQty": "140000.0",
           "minOrderQty": "0.1",
           "qtyStep": "0.1",
-          "postOnlyMaxOrderQty": "300000.0",
-          "maxMktOrderQty": "60000.0",
+          "postOnlyMaxOrderQty": "140000.0",
+          "maxMktOrderQty": "39000.0",
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
@@ -15801,13 +15757,13 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "MNTUSDT-19DEC25",
+        "symbol": "MNTUSDT-09JAN26",
         "contractType": "LinearFutures",
         "status": "Trading",
         "baseCoin": "MNT",
         "quoteCoin": "USDT",
-        "launchTime": "1764316800000",
-        "deliveryTime": "1766131200000",
+        "launchTime": "1766131200000",
+        "deliveryTime": "1767945600000",
         "deliveryFeeRate": "0",
         "priceScale": "4",
         "leverageFilter": {
@@ -16393,11 +16349,11 @@
           "tickSize": "0.00010"
         },
         "lotSizeFilter": {
-          "maxOrderQty": "50000",
+          "maxOrderQty": "9900",
           "minOrderQty": "1",
           "qtyStep": "1",
-          "postOnlyMaxOrderQty": "50000",
-          "maxMktOrderQty": "10000",
+          "postOnlyMaxOrderQty": "9900",
+          "maxMktOrderQty": "5000",
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
@@ -18461,11 +18417,11 @@
           "tickSize": "0.00001"
         },
         "lotSizeFilter": {
-          "maxOrderQty": "750000",
+          "maxOrderQty": "200000",
           "minOrderQty": "1",
           "qtyStep": "1",
-          "postOnlyMaxOrderQty": "750000",
-          "maxMktOrderQty": "150000",
+          "postOnlyMaxOrderQty": "200000",
+          "maxMktOrderQty": "93000",
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
@@ -19019,7 +18975,7 @@
         "baseCoin": "PRCL",
         "quoteCoin": "USDT",
         "launchTime": "1721208686000",
-        "deliveryTime": "0",
+        "deliveryTime": "1766739600000",
         "deliveryFeeRate": "",
         "priceScale": "5",
         "leverageFilter": {
@@ -19593,16 +19549,16 @@
         "launchTime": "1639356566000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "3",
+        "priceScale": "4",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "25.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.001",
-          "maxPrice": "19999.998",
-          "tickSize": "0.001"
+          "minPrice": "0.0001",
+          "maxPrice": "1999.9998",
+          "tickSize": "0.0001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "26000.0",
@@ -19945,16 +19901,16 @@
         "launchTime": "1721982407000",
         "deliveryTime": "0",
         "deliveryFeeRate": "",
-        "priceScale": "3",
+        "priceScale": "4",
         "leverageFilter": {
           "minLeverage": "1",
           "maxLeverage": "50.00",
           "leverageStep": "0.01"
         },
         "priceFilter": {
-          "minPrice": "0.001",
-          "maxPrice": "19999.998",
-          "tickSize": "0.001"
+          "minPrice": "0.0001",
+          "maxPrice": "1999.9998",
+          "tickSize": "0.0001"
         },
         "lotSizeFilter": {
           "maxOrderQty": "50000.0",
@@ -21917,13 +21873,13 @@
         "forbidUplWithdrawal": false
       },
       {
-        "symbol": "SOLUSDT-19DEC25",
+        "symbol": "SOLUSDT-09JAN26",
         "contractType": "LinearFutures",
         "status": "Trading",
         "baseCoin": "SOL",
         "quoteCoin": "USDT",
-        "launchTime": "1764316800000",
-        "deliveryTime": "1766131200000",
+        "launchTime": "1766131200000",
+        "deliveryTime": "1767945600000",
         "deliveryFeeRate": "0",
         "priceScale": "2",
         "leverageFilter": {
@@ -22003,10 +21959,54 @@
         "displayName": "",
         "symbolType": "",
         "forbidUplWithdrawal": false
+      },
+      {
+        "symbol": "SOLUSDT-30JAN26",
+        "contractType": "LinearFutures",
+        "status": "Trading",
+        "baseCoin": "SOL",
+        "quoteCoin": "USDT",
+        "launchTime": "1764921600000",
+        "deliveryTime": "1769760000000",
+        "deliveryFeeRate": "0",
+        "priceScale": "2",
+        "leverageFilter": {
+          "minLeverage": "1",
+          "maxLeverage": "50.00",
+          "leverageStep": "0.01"
+        },
+        "priceFilter": {
+          "minPrice": "0.01",
+          "maxPrice": "199999.98",
+          "tickSize": "0.01"
+        },
+        "lotSizeFilter": {
+          "maxOrderQty": "1000.00",
+          "minOrderQty": "0.01",
+          "qtyStep": "0.01",
+          "postOnlyMaxOrderQty": "1000.00",
+          "maxMktOrderQty": "200.00",
+          "minNotionalValue": "5"
+        },
+        "unifiedMarginTrade": true,
+        "fundingInterval": 0,
+        "settleCoin": "USDT",
+        "copyTrading": "none",
+        "upperFundingRate": "0",
+        "lowerFundingRate": "0",
+        "isPreListing": false,
+        "preListingInfo": null,
+        "riskParameters": {
+          "priceLimitRatioX": "0.05",
+          "priceLimitRatioY": "0.1"
+        },
+        "displayName": "",
+        "symbolType": "",
+        "forbidUplWithdrawal": false
       }
     ],
-    "nextPageCursor": "first%3D0GUSDT%26last%3DSOLUSDT-26DEC25"
+    "nextPageCursor": "first%3D0GUSDT%26last%3DSOLUSDT-30JAN26"
   },
   "retExtInfo": {},
-  "time": 1766077926611
+  "time": 1766595981222
 }
