@@ -45,8 +45,8 @@ stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
 MAX_POSITION_USDT = 2000
 
 FIXED_MARGIN_USDT = 100
-MAX_LOSS_USDT = 15
-TARGET_PROFIT_USDT = 7
+MAX_LOSS_USDT = 30
+TARGET_PROFIT_USDT = 15
 
 # -------- SELECT API KEYS --------
 if is_demo:

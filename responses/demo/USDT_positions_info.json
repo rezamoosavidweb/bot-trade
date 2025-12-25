@@ -15,19 +15,19 @@
         "takeProfit": "1.4358",
         "positionValue": "1987.72",
         "isReduceOnly": false,
-        "positionIMByMp": "198.9215214",
+        "positionIMByMp": "196.5639214",
         "tpslMode": "Full",
         "riskId": 1,
         "trailingStop": "0",
-        "unrealisedPnl": "-8.344",
-        "markPrice": "1.41384",
+        "unrealisedPnl": "-31.92",
+        "markPrice": "1.397",
         "adlRankIndicator": 2,
         "cumRealisedPnl": "13.271305",
-        "positionMM": "20.7776814",
+        "positionMM": "20.5419214",
         "createdTime": "1766449873297",
         "positionIdx": 0,
-        "positionIM": "198.9215214",
-        "positionMMByMp": "20.7776814",
+        "positionIM": "196.5639214",
+        "positionMMByMp": "20.5419214",
         "seq": 140667106141099,
         "updatedTime": "1766678400020",
         "side": "Buy",
@@ -45,5 +45,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1766687161597
+  "time": 1766701150697
 }
