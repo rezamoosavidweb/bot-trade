@@ -42,7 +42,11 @@ settleCoin = "USDT"
 symbol_cache = {}
 open_positions = set()
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}
-MAX_POSITION_USDT =2000  
+MAX_POSITION_USDT = 2000
+
+FIXED_MARGIN_USDT = 100
+MAX_LOSS_USDT = 15
+TARGET_PROFIT_USDT = 7
 
 # -------- SELECT API KEYS --------
 if is_demo:
@@ -116,6 +120,7 @@ def get_usdt_balance():
                 return 0.0
     return 0.0
 
+
 # ---------------- GET OPEN POSITION ---------------- #
 def is_position_open(symbol):
     try:
@@ -132,6 +137,7 @@ def is_position_open(symbol):
     except Exception as e:
         print(f"[WARN] position check failed: {e}")
         return False
+
 
 # ---------------- GET TRANSACTIONS LOG ---------------- #
 async def get_last_transactions(symbol: str, limit: int = 5):
@@ -151,18 +157,55 @@ async def get_last_transactions(symbol: str, limit: int = 5):
     )
 
     transactions = resp.get("result", {}).get("list", [])
-    
+
     # فقط symbol مورد نظر
     symbol_txs = [tx for tx in transactions if tx.get("symbol") == symbol]
 
     # جدیدترین → قدیمی‌ترین
-    symbol_txs.sort(
-        key=lambda x: int(x.get("transactionTime", 0)),
-        reverse=True
-    )
+    symbol_txs.sort(key=lambda x: int(x.get("transactionTime", 0)), reverse=True)
 
     return symbol_txs[:limit]
 
+
+# ---------------- QUANTITY FIXED MARGIN --------- #
+def calculate_fixed_trade(symbol, entry, sl):
+    info = get_symbol_info(symbol)
+
+    sl_distance = abs(entry - sl)
+    if sl_distance <= 0:
+        return None
+
+    raw_qty = MAX_LOSS_USDT / sl_distance
+    qty = normalize_qty(raw_qty, info["qty_step"])
+
+    qty = min(qty, info["max_order_qty"])
+    if qty < info["min_qty"]:
+        return None
+
+    notional = qty * entry
+    if notional < info["min_notional"]:
+        return None
+
+    raw_leverage = notional / FIXED_MARGIN_USDT
+
+    max_allowed_leverage = min(info["max_leverage"], MAX_LEVERAGE)
+
+    leverage = min(raw_leverage, max_allowed_leverage)
+    leverage = round(leverage, 2)
+
+    max_notional = FIXED_MARGIN_USDT * leverage
+    if notional > max_notional:
+        qty = normalize_qty(max_notional / entry, info["qty_step"])
+
+    if qty < info["min_qty"]:
+        return None
+
+    return {
+        "qty": qty,
+        "leverage": leverage,
+        "margin": round((qty * entry) / leverage, 2),
+        "max_loss": round(qty * sl_distance, 2),
+    }
 
 
 # ---------------- QUANTITY CALC ---------------- #
@@ -170,6 +213,7 @@ def normalize_qty(qty, step):
     precision = len(str(step).split(".")[1]) if "." in str(step) else 0
     qty = int(qty / step) * step
     return round(qty, precision)
+
 
 def calculate_risk_qty(symbol, entry, sl):
     info = get_symbol_info(symbol)
@@ -208,6 +252,7 @@ client = TelegramClient("session_name", TELEGRAM_API_ID, TELEGRAM_API_HASH)
 
 telegram_queue = asyncio.Queue()
 
+
 async def process_telegram_queue():
     while True:
         item = await telegram_queue.get()
@@ -237,8 +282,7 @@ async def process_telegram_queue():
 
                 # ---------- get last transactions ----------
                 transactions_data = await get_last_transactions(
-                    symbol=symbol_ws,
-                    limit=2
+                    symbol=symbol_ws, limit=2
                 )
 
                 # ---------- header message ----------
@@ -314,6 +358,7 @@ async def process_telegram_queue():
 
         telegram_queue.task_done()
 
+
 # ---------------- CLOSED ORDER CALLBACK ---------------- #
 def order_callback_ws(msg):
     try:
@@ -325,32 +370,34 @@ def order_callback_ws(msg):
         stopLoss = float(data.get("stopLoss") or 0)
 
         # print(f"✅ WS data: {data}")
-        print(f"✅ WS message: symbol_ws:{symbol_ws} / size:{size} / closed_pnl:{closed_pnl}")
+        print(
+            f"✅ WS message: symbol_ws:{symbol_ws} / size:{size} / closed_pnl:{closed_pnl}"
+        )
 
         # تشخیص اینکه پوزیشن بسته شده است یا خیر
         is_closed = (
-            (data.get("reduceOnly") in [True, "True"] and data.get("closeOnTrigger") in [True, "True"])
-            or float(data.get("closedPnl", 0)) != 0
-        )
+            data.get("reduceOnly") in [True, "True"]
+            and data.get("closeOnTrigger") in [True, "True"]
+        ) or float(data.get("closedPnl", 0)) != 0
 
-        
         asyncio.run_coroutine_threadsafe(
-            telegram_queue.put({
-                "symbol": symbol_ws,
-                "size": size,
-                "closed_pnl": closed_pnl,
-                "takeProfit": takeProfit,
-                "stopLoss": stopLoss,
-                "data": data,
-                "is_closed": is_closed,
-            }),
-            main_loop
+            telegram_queue.put(
+                {
+                    "symbol": symbol_ws,
+                    "size": size,
+                    "closed_pnl": closed_pnl,
+                    "takeProfit": takeProfit,
+                    "stopLoss": stopLoss,
+                    "data": data,
+                    "is_closed": is_closed,
+                }
+            ),
+            main_loop,
         )
 
     except Exception as e:
         asyncio.run_coroutine_threadsafe(
-            send_error_to_telegram(e, context="WS position callback"),
-            main_loop
+            send_error_to_telegram(e, context="WS position callback"), main_loop
         )
 
 
@@ -416,12 +463,24 @@ async def handle_signal(message):
             print(f"[INFO] Already in position: {symbol}")
             await client.send_message(
                 TARGET_CHANNEL,
-                f"ℹ️ Ignore Signal. Already have an open position for {symbol}"
+                f"ℹ️ Ignore Signal. Already have an open position for {symbol}",
             )
             return
 
-        # ---------- محاسبه مقدار سفارش ----------
-        qty = calculate_risk_qty(symbol, signal["entry"], signal["sl"])
+        trade = calculate_fixed_trade(symbol, signal["entry"], signal["sl"])
+
+        if not trade:
+            print("[WARN] Trade calculation failed")
+            return
+
+        qty = trade["qty"]
+        leverage = trade["leverage"]
+        await session.set_leverage(
+            category="linear",
+            symbol=symbol,
+            buyLeverage=str(leverage),
+            sellLeverage=str(leverage),
+        )
         if not qty:
             print("[WARN] Qty calculation failed")
             return
@@ -429,19 +488,16 @@ async def handle_signal(message):
         print(f"[INFO] Opening {symbol} | qty={qty}")
 
         # ---------- ثبت سفارش بازار ----------
-        order = session.place_order(
-            category=order_category,
+        session.place_order(
+            category="linear",
             symbol=symbol,
             side=signal["side"],
             orderType="Market",
             qty=str(qty),
             stopLoss=str(signal["sl"]),
-            takeProfit=str(signal["targets"][0])
-            # price=signal["entry"],
-            # leverage=MAX_LEVERAGE,
+            takeProfit=str(signal["targets"][0]),
         )
 
-        # ثبت موفق → به cache اضافه شود
         open_positions.add(symbol)
 
         # ---------- تنظیم SL و اولین TP ----------
@@ -467,7 +523,7 @@ async def handle_signal(message):
             f"Entry: {signal['entry']}\n"
             f"Qty: {qty}\n"
             f"SL: {signal['sl']}\n"
-            f"TP: {signal['targets'][0]}"
+            f"TP: {signal['targets'][0]}",
         )
 
     except Exception as e:
@@ -534,7 +590,7 @@ async def main():
         channel_type="private",
         api_key=selected_api_key,
         api_secret=selected_api_secret,
-        # trace_logging=True 
+        # trace_logging=True
     )
     WSPrivate.order_stream(order_callback_ws)
 
