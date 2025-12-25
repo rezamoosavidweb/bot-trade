@@ -2,7 +2,7 @@
   "retCode": 0,
   "retMsg": "OK",
   "result": {
-    "nextPageCursor": "SUIUSDT%2C1766595630167%2C0",
+    "nextPageCursor": "SUIUSDT%2C1766678400020%2C0",
     "category": "linear",
     "list": [
       {
@@ -15,26 +15,26 @@
         "takeProfit": "1.4358",
         "positionValue": "1987.72",
         "isReduceOnly": false,
-        "positionIMByMp": "200.0667214",
+        "positionIMByMp": "198.9215214",
         "tpslMode": "Full",
         "riskId": 1,
         "trailingStop": "0",
-        "unrealisedPnl": "3.108",
-        "markPrice": "1.42202",
+        "unrealisedPnl": "-8.344",
+        "markPrice": "1.41384",
         "adlRankIndicator": 2,
-        "cumRealisedPnl": "13.8650268",
-        "positionMM": "20.8922014",
+        "cumRealisedPnl": "13.271305",
+        "positionMM": "20.7776814",
         "createdTime": "1766449873297",
         "positionIdx": 0,
-        "positionIM": "200.0667214",
-        "positionMMByMp": "20.8922014",
-        "seq": 140667102416931,
-        "updatedTime": "1766595630167",
+        "positionIM": "198.9215214",
+        "positionMMByMp": "20.7776814",
+        "seq": 140667106141099,
+        "updatedTime": "1766678400020",
         "side": "Buy",
         "bustPrice": "",
         "positionBalance": "0",
         "leverageSysUpdatedTime": "",
-        "curRealisedPnl": "-1.093246",
+        "curRealisedPnl": "-1.6869678",
         "size": "1400",
         "positionStatus": "Normal",
         "mmrSysUpdatedTime": "",
@@ -45,5 +45,5 @@
     ]
   },
   "retExtInfo": {},
-  "time": 1766595981406
+  "time": 1766687161597
 }

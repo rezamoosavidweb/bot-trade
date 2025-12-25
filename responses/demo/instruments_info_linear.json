@@ -3993,7 +3993,7 @@
           "minNotionalValue": "5"
         },
         "unifiedMarginTrade": true,
-        "fundingInterval": 240,
+        "fundingInterval": 60,
         "settleCoin": "USDT",
         "copyTrading": "both",
         "upperFundingRate": "0.02",
@@ -22008,5 +22008,5 @@
     "nextPageCursor": "first%3D0GUSDT%26last%3DSOLUSDT-30JAN26"
   },
   "retExtInfo": {},
-  "time": 1766595981222
+  "time": 1766687161409
 }
