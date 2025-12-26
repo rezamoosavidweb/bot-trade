@@ -1,5 +1,5 @@
 import traceback
-from telegram_client import client
+from clients import telClient
 from config import TARGET_CHANNEL
 import datetime
 
@@ -16,6 +16,6 @@ async def send_error_to_telegram(error: Exception, context: str = ""):
             f"📌 Traceback:\n"
             f"```{tb[-3500:]}```"
         )
-        await client.send_message(TARGET_CHANNEL, msg)
+        await telClient.send_message(TARGET_CHANNEL, msg)
     except Exception as e:
         print("[FATAL] Failed to send error to Telegram:", e)

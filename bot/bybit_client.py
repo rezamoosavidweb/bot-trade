@@ -1,4 +1,3 @@
-from pybit.unified_trading import HTTP
 from config import (
     IS_DEMO,
     SELECTED_API_KEY,
@@ -9,25 +8,20 @@ from config import (
 )
 
 from cache import get_symbol_info as get_cached_symbol_info
+from api import get_wallet_balance, get_symbol_positions
 import asyncio
 
 
-session = HTTP(demo=IS_DEMO, api_key=SELECTED_API_KEY, api_secret=SELECTED_API_SECRET)
-
-
 # ---------------- SYMBOL INFO ---------------- #
-
-
-def get_symbol_info(symbol: str):
+async def get_symbol_info(symbol: str):
     """Fetch symbol info from cache first, fallback to API."""
-    loop = asyncio.get_event_loop()
-    return loop.run_until_complete(get_cached_symbol_info(symbol))
+    return await get_cached_symbol_info(symbol)
 
 
 # ---------------- BALANCE ---------------- #
-def get_usdt_balance() -> float:
+async def get_usdt_balance() -> float:
     """Return USDT balance from Bybit."""
-    wallet = session.get_wallet_balance(accountType="UNIFIED")
+    wallet =await get_wallet_balance(accountType="UNIFIED")
     coins = wallet["result"]["list"][0]["coin"]
     for c in coins:
         if c["coin"] == "USDT":
@@ -40,10 +34,10 @@ def get_usdt_balance() -> float:
 
 
 # ---------------- OPEN POSITION ---------------- #
-def is_position_open(symbol: str) -> bool:
+async def is_position_open(symbol: str) -> bool:
     """Check if a symbol has an open position."""
     try:
-        res = session.get_positions(category="linear", symbol=symbol)
+        res = await get_symbol_positions(symbol=symbol)
         positions = res["result"]["list"]
         if not positions:
             return False
@@ -61,9 +55,9 @@ def normalize_qty(qty, step):
     return round(qty, precision)
 
 
-def calculate_fixed_trade(symbol, entry, sl):
+async def calculate_fixed_trade(symbol, entry, sl):
     """Calculate trade quantity and leverage for a fixed margin strategy."""
-    info = get_symbol_info(symbol)
+    info = await get_symbol_info(symbol)
     sl_distance = abs(entry - sl)
     if sl_distance <= 0:
         return None

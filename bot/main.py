@@ -1,8 +1,10 @@
 import asyncio
+from clients import telClient
 from telegram_client import (
-    client,
     process_telegram_queue,
     register_telegram_handlers,
+)
+from ws_handlers import (
     order_callback_ws,
 )
 from config import (
@@ -14,11 +16,16 @@ from config import (
 )
 from pybit.unified_trading import WebSocket
 from errors import send_error_to_telegram
-from cache import periodic_refresh
+from cache import periodic_refresh, init_redis
 
 
 async def main():
-    await client.start()
+    # Initialization Redis and Start periodic refresh (every 1 hour)
+    await init_redis()
+    asyncio.create_task(periodic_refresh(interval_seconds=3600))
+
+    # Start Telegram Client
+    await telClient.start()
     print("[INFO] Telegram client started")
 
     # Register Telegram message handler
@@ -26,9 +33,6 @@ async def main():
 
     # Start Telegram processing queue
     asyncio.create_task(process_telegram_queue())
-
-    # Start Redis periodic refresh (every 1 hour)
-    asyncio.create_task(periodic_refresh(interval_seconds=3600))
 
     # Handle global exceptions
     def handle_global_exception(loop, context):
@@ -41,9 +45,10 @@ async def main():
 
     # Start Bybit WebSocket
     ws = WebSocket(
-        demo=IS_DEMO,
         api_key=SELECTED_API_KEY,
         api_secret=SELECTED_API_SECRET,
+        demo=IS_DEMO,
+        testnet=False,
         channel_type="private",
     )
     ws.order_stream(
@@ -51,7 +56,7 @@ async def main():
     )
 
     # Run until Telegram client disconnected
-    await client.run_until_disconnected()
+    await telClient.run_until_disconnected()
 
 
 if __name__ == "__main__":
