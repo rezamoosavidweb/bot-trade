@@ -312,6 +312,7 @@ async def process_telegram_queue():
                     tx_msg = (
                         f"📄 **Transaction #{idx}**\n\n"
                         "```\n"
+                        f"Symbol: {tx.get('symbol')}\n"
                         f"Type: {tx.get('type')}\n"
                         f"Side: {tx.get('side')}\n"
                         f"Qty: {tx.get('qty')}\n"
@@ -475,7 +476,10 @@ async def handle_signal(message):
 
         qty = trade["qty"]
         leverage = trade["leverage"]
-        await session.set_leverage(
+        print(
+            f"{symbol} / Leverage:{leverage} / Qty:{qty} / Side:{signal['side']} / stopLoss:{signal['sl']} / takeProfit:{signal['targets'][0]}"
+        )
+        session.set_leverage(
             category="linear",
             symbol=symbol,
             buyLeverage=str(leverage),
@@ -488,7 +492,7 @@ async def handle_signal(message):
         print(f"[INFO] Opening {symbol} | qty={qty}")
 
         # ---------- ثبت سفارش بازار ----------
-        session.place_order(
+        order = session.place_order(
             category="linear",
             symbol=symbol,
             side=signal["side"],
@@ -511,7 +515,7 @@ async def handle_signal(message):
         # )
 
         print(
-            f"[SUCCESS] Order placed: {symbol} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
+            f"[SUCCESS] Order placed: {symbol} | leverage={leverage} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
         )
 
         # ---------- ارسال اطلاعات به تلگرام ----------
