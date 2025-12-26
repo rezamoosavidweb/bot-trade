@@ -168,6 +168,12 @@ async def get_last_transactions(symbol: str, limit: int = 5):
 
 
 # ---------------- QUANTITY FIXED MARGIN --------- #
+def normalize_qty(qty, step):
+    precision = len(str(step).split(".")[1]) if "." in str(step) else 0
+    qty = int(qty / step) * step
+    return round(qty, precision)
+
+
 def calculate_fixed_trade(symbol, entry, sl):
     info = get_symbol_info(symbol)
 
@@ -206,45 +212,6 @@ def calculate_fixed_trade(symbol, entry, sl):
         "margin": round((qty * entry) / leverage, 2),
         "max_loss": round(qty * sl_distance, 2),
     }
-
-
-# ---------------- QUANTITY CALC ---------------- #
-def normalize_qty(qty, step):
-    precision = len(str(step).split(".")[1]) if "." in str(step) else 0
-    qty = int(qty / step) * step
-    return round(qty, precision)
-
-
-def calculate_risk_qty(symbol, entry, sl):
-    info = get_symbol_info(symbol)
-    balance = get_usdt_balance()
-
-    risk_amount = balance * RISK_PERCENT
-    sl_distance = abs(entry - sl)
-
-    if sl_distance <= 0 or entry <= 0:
-        return None
-
-    # qty based on risk
-    raw_qty = (risk_amount * MAX_LEVERAGE) / (sl_distance * entry)
-    qty = normalize_qty(raw_qty, info["qty_step"])
-
-    # 🧠 cap based on order limit
-    qty = min(qty, info["max_order_qty"])
-
-    # 🧠 cap based on position USDT
-    qty_cap_by_usdt = MAX_POSITION_USDT / entry
-    qty = min(qty, qty_cap_by_usdt)
-
-    qty = normalize_qty(qty, info["qty_step"])
-
-    if qty < info["min_qty"]:
-        return None
-
-    if qty * entry < info["min_notional"]:
-        return None
-
-    return qty
 
 
 # ---------------- TELETHON ---------------- #
