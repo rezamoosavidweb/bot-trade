@@ -1,4 +1,6 @@
-telethon
+asyncio
 pybit
 python-dotenv
+redis
+telethon
 tzdata

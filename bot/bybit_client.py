@@ -1,30 +1,28 @@
 from pybit.unified_trading import HTTP
-from config import IS_DEMO, SELECTED_API_KEY, SELECTED_API_SECRET, MAX_LEVERAGE, FIXED_MARGIN_USDT, MAX_LOSS_USDT
-from config import symbol_cache
+from config import (
+    IS_DEMO,
+    SELECTED_API_KEY,
+    SELECTED_API_SECRET,
+    MAX_LEVERAGE,
+    FIXED_MARGIN_USDT,
+    MAX_LOSS_USDT,
+)
+
+from cache import get_symbol_info as get_cached_symbol_info
 import asyncio
+
 
 session = HTTP(demo=IS_DEMO, api_key=SELECTED_API_KEY, api_secret=SELECTED_API_SECRET)
 
+
 # ---------------- SYMBOL INFO ---------------- #
+
+
 def get_symbol_info(symbol: str):
-    """Fetch symbol trading info and cache it."""
-    if symbol in symbol_cache:
-        return symbol_cache[symbol]
+    """Fetch symbol info from cache first, fallback to API."""
+    loop = asyncio.get_event_loop()
+    return loop.run_until_complete(get_cached_symbol_info(symbol))
 
-    res = session.get_instruments_info(category="linear", symbol=symbol)
-    item = res["result"]["list"][0]
-
-    info = {
-        "min_qty": float(item["lotSizeFilter"]["minOrderQty"]),
-        "max_order_qty": float(item["lotSizeFilter"]["maxOrderQty"]),
-        "qty_step": float(item["lotSizeFilter"]["qtyStep"]),
-        "min_notional": float(item["lotSizeFilter"]["minNotionalValue"]),
-        "tick_size": float(item["priceFilter"]["tickSize"]),
-        "max_leverage": float(item["leverageFilter"]["maxLeverage"]),
-    }
-
-    symbol_cache[symbol] = info
-    return info
 
 # ---------------- BALANCE ---------------- #
 def get_usdt_balance() -> float:
@@ -40,6 +38,7 @@ def get_usdt_balance() -> float:
                 return 0.0
     return 0.0
 
+
 # ---------------- OPEN POSITION ---------------- #
 def is_position_open(symbol: str) -> bool:
     """Check if a symbol has an open position."""
@@ -53,12 +52,14 @@ def is_position_open(symbol: str) -> bool:
         print(f"[WARN] position check failed: {e}")
         return False
 
+
 # ---------------- TRADE CALCULATION ---------------- #
 def normalize_qty(qty, step):
     """Adjust quantity based on step size."""
     precision = len(str(step).split(".")[1]) if "." in str(step) else 0
     qty = int(qty / step) * step
     return round(qty, precision)
+
 
 def calculate_fixed_trade(symbol, entry, sl):
     """Calculate trade quantity and leverage for a fixed margin strategy."""
