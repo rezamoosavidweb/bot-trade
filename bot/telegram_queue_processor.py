@@ -14,9 +14,7 @@ telegram_queue = asyncio.Queue()
 
 
 # ---------------- HELPER FUNCTIONS ---------------- #
-def set_sl_tp_partial(
-    symbol: str, position_idx: int, tp2: float, qty: float
-):
+def set_sl_tp_partial(symbol: str, position_idx: int, tp2: float, qty: float):
     """
     Set the Stop Loss for the entire position and two partial Take Profits (TP1 and TP2).
 
@@ -125,7 +123,7 @@ async def handle_telegram_signal(item):
 
 async def handle_ws_message(item):
     """
-    Handle WebSocket messages from Bybit: new order, cancel, or close position.
+    Handle WebSocket messages from Bybit: new order, cancel, close position, or SL/TP updates.
     Formats message and sends to Telegram channel.
     """
     ws_type = item.get("msg_type")
@@ -135,15 +133,34 @@ async def handle_ws_message(item):
     price = data.get("price")
     avg_price = data.get("avgPrice")
     closed_pnl = item.get("closed_pnl")
-    take_profit = item.get("takeProfit")
-    stop_loss = item.get("stopLoss")
+    take_profit = data.get("takeProfit")
+    stop_loss = data.get("stopLoss")
+    stop_order_type = data.get("stopOrderType")
+    tpsl_mode = data.get("tpslMode")
+    create_type = data.get("createType")
 
-    if ws_type == "new_order":
+    # ---------------- Check if this message is related to set_trading_stop ----------------
+    if stop_order_type in ["TakeProfit", "StopLoss", "PartialTakeProfit"]:
+        text = (
+            f"⚡ SL/TP Update Detected\n\n"
+            f"Symbol: {symbol}\n"
+            f"Side: {data.get('side')}\n"
+            f"Qty: {size}\n"
+            f"SL: {stop_loss or '—'}\n"
+            f"TP: {take_profit or '—'}\n"
+            f"Mode: {tpsl_mode}\n"
+            f"Type: {stop_order_type}\n"
+            f"CreatedBy: {create_type}\n"
+            f"OrderID: {data.get('orderId')}"
+        )
+
+    # ---------------- Regular WebSocket messages ----------------
+    elif ws_type == "new_order":
         text = (
             f"📤 New Order Filled\n\n"
             f"Symbol: {symbol}\nSide: {data.get('side')}\nQty: {size}\n"
-            f"Price: {price}\nAvgPrice: {avg_price}\nSL: {stop_loss}\n"
-            f"TP: {take_profit}\nOrderID: {data.get('orderId')}"
+            f"Price: {price}\nAvgPrice: {avg_price}\nSL: {stop_loss or '—'}\n"
+            f"TP: {take_profit or '—'}\nOrderID: {data.get('orderId')}"
         )
     elif ws_type == "cancel_order":
         text = (
