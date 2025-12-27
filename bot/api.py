@@ -110,35 +110,54 @@ from clients import bybitClient
 
 
 def close_all_positions(settleCoin="USDT"):
-    positions = bybitClient.get_positions(category="linear", settleCoin=settleCoin)
-    positions_list = positions.get("result", {}).get("list", [])
+    """
+    Close all open positions for the given settleCoin (e.g., USDT) in linear contracts.
+    Uses reduce-only market orders to safely close positions.
+    """
+    # ۱. گرفتن تمام پوزیشن‌های باز
+    res = bybitClient.get_positions(category="linear", settleCoin=settleCoin)
+    positions_list = res.get("result", {}).get("list", [])
+
+    if not positions_list:
+        print("No open positions to close.")
+        return []
 
     closed_positions = []
-    print(f"positions_list:{positions_list}")
+
     for pos in positions_list:
-        symbol = pos["symbol"]
-        side = pos["side"]
-        size = pos["size"]
+        symbol = pos.get("symbol")
+        side = pos.get("side")
+        size = float(pos.get("size", 0))
 
-        if float(size) == 0:
-            continue 
+        if size == 0:
+            continue  # پوزیشن صفر را نادیده می‌گیریم
 
-        
+        # تعیین جهت مخالف برای بستن پوزیشن
         close_side = "Sell" if side == "Buy" else "Buy"
 
-        
-        order = bybitClient.place_order(
-            category="linear",
-            symbol=symbol,
-            side=close_side,
-            orderType="Market",
-            qty=str(size),
-        )
+        try:
+            # ثبت سفارش مارکت reduce-only برای بستن پوزیشن
+            order = bybitClient.place_order(
+                category="linear",
+                symbol=symbol,
+                side=close_side,
+                orderType="Market",
+                qty=str(size),
+                reduceOnly=True,  # مهم: تضمین بستن پوزیشن
+            )
 
-        closed_positions.append(
-            {"symbol": symbol, "side": side, "size": size, "orderResult": order}
-        )
-    print(f"closed_positions:{closed_positions}")
+            closed_positions.append(
+                {"symbol": symbol, "side": side, "size": size, "orderResult": order}
+            )
+
+            print(f"Closed position {symbol} | {side} | size: {size}")
+
+        except Exception as e:
+            print(f"❌ Failed to close position {symbol}: {e}")
+            closed_positions.append(
+                {"symbol": symbol, "side": side, "size": size, "error": str(e)}
+            )
+
     return closed_positions
 
 
