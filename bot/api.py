@@ -219,8 +219,7 @@ def set_trading_stop(
         "slTriggerBy": slTriggerBy,
     }
 
-    # حذف مقادیر None تا API خطا ندهد
     payload = {k: v for k, v in payload.items() if v is not None}
-    print(f"payload:{payload}")
-    # فراخوانی دقیق API با دیکشنری
+    print(f"\npayload:{payload}\n\n")
+
     return bybitClient.v5.position.trading_stop(**payload)
