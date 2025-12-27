@@ -6,9 +6,9 @@ def register_command_handlers():
     async def start_handler(event):
         # دکمه‌ها
         buttons = [
-            [Button.text("📊 Positions")],
-            [Button.text("🛑 Cancel Orders")],
-            [Button.text("❌ Close Positions")],
+            [Button.inline("📊 Positions")],
+            [Button.inline("🛑 Cancel Orders")],
+            [Button.inline("❌ Close Positions")],
         ]
 
         # با send_message مستقیم روی chat_id پیام می‌فرستیم
