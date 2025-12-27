@@ -98,24 +98,26 @@ async def process_telegram_queue():
                 # ---------------- WEBSOCKET MESSAGE ---------------- #
                 data = item["data"]
                 symbol = item.get("symbol")
-                size = item.get("size", 0.0)
-                closed_pnl = item.get("closed_pnl", 0.0)
+                size = item.get("size")
+                closed_pnl = item.get("closed_pnl")
                 takeProfit = item.get("takeProfit")
                 stopLoss = item.get("stopLoss")
-                is_closed = item.get("is_closed", False)
+                is_closed = item.get("is_closed")
                 order_status = data.get("orderStatus", "").lower()
                 order_id = data.get("orderId", "")
 
+                # دسته‌بندی پیام‌ها
                 if is_closed:
-                    # Position Closed
                     msg = (
                         f"❌ **Position Closed**\n"
                         f"Symbol: {symbol}\n"
                         f"Size: {size}\n"
-                        f"PnL: {closed_pnl}"
+                        f"Closed PnL: {closed_pnl}\n"
+                        f"Order ID: {order_id}\n"
+                        f"Avg Price: {data.get('avgPrice')}\n"
+                        f"Fee: {data.get('cumFeeDetail')}"
                     )
                 elif order_status in ["new", "filled"]:
-                    # New Order / Filled
                     msg = (
                         f"📥 **Order Created / Filled**\n"
                         f"Symbol: {symbol}\n"
@@ -124,16 +126,18 @@ async def process_telegram_queue():
                         f"Price: {data.get('price')}\n"
                         f"SL: {stopLoss}\n"
                         f"TP: {takeProfit}\n"
-                        f"Order ID: {order_id}"
+                        f"Order ID: {order_id}\n"
+                        f"Order Type: {data.get('orderType')}\n"
+                        f"TimeInForce: {data.get('timeInForce')}"
                     )
                 else:
-                    # Order Update
                     msg = (
                         f"📤 **Order Update**\n"
                         f"Symbol: {symbol}\n"
                         f"Size: {size}\n"
                         f"Order Status: {order_status}\n"
-                        f"Order ID: {order_id}"
+                        f"Order ID: {order_id}\n"
+                        f"Leaves Qty: {data.get('leavesQty')}"
                     )
 
                 await telClient.send_message(TARGET_CHANNEL, msg)
