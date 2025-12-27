@@ -8,15 +8,15 @@ from api import (
     get_closed_pnl,
     close_all_positions,
 )
+from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def register_command_handlers():
     # ---------- /start ----------
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-
         keyboard = ReplyKeyboardMarkup(
-            keyboard=[
+            rows=[  # <-- اینجا باید از "rows" استفاده کنید
                 [KeyboardButton("📊 Positions")],
                 [KeyboardButton("🛑 Cancel Orders")],
                 [KeyboardButton("❌ Close Positions")],
