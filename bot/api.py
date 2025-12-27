@@ -231,4 +231,11 @@ def set_trading_stop(
         "stopLoss": "48000",
     }
 
-    bybitClient.v5.position.trading_stop(**payload)
+    bybitClient.v5.position.trading_stop(
+        category="linear",
+        symbol="ENSUSDT",
+        positionIdx=0,
+        tpslMode="Full",
+        takeProfit="50000",
+        stopLoss="48000",
+    )
