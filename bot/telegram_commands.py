@@ -8,21 +8,23 @@ from api import (
     close_all_positions,
 )
 
+
 def register_command_handlers():
     # ---------- /start ----------
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
         # درست کردن کیبورد با Button.text
-        buttons = [
-            [Button.text("📊 Positions")],
-            [Button.text("🛑 Cancel Orders")],
-            [Button.text("❌ Close Positions")]
-        ]
+        buttons = []
 
-        await event.respond(
-            "📌 Welcome! Choose an action:",
-            buttons=buttons  # باید Button.text استفاده شود
+        markup = event.client.build_reply_markup(
+            [
+                [Button.text("📊 Positions")],
+                [Button.text("🛑 Cancel Orders")],
+                [Button.text("❌ Close Positions")],
+            ]
         )
+
+        await event.respond("📌 Welcome! Choose an action:", buttons=markup)
 
     # ---------- هندل پیام‌های دکمه‌ای ----------
     @telClient.on(events.NewMessage)
@@ -66,7 +68,9 @@ def register_command_handlers():
                 else:
                     for p in pnl[:10]:
                         emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
-                        msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+                        msg += (
+                            f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+                        )
 
                 await event.respond(msg)
 
