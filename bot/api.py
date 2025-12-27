@@ -205,7 +205,7 @@ def set_trading_stop(
     """
 
     payload = {
-        "category": "linear",  # required by API
+        "category": "linear",
         "symbol": symbol,
         "positionIdx": positionIdx,
         "tpslMode": tpslMode,
@@ -222,4 +222,13 @@ def set_trading_stop(
     payload = {k: v for k, v in payload.items() if v is not None}
     print(f"\npayload:{payload}\n\n")
 
-    return bybitClient.trading_stop(**payload)
+    payload = {
+        "category": "linear",
+        "symbol": "BTCUSDT",
+        "positionIdx": 0,
+        "tpslMode": "Full",
+        "takeProfit": "50000",
+        "stopLoss": "48000",
+    }
+
+    bybitClient.v5.position.trading_stop(**payload)
