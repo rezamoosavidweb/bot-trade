@@ -16,10 +16,10 @@ def register_command_handlers():
         chat = await event.get_chat()
 
         message = (
-            f"📌 Welcome! Choose an action:\n",
-            f"📊 Get Positions: /positions\n",
-            f"📊 🛑 Cancel Orders /cancel \n",
-            f"📊 🛑 Cancel active positions /close_positions \n",
+            "📌 Welcome! Choose an action:\n"
+            "📊 Get Positions: /positions\n"
+            "🛑 Cancel Orders: /cancel\n"
+            "❌ Close active positions: /close_positions\n"
         )
 
         # [Button.inline("🛑 Cancel Orders", b"cancel")],
