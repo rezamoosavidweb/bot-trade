@@ -13,14 +13,14 @@ def register_command_handlers():
     # ---------- /start ----------  
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-        # نمایش دکمه‌ها
+        buttons = [
+            [Button.inline("📊 Positions", b"positions")],
+            [Button.inline("🛑 Cancel Orders", b"cancel")],
+            [Button.inline("❌ Close Positions", b"close_positions")]
+        ]
         await event.respond(
             "📌 Welcome! Choose an action:",
-            buttons=[
-                [Button.inline("📊 Positions", b"positions")],
-                [Button.inline("🛑 Cancel Orders", b"cancel")],
-                [Button.inline("❌ Close Positions", b"close_positions")]
-            ]
+            buttons=buttons
         )
 
     # ---------- Inline button handlers ----------
