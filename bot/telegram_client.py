@@ -109,7 +109,7 @@ async def process_telegram_queue():
                 # قالب‌بندی پیام با افزودن price, qty, avgPrice
                 if ws_type == "new_order":
                     text = (
-                        f"📤 New Order Filled\n"
+                        f"📤 New Order Filled\n\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {data.get('side')}\n"
                         f"Qty: {size}\n"
@@ -121,7 +121,7 @@ async def process_telegram_queue():
                     )
                 elif ws_type == "cancel_order":
                     text = (
-                        f"❌ Order Cancelled\n"
+                        f"❌ Order Cancelled\n\n"
                         f"Symbol: {symbol}\n"
                         f"Qty: {size}\n"
                         f"Price: {price}\n"
@@ -131,7 +131,7 @@ async def process_telegram_queue():
                     )
                 elif ws_type == "close_position":
                     text = (
-                        f"🔒 Position Closed\n"
+                        f"🔒 Position Closed\n\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {data.get('side')}\n"
                         f"Size: {size}\n"
