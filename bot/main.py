@@ -3,6 +3,7 @@ from clients import telClient
 from telegram_client import (
     process_telegram_queue,
     register_telegram_handlers,
+    telegram_queue
 )
 from ws_handlers import (
     order_callback_ws,
@@ -56,8 +57,10 @@ async def main():
         testnet=False,
         channel_type="private",
     )
+    callback = order_callback_ws(loop, telegram_queue)
+
     ws.order_stream(
-        lambda msg: asyncio.run_coroutine_threadsafe(order_callback_ws(msg), main_loop)
+        lambda msg: asyncio.run_coroutine_threadsafe(callback, loop)
     )
 
     # Run until Telegram client disconnected
