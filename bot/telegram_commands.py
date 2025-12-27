@@ -11,27 +11,26 @@ from api import (
 def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-        chat = await event.get_chat()  # گرفتن چت فعلی
+        chat = await event.get_chat()
 
+        # Inline buttons زیر پیام
         buttons = [
-            [Button.text("📊 Positions")],
-            [Button.text("🛑 Cancel Orders")],
-            [Button.text("❌ Close Positions")],
+            [Button.inline("📊 Positions", b"positions")],
+            [Button.inline("🛑 Cancel Orders", b"cancel")],
+            [Button.inline("❌ Close Positions", b"close_positions")],
         ]
 
-        # ارسال پیام جدید به جای event.respond
         await telClient.send_message(
             chat,
             "📌 Welcome! Choose an action:",
-            buttons=buttons,
-            parse_mode='md'
+            buttons=buttons
         )
 
-    @telClient.on(events.NewMessage)
-    async def menu_handler(event):
-        text = event.raw_text
+    @telClient.on(events.CallbackQuery)
+    async def callback_handler(event):
+        data = event.data.decode("utf-8")
         try:
-            if text == "📊 Positions":
+            if data == "positions":
                 msg = "📊 **Open Positions:**\n\n"
                 positions = get_positions(settleCoin="USDT")
                 if not positions:
@@ -47,21 +46,21 @@ def register_command_handlers():
                             f"Liq: {p.get('liq_price','-')}\n"
                             "----------------------\n"
                         )
-                await telClient.send_message(event.chat_id, msg, parse_mode='md')
+                await event.edit(msg)
 
-            elif text == "🛑 Cancel Orders":
+            elif data == "cancel":
                 cancel_all_orders(settleCoin="USDT")
-                await telClient.send_message(event.chat_id, "🛑 All USDT orders cancelled")
+                await event.edit("🛑 All USDT orders cancelled")
 
-            elif text == "❌ Close Positions":
+            elif data == "close_positions":
                 results = close_all_positions(settleCoin="USDT")
                 if not results:
-                    await telClient.send_message(event.chat_id, "📌 No open positions to close.")
+                    await event.edit("📌 No open positions to close.")
                     return
                 msg = "✅ Closed positions:\n\n"
                 for r in results:
                     msg += f"{r['symbol']} | {r['side']} | {r['size']}\n"
-                await telClient.send_message(event.chat_id, msg)
+                await event.edit(msg)
 
         except Exception as e:
-            await telClient.send_message(event.chat_id, f"❌ Error: {e}")
+            await event.edit(f"❌ Error: {e}")
