@@ -5,6 +5,9 @@ from pybit.exceptions import InvalidRequestError
 def get_wallet_balance():
     wallet = bybitClient.get_wallet_balance(accountType="UNIFIED")
     return wallet
+def get_account_info():
+    wallet = bybitClient.get_account_info()
+    return wallet
 
 
 def get_all_linear_instruments(limit=200):

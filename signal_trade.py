@@ -452,6 +452,7 @@ async def handle_signal(message):
             buyLeverage=str(leverage),
             sellLeverage=str(leverage),
         )
+        
         if not qty:
             print("[WARN] Qty calculation failed")
             return
