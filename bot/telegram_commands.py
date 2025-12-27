@@ -10,7 +10,71 @@ from api import (
 
 
 def register_command_handlers():
+    # ---------- /start ----------
+    @telClient.on(events.NewMessage(pattern=r"^/start$"))
+    async def start_handler(event):
+        chat = await event.get_chat()
+
+        message = (
+            f"📌 Welcome! Choose an action:\n",
+            f"📊 Get Positions: /positions\n",
+            f"📊 🛑 Cancel Orders /cancel \n",
+            f"📊 🛑 Cancel active positions /close_positions \n",
+        )
+
+        # [Button.inline("🛑 Cancel Orders", b"cancel")],
+        # [Button.inline("❌ Close Positions", b"close_positions")],
+
+        await telClient.send_message(chat, message)
+
     # ---------- /positions ----------
+    @telClient.on(events.NewMessage(pattern=r"^/positions$"))
+    async def positions_handler(event):
+        try:
+            print("call /positions")
+            msg = "📊 **Open Positions:**\n\n"
+
+            positions = get_positions(settleCoin="USDT")
+            if not positions:
+                msg += "No open positions.\n"
+            else:
+                for p in positions:
+                    msg += (
+                        f"Symbol: {p.get('symbol','-')}\n"
+                        f"Side: {p.get('side','-')}\n"
+                        f"Size: {p.get('size',0)}\n"
+                        f"Entry: {p.get('entry_price',0)}\n"
+                        f"PnL: {p.get('unrealized_pnl',0)}\n"
+                        f"Liq: {p.get('liq_price','-')}\n"
+                        "----------------------\n"
+                    )
+
+            pending = get_pending_orders(settleCoin="USDT")
+            msg += "\n⏳ **Pending Orders:**\n\n"
+            if not pending:
+                msg += "No pending orders.\n"
+            else:
+                for o in pending:
+                    msg += (
+                        f"{o.get('symbol','-')} | {o.get('side','-')} | {o.get('qty',0)}\n"
+                        f"Price: {o.get('price','-')} | Trigger: {o.get('trigger_price','-')}\n"
+                        "----------------------\n"
+                    )
+
+            pnl = get_closed_pnl()
+            msg += "\n✅ **Closed PnL:**\n\n"
+            if not pnl:
+                msg += "No closed PnL.\n"
+            else:
+                for p in pnl[:10]:
+                    emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
+                    msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+
+            await event.respond(msg)
+
+        except Exception as e:
+            await event.respond(f"❌ Error: {e}")
+
     @telClient.on(events.NewMessage(pattern=r"^/positions$"))
     async def positions_handler(event):
         try:
@@ -67,7 +131,7 @@ def register_command_handlers():
             await event.respond("🛑 All USDT orders cancelled")
         except Exception as e:
             await event.respond(f"❌ Error cancelling orders: {e}")
-            
+
     # ---------- /close_positions ----------
     @telClient.on(events.NewMessage(pattern=r"^/close_positions$"))
     async def close_positions_handler(event):
