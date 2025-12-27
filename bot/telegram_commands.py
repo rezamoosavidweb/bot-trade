@@ -2,6 +2,7 @@ from telethon import events
 from clients import telClient
 from api import cancel_all_orders, get_positions, get_pending_orders, get_closed_pnl
 
+
 def register_command_handlers():
     # ---------- /positions ----------
     @telClient.on(events.NewMessage(pattern=r"^/positions$"))
@@ -44,7 +45,7 @@ def register_command_handlers():
                 msg += "No closed PnL.\n"
             else:
                 for p in pnl[:10]:
-                    emoji = "🟢" if p.get("closed_pnl",0) > 0 else "🔴"
+                    emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
                     msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
 
             await event.respond(msg)
@@ -52,14 +53,16 @@ def register_command_handlers():
         except Exception as e:
             await event.respond(f"❌ Error: {e}")
 
-
     # ---------- /cancel ----------
     @telClient.on(events.NewMessage(pattern=r"^/cancel$"))
     async def cancel_handler(event):
         try:
             # ⚠️ برای cancel باید settleCoin یا symbol بدهیم تا ErrCode 10001 ندهد
-            orders= await cancel_all_orders(settleCoin="USDT")
-            print(f"orders:{orders}")
+            orders = cancel_all_orders(settleCoin="USDT")
+            print(f"orders: {orders}")
             await event.respond("🛑 All USDT orders cancelled")
         except Exception as e:
             await event.respond(f"❌ Error cancelling orders: {e}")
+
+
+
