@@ -199,20 +199,19 @@ def set_trading_stop(
     :param tpOrderType: 'Market' or 'Limit' for TP
     :param slOrderType: 'Market' or 'Limit' for SL
     """
-    payload = {
-        "category": "linear",
-        "symbol": symbol,
-        "positionIdx": positionIdx,
-        "tpslMode": tpslMode,
-        "takeProfit": str(takeProfit) if takeProfit else None,
-        "stopLoss": str(stopLoss) if stopLoss else None,
-        "tpSize": str(tpSize) if tpSize else None,
-        "slSize": str(slSize) if slSize else None,
-        "tpOrderType": tpOrderType,
-        "slOrderType": slOrderType,
-    }
 
     # Remove None values to avoid API errors
     payload = {k: v for k, v in payload.items() if v is not None}
 
-    return bybitClient.set_trading_stop(**payload)
+    return bybitClient.set_trading_stop(
+        category="linear",
+        symbol=symbol,
+        positionIdx=positionIdx,
+        tpslMode=tpslMode,
+        takeProfit=str(takeProfit) if takeProfit else None,
+        stopLoss=str(stopLoss) if stopLoss else None,
+        tpSize=str(tpSize) if tpSize else None,
+        slSize=str(slSize) if slSize else None,
+        tpOrderType=tpOrderType,
+        slOrderType=slOrderType,
+    )

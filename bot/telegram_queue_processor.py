@@ -28,7 +28,6 @@ def set_sl_tp_partial(
     try:
         # Set partial Take Profit for remaining half
         set_trading_stop(
-            category="linear",
             symbol=symbol,
             tpslMode="Partial",
             positionIdx=position_idx,
