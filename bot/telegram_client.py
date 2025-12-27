@@ -100,7 +100,7 @@ async def process_telegram_queue():
                 size = item["size"]
                 closed_pnl = item["closed_pnl"]
                 is_closed = item["is_closed"]
-
+                print(f"item:{item}\n")
                 if is_closed:
                     msg = (
                         f"❌ **Position Closed**\n"
