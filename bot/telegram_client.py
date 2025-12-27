@@ -114,21 +114,27 @@ async def process_telegram_queue():
                 cum_fee = data.get("cumFeeDetail")
 
                 # ----------------- دسته‌بندی پیام ----------------- #
-                if order_status.lower() == "filled" and create_type == "CreateByUser" and not reduce_only:
-                    # Place Order
+                if (
+                    order_status.lower() == "filled"
+                    and reduce_only
+                    and not close_on_trigger
+                ):
+                    # Close All Positions (market close)
                     msg = (
-                        f"🚀 **New Position Opened**\n"
+                        f"❌ **Position Closed**\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {side}\n"
-                        f"Qty: {size}\n"
-                        f"Entry Price: {avg_price}\n"
-                        f"SL: {stopLoss}\n"
-                        f"TP: {takeProfit}\n"
+                        f"Size: {size}\n"
+                        f"Closed PnL: {closed_pnl}\n"
+                        f"Avg Price: {avg_price}\n"
                         f"Order ID: {order_id}\n"
                         f"Fee: {cum_fee}"
                     )
 
-                elif order_status.lower() == "deactivated" and cancel_type.lower() == "cancelbyuser":
+                elif (
+                    order_status.lower() == "deactivated"
+                    and cancel_type.lower() == "cancelbyuser"
+                ):
                     # Cancel Order (SL/TP canceled)
                     msg = (
                         f"⚠️ **Order Cancelled**\n"
@@ -141,15 +147,20 @@ async def process_telegram_queue():
                         f"TP: {takeProfit}"
                     )
 
-                elif order_status.lower() == "filled" and reduce_only and not close_on_trigger:
-                    # Close All Positions (market close)
+                elif (
+                    order_status.lower() == "filled"
+                    and create_type == "CreateByUser"
+                    and not reduce_only
+                ):
+                    # Place Order
                     msg = (
-                        f"❌ **Position Closed**\n"
+                        f"🚀 **New Position Opened**\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {side}\n"
-                        f"Size: {size}\n"
-                        f"Closed PnL: {closed_pnl}\n"
-                        f"Avg Price: {avg_price}\n"
+                        f"Qty: {size}\n"
+                        f"Entry Price: {avg_price}\n"
+                        f"SL: {stopLoss}\n"
+                        f"TP: {takeProfit}\n"
                         f"Order ID: {order_id}\n"
                         f"Fee: {cum_fee}"
                     )
