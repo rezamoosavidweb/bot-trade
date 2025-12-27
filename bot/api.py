@@ -56,7 +56,10 @@ def get_pending_orders(settleCoin: str):
 
 
 def get_closed_pnl():
-    return bybitClient.get_closed_pnl(category="linear", limit=10)
+    res = bybitClient.get_closed_pnl(category="linear", limit=10)
+    if isinstance(res, dict):
+        return res.get("result", {}).get("list", [])
+    return []
 
 
 def get_transaction_log(limit=50):
