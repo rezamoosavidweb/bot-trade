@@ -28,25 +28,19 @@ def get_all_linear_instruments(limit=200):
 
 
 def get_positions(symbol: str | None = None, settleCoin: str | None = None):
-    """
-    Get positions by symbol or settleCoin.
-    At least one of symbol or settleCoin must be provided.
-    """
-
     if not symbol and not settleCoin:
         raise ValueError("Either symbol or settleCoin must be provided")
 
-    params = {
-        "category": "linear",
-    }
+    params = {"category": "linear"}
 
     if symbol:
         params["symbol"] = symbol
-
     if settleCoin:
         params["settleCoin"] = settleCoin
 
-    return bybitClient.get_positions(**params)
+    res = bybitClient.get_positions(**params)
+
+    return res.get("result", {}).get("list", [])
 
 
 def get_pending_orders(settleCoin: str):
@@ -111,4 +105,4 @@ def place_market_order(symbol, side, qty, sl, tp):
 
 
 def cancel_all_orders():
-    return bybitClient.cancel_all_orders(category="linear",settleCoins="USDT")
+    return bybitClient.cancel_all_orders(category="linear", settleCoins="USDT")
