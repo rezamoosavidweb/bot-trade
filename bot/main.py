@@ -3,7 +3,7 @@ from clients import telClient
 from telegram_queue_processor import (
     process_telegram_queue,
     register_telegram_handlers,
-    telegram_queue
+    telegram_queue,
 )
 from ws_handlers import (
     order_callback_ws,
@@ -21,6 +21,14 @@ from telegram_commands import register_command_handlers
 
 
 async def main():
+    print(
+        f"================================",
+        f"IS_DEMO:{IS_DEMO}\n",
+        f"SELECTED_API_KEY:{SELECTED_API_KEY}\n",
+        f"SELECTED_API_SECRET:{SELECTED_API_SECRET}\n",
+        f"SELECTED_SOURCE_CHANNEL:{SELECTED_SOURCE_CHANNEL}",
+        f"=================================",
+    )
     loop = asyncio.get_running_loop()
 
     # Initialization Redis and Start periodic refresh (every 1 hour)
