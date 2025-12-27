@@ -84,7 +84,7 @@ async def process_telegram_queue():
 
                 await telClient.send_message(
                     TARGET_CHANNEL,
-                    f"🚀 New Order Placed:\n"
+                    f"🚀 New Order Placed:\n\n"
                     f"Symbol: {symbol}\n"
                     f"Side: {signal['side']}\n"
                     f"Entry: {signal['entry']}\n"
@@ -109,7 +109,7 @@ async def process_telegram_queue():
                 # دسته‌بندی پیام‌ها
                 if is_closed:
                     msg = (
-                        f"❌ **Position Closed**\n"
+                        f"❌ **Position Closed**\n\n"
                         f"Symbol: {symbol}\n"
                         f"Size: {size}\n"
                         f"Closed PnL: {closed_pnl}\n"
@@ -119,7 +119,7 @@ async def process_telegram_queue():
                     )
                 elif order_status in ["new", "filled"]:
                     msg = (
-                        f"📥 **Order Created / Filled**\n"
+                        f"📥 **Order Created / Filled**\n\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {data.get('side')}\n"
                         f"Qty: {data.get('qty')}\n"
@@ -132,7 +132,7 @@ async def process_telegram_queue():
                     )
                 else:
                     msg = (
-                        f"📤 **Order Update**\n"
+                        f"📤 **Order Update**\n\n"
                         f"Symbol: {symbol}\n"
                         f"Size: {size}\n"
                         f"Order Status: {order_status}\n"
