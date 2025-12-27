@@ -44,15 +44,15 @@ def get_positions(symbol: str | None = None, settleCoin: str | None = None):
 
 
 def get_pending_orders(settleCoin: str):
-    """Pending entry orders (Limit + Stop not triggered yet)"""
-    print("get pending orders called")
-
-    return bybitClient.get_open_orders(
+    res = bybitClient.get_open_orders(
         category="linear",
         settleCoin=settleCoin,
         openOnly=0,
         limit=20,
     )
+    if isinstance(res, dict):
+        return res.get("result", {}).get("list", [])
+    return []
 
 
 def get_closed_pnl():
