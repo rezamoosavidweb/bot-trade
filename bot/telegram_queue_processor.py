@@ -1,20 +1,73 @@
 import asyncio
-from telethon import events
 from zoneinfo import ZoneInfo
+from telethon import events
 
 from config import TARGET_CHANNEL, open_positions
 from bybit_client import calculate_fixed_trade, is_position_open
 from regex_utils import parse_signal, is_signal_message
 from errors import send_error_to_telegram
-from api import set_leverage_safe, place_market_order
+from api import set_leverage_safe, place_market_order, set_trading_stop
 from clients import telClient
 
-# ---------------- TELEGRAM CLIENT ---------------- #
+# ---------------- TELEGRAM QUEUE ---------------- #
 telegram_queue = asyncio.Queue()
 
 
 # ---------------- HELPER FUNCTIONS ---------------- #
+async def set_sl_tp_partial(
+    symbol: str, position_idx: int, sl: float, tp1: float, tp2: float, qty: float
+):
+    """
+    Set the Stop Loss for the entire position and two partial Take Profits (TP1 and TP2).
+
+    :param symbol: Symbol like 'BTCUSDT'
+    :param position_idx: Position index (0 for one-way, 1/2 for hedge)
+    :param sl: Stop Loss price
+    :param tp1: Take Profit price for first half
+    :param tp2: Take Profit price for second half
+    :param qty: Total position quantity
+    """
+    try:
+        # Set full position Stop Loss
+        await set_trading_stop(
+            category="linear",
+            symbol=symbol,
+            tpslMode="Full",
+            positionIdx=position_idx,
+            stopLoss=str(sl),
+        )
+
+        # Set partial Take Profit for first half
+        await set_trading_stop(
+            category="linear",
+            symbol=symbol,
+            tpslMode="Partial",
+            positionIdx=position_idx,
+            takeProfit=str(tp1),
+            tpSize=str(qty / 2),
+        )
+
+        # Set partial Take Profit for remaining half
+        await set_trading_stop(
+            category="linear",
+            symbol=symbol,
+            tpslMode="Partial",
+            positionIdx=position_idx,
+            takeProfit=str(tp2),
+            tpSize=str(qty / 2),
+        )
+
+        print(f"[INFO] SL and Partial TPs set for {symbol}")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to set SL/TP for {symbol}: {e}")
+
+
 async def handle_telegram_signal(item):
+    """
+    Handle incoming Telegram signal messages: validate, calculate trade, place order,
+    set leverage, and configure SL/TP using partial TP logic.
+    """
     text = item["text"]
     signal = parse_signal(text)
     if not signal:
@@ -23,7 +76,7 @@ async def handle_telegram_signal(item):
 
     symbol = signal["symbol"]
 
-    # Check open positions locally and on Bybit
+    # Check if position is already open
     if symbol in open_positions or await is_position_open(symbol):
         open_positions.add(symbol)
         print(f"[INFO] Already in position: {symbol}")
@@ -33,7 +86,7 @@ async def handle_telegram_signal(item):
         )
         return
 
-    # Calculate trade
+    # Calculate trade size and leverage
     trade = await calculate_fixed_trade(symbol, signal["entry"], signal["sl"])
     if not trade:
         print("[WARN] Trade calculation failed")
@@ -43,7 +96,7 @@ async def handle_telegram_signal(item):
 
     print(
         f"[INFO] Detected signal / {symbol} / qty:{qty} / entry:{signal['entry']} "
-        f"/ tp:{signal['targets'][0]} / sl:{signal['sl']} / leverage:{leverage}"
+        f"/ tp1:{signal['targets'][0]} / tp2:{signal['targets'][1]} / sl:{signal['sl']} / leverage:{leverage}"
     )
 
     # Set leverage safely
@@ -65,24 +118,40 @@ async def handle_telegram_signal(item):
         side=signal["side"],
         qty=str(qty),
         sl=str(signal["sl"]),
-        tp=str(signal["targets"][0]),
+        tp=str(
+            signal["targets"][0]  # temporary, main TP replaced by partial logic below
+        ),
     )
+
     open_positions.add(symbol)
 
-    print(
-        f"[SUCCESS] Order placed: {symbol} | leverage={leverage} | qty={qty} | "
-        f"SL={signal['sl']} | TP={signal['targets'][0]}"
+    # Set SL and Partial TPs
+    await set_sl_tp_partial(
+        symbol=symbol,
+        position_idx=0,  # assuming one-way mode; adjust if using hedge-mode
+        sl=signal["sl"],
+        tp1=signal["targets"][0],
+        tp2=signal["targets"][1],
+        qty=qty,
     )
 
+    # Notify Telegram channel
     await telClient.send_message(
         TARGET_CHANNEL,
         f"🚀 New Order Placed:\n"
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
-        f"Qty: {qty}\nSL: {signal['sl']}\nTP: {signal['targets'][0]}\nLeverage: {leverage}",
+        f"Qty: {qty}\nSL: {signal['sl']}\nTP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}\n"
+        f"Leverage: {leverage}",
     )
+
+    print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
 
 
 async def handle_ws_message(item):
+    """
+    Handle WebSocket messages from Bybit: new order, cancel, or close position.
+    Formats message and sends to Telegram channel.
+    """
     ws_type = item.get("msg_type")
     data = item.get("data")
     symbol = item.get("symbol")
@@ -121,7 +190,10 @@ async def handle_ws_message(item):
 
 # ---------------- QUEUE PROCESSOR ---------------- #
 async def process_telegram_queue():
-    """Process queued Telegram signals and WebSocket messages."""
+    """
+    Continuously process messages in the Telegram queue.
+    Supports both Telegram signals and WebSocket messages.
+    """
     while True:
         item = await telegram_queue.get()
         try:
@@ -135,9 +207,11 @@ async def process_telegram_queue():
             telegram_queue.task_done()
 
 
-# ---------------- NEW MESSAGE HANDLER ---------------- #
+# ---------------- TELEGRAM HANDLER REGISTRATION ---------------- #
 def register_telegram_handlers(source_channel):
-    """Register handler for incoming Telegram messages."""
+    """
+    Register Telegram command and message handlers for signals and commands.
+    """
 
     @telClient.on(events.NewMessage(chats=source_channel))
     async def new_message_handler(event):
