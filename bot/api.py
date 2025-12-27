@@ -1,28 +1,29 @@
-from clients import bybitClient
 from pybit.exceptions import InvalidRequestError
+from clients import bybitClient
 
 
+# ---------------- WALLET & ACCOUNT ---------------- #
 def get_wallet_balance():
-    wallet = bybitClient.get_wallet_balance(accountType="UNIFIED")
-    return wallet
+    """Retrieve wallet balance for unified account."""
+    return bybitClient.get_wallet_balance(accountType="UNIFIED")
+
+
 def get_account_info():
-    wallet = bybitClient.get_account_info()
-    return wallet
+    """Retrieve account information."""
+    return bybitClient.get_account_info()
 
 
-def get_all_linear_instruments(limit=200):
+# ---------------- INSTRUMENTS ---------------- #
+def get_all_linear_instruments(limit: int = 200):
+    """Retrieve all linear instruments (futures) from Bybit with pagination support."""
     cursor = None
     instruments = []
 
     while True:
         res = bybitClient.get_instruments_info(
-            category="linear",
-            limit=limit,
-            cursor=cursor,
+            category="linear", limit=limit, cursor=cursor
         )
-
         instruments.extend(res["result"]["list"])
-
         cursor = res["result"].get("nextPageCursor")
         if not cursor:
             break
@@ -30,12 +31,22 @@ def get_all_linear_instruments(limit=200):
     return instruments
 
 
+def get_single_instrument(symbol: str):
+    """Retrieve a single instrument by symbol."""
+    res = bybitClient.get_instruments_info(category="linear", symbol=symbol, limit=1)
+    return res["result"]["list"][0]
+
+
+# ---------------- POSITIONS ---------------- #
 def get_positions(symbol: str | None = None, settleCoin: str | None = None):
+    """
+    Retrieve open positions filtered by symbol or settleCoin.
+    At least one parameter must be provided.
+    """
     if not symbol and not settleCoin:
         raise ValueError("Either symbol or settleCoin must be provided")
 
     params = {"category": "linear"}
-
     if symbol:
         params["symbol"] = symbol
     if settleCoin:
@@ -45,83 +56,16 @@ def get_positions(symbol: str | None = None, settleCoin: str | None = None):
     return res.get("result", {}).get("list", [])
 
 
-def get_pending_orders(settleCoin: str):
-    res = bybitClient.get_open_orders(
-        category="linear",
-        settleCoin=settleCoin,
-        openOnly=0,
-        limit=20,
-    )
-    if isinstance(res, dict):
-        return res.get("result", {}).get("list", [])
-    return []
-
-
-def get_closed_pnl():
-    res = bybitClient.get_closed_pnl(category="linear", limit=10)
-    if isinstance(res, dict):
-        return res.get("result", {}).get("list", [])
-    return []
-
-
-def get_transaction_log(limit=50):
-    return bybitClient.get_transaction_log(
-        accountType="UNIFIED",
-        category="linear",
-        limit=limit,
-    )
-
-
-def get_single_instrument(symbol: str):
-    res = bybitClient.get_instruments_info(
-        category="linear",
-        symbol=symbol,
-        limit=1,
-    )
-    return res["result"]["list"][0]
-
-
-def set_leverage_safe(symbol: str, leverage: float):
-    try:
-        bybitClient.set_leverage(
-            category="linear",
-            symbol=symbol,
-            buyLeverage=str(leverage),
-            sellLeverage=str(leverage),
-        )
-        return True
-    except InvalidRequestError as e:
-        if "110043" in str(e):
-            return False
-        raise
-
-
-def place_market_order(symbol, side, qty, sl, tp):
-    return bybitClient.place_order(
-        category="linear",
-        symbol=symbol,
-        side=side,
-        orderType="Market",
-        qty=str(qty),
-        stopLoss=str(sl),
-        takeProfit=str(tp),
-    )
-
-
-from clients import bybitClient
-
-
 def close_all_positions(settleCoin="USDT"):
     """
-    Close all open positions for the given settleCoin (e.g., USDT) in linear contracts.
+    Close all open positions for the given settleCoin in linear contracts.
     Uses reduce-only market orders to safely close positions.
     """
-    # ۱. گرفتن تمام پوزیشن‌های باز
     res = bybitClient.get_positions(category="linear", settleCoin=settleCoin)
     positions_list = res.get("result", {}).get("list", [])
 
     if not positions_list:
-        print("No open positions to close.")
+        print("[INFO] No open positions to close.")
         return []
 
     closed_positions = []
@@ -132,30 +76,26 @@ def close_all_positions(settleCoin="USDT"):
         size = float(pos.get("size", 0))
 
         if size == 0:
-            continue  # پوزیشن صفر را نادیده می‌گیریم
+            continue  # Ignore empty positions
 
-        # تعیین جهت مخالف برای بستن پوزیشن
+        # Determine opposite side to close position
         close_side = "Sell" if side == "Buy" else "Buy"
 
         try:
-            # ثبت سفارش مارکت reduce-only برای بستن پوزیشن
             order = bybitClient.place_order(
                 category="linear",
                 symbol=symbol,
                 side=close_side,
                 orderType="Market",
                 qty=str(size),
-                reduceOnly=True,  # مهم: تضمین بستن پوزیشن
+                reduceOnly=True,
             )
-
             closed_positions.append(
                 {"symbol": symbol, "side": side, "size": size, "orderResult": order}
             )
-
-            print(f"Closed position {symbol} | {side} | size: {size}")
-
+            print(f"[SUCCESS] Closed position {symbol} | {side} | size: {size}")
         except Exception as e:
-            print(f"❌ Failed to close position {symbol}: {e}")
+            print(f"[ERROR] Failed to close position {symbol}: {e}")
             closed_positions.append(
                 {"symbol": symbol, "side": side, "size": size, "error": str(e)}
             )
@@ -163,5 +103,116 @@ def close_all_positions(settleCoin="USDT"):
     return closed_positions
 
 
+# ---------------- ORDERS ---------------- #
+def get_pending_orders(settleCoin: str):
+    """Retrieve all pending/open orders for a given settleCoin."""
+    res = bybitClient.get_open_orders(
+        category="linear", settleCoin=settleCoin, openOnly=0, limit=20
+    )
+    if isinstance(res, dict):
+        return res.get("result", {}).get("list", [])
+    return []
+
+
+def get_closed_pnl(limit: int = 10):
+    """Retrieve closed PnL for the account."""
+    res = bybitClient.get_closed_pnl(category="linear", limit=limit)
+    if isinstance(res, dict):
+        return res.get("result", {}).get("list", [])
+    return []
+
+
+def get_transaction_log(limit: int = 50):
+    """Retrieve transaction log for linear category."""
+    return bybitClient.get_transaction_log(
+        accountType="UNIFIED", category="linear", limit=limit
+    )
+
+
 def cancel_all_orders(settleCoin="USDT"):
+    """Cancel all open orders for a given settleCoin in linear contracts."""
     return bybitClient.cancel_all_orders(category="linear", settleCoin=settleCoin)
+
+
+# ---------------- LEVERAGE & ORDER PLACEMENT ---------------- #
+def set_leverage_safe(symbol: str, leverage: float):
+    """
+    Safely set leverage for a symbol.
+    If leverage is already set to desired value, returns False.
+    """
+    try:
+        bybitClient.set_leverage(
+            category="linear",
+            symbol=symbol,
+            buyLeverage=str(leverage),
+            sellLeverage=str(leverage),
+        )
+        return True
+    except InvalidRequestError as e:
+        # Error code 110043 = leverage not modified
+        if "110043" in str(e):
+            return False
+        raise
+
+
+def place_market_order(
+    symbol: str, side: str, qty: float, sl: float | None = None, tp: float | None = None
+):
+    """
+    Place a market order with optional SL/TP.
+    Compatible with legacy code.
+    """
+    return bybitClient.place_order(
+        category="linear",
+        symbol=symbol,
+        side=side,
+        orderType="Market",
+        qty=str(qty),
+        stopLoss=str(sl) if sl else None,
+        takeProfit=str(tp) if tp else None,
+    )
+
+
+# ---------------- TRADING STOP (SL/TP) ---------------- #
+def set_trading_stop(
+    symbol: str,
+    positionIdx: int,
+    tpslMode: str,
+    takeProfit: float | None = None,
+    stopLoss: float | None = None,
+    tpSize: float | None = None,
+    slSize: float | None = None,
+    tpOrderType: str = "Market",
+    slOrderType: str = "Market",
+):
+    """
+    Set Take Profit / Stop Loss / Trailing Stop for a position.
+    Supports both Full and Partial modes.
+
+    :param symbol: Trading symbol (e.g., BTCUSDT)
+    :param positionIdx: 0 = one-way, 1/2 = hedge-mode
+    :param tpslMode: 'Full' for full position, 'Partial' for partial
+    :param takeProfit: TP price
+    :param stopLoss: SL price
+    :param tpSize: Quantity for partial TP
+    :param slSize: Quantity for partial SL
+    :param tpOrderType: 'Market' or 'Limit' for TP
+    :param slOrderType: 'Market' or 'Limit' for SL
+    """
+    payload = {
+        "category": "linear",
+        "symbol": symbol,
+        "positionIdx": positionIdx,
+        "tpslMode": tpslMode,
+        "takeProfit": str(takeProfit) if takeProfit else None,
+        "stopLoss": str(stopLoss) if stopLoss else None,
+        "tpSize": str(tpSize) if tpSize else None,
+        "slSize": str(slSize) if slSize else None,
+        "tpOrderType": tpOrderType,
+        "slOrderType": slOrderType,
+    }
+
+    # Remove None values to avoid API errors
+    payload = {k: v for k, v in payload.items() if v is not None}
+
+    return bybitClient.set_trading_stop(**payload)
