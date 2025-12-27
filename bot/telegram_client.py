@@ -16,21 +16,87 @@ telegram_queue = asyncio.Queue()
 
 # ---------------- QUEUE PROCESSOR ---------------- #
 async def process_telegram_queue():
+    """Process queued Telegram signals and handle Bybit orders."""
     while True:
         item = await telegram_queue.get()
         try:
             if item.get("type") == "tg":
+                # ---------------- SIGNAL TELEGRAM ---------------- #
                 text = item["text"]
                 signal = parse_signal(text)
                 if not signal:
                     print("[WARN] Invalid signal")
                     continue
 
+                print(
+                    f"[INFO] Detect signal / {symbol} / entry:{signal['entry']} / tp:{signal['tp']} / sl:{signal['sl']} / leverage:{signal['leverage']}"
+                )
                 symbol = signal["symbol"]
-                # ادامه پردازش سیگنال تلگرام...
-                print(f"[INFO] TG Signal: {symbol}")
+
+                # Check open positions locally and in Bybit
+                position_open = await is_position_open(symbol)
+                if symbol in open_positions or position_open:
+                    open_positions.add(symbol)
+                    print(f"[INFO] Already in position: {symbol}")
+                    await telClient.send_message(
+                        TARGET_CHANNEL,
+                        f"ℹ️ Ignore Signal. Already have an open position for {symbol}",
+                    )
+                    continue
+
+                # Calculate fixed trade
+                trade = await calculate_fixed_trade(
+                    symbol, signal["entry"], signal["sl"]
+                )
+                if not trade:
+                    print("[WARN] Trade calculation failed")
+                    continue
+
+                qty = trade["qty"]
+                leverage = trade["leverage"]
+
+                # Set leverage safely
+                try:
+                    set_leverage_safe(symbol=symbol, leverage=str(leverage))
+                except Exception as e:
+                    if "leverage not modified" in str(e):
+                        print(f"[INFO] Leverage already set for {symbol}, skipping...")
+                    else:
+                        await telClient.send_message(
+                            TARGET_CHANNEL,
+                            f"⚠️ Error on setLeverage for {symbol}: {e}",
+                        )
+                        raise e
+
+                # Place market order
+                place_market_order(
+                    symbol=symbol,
+                    side=signal["side"],
+                    qty=str(qty),
+                    sl=str(signal["sl"]),
+                    tp=str(signal["targets"][0]),
+                )
+
+                open_positions.add(symbol)
+
+                print(
+                    f"[SUCCESS] Order placed: {symbol} | leverage={leverage} | qty={qty} | SL={signal['sl']} | TP={signal['targets'][0]}"
+                )
+
+                await telClient.send_message(
+                    TARGET_CHANNEL,
+                    f"🚀 New Order Placed:\n"
+                    f"Symbol: {symbol}\n"
+                    f"Side: {signal['side']}\n"
+                    f"Entry: {signal['entry']}\n"
+                    f"Qty: {qty}\n"
+                    f"SL: {signal['sl']}\n"
+                    f"TP: {signal['targets'][0]}\n"
+                    f"Leverage: {leverage}",
+                )
 
             elif item.get("type") == "ws":
+                # ---------------- WEBSOCKET MESSAGE ---------------- #
                 symbol = item["symbol"]
                 size = item["size"]
                 closed_pnl = item["closed_pnl"]
@@ -44,11 +110,7 @@ async def process_telegram_queue():
                         f"PnL: {closed_pnl}"
                     )
                 else:
-                    msg = (
-                        f"📥 **Order Update**\n"
-                        f"Symbol: {symbol}\n"
-                        f"Size: {size}"
-                    )
+                    msg = f"📥 **Order Update**\n" f"Symbol: {symbol}\n" f"Size: {size}"
 
                 await telClient.send_message(TARGET_CHANNEL, msg)
 
