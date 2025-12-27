@@ -95,16 +95,38 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/wallet$"))
     async def wallet_handler(event):
         try:
-            balance = get_wallet_balance()
+            balances = session.get_wallet_balance()
+
+            if not balances:
+                await event.respond("💰 Wallet is empty.")
+                return
 
             msg = "💰 **Wallet Balance**\n\n"
 
-            for coin in balance.get("result", {}).get("list", []):
-                msg += (
-                    f"{coin.get('coin','-')} | "
-                    f"Available: {coin.get('availableToWithdraw','0')} | "
-                    f"Equity: {coin.get('equity','0')}\n"
-                )
+            for coin in balances:
+                symbol = coin.get("coin", "-")
+                equity = float(coin.get("equity", 0))
+                wallet = float(coin.get("walletBalance", 0))
+                usd_value = float(coin.get("usdValue", 0))
+                pnl = float(coin.get("cumRealisedPnl", 0))
+
+                # رد کردن کوین‌هایی که صفر هستند
+                if equity == 0 and wallet == 0:
+                    continue
+
+                msg += f"🪙 **{symbol}**\n"
+
+                if wallet:
+                    msg += f"Wallet: {wallet:,.4f}\n"
+                if equity:
+                    msg += f"Equity: {equity:,.4f}\n"
+                if usd_value:
+                    msg += f"USD Value: {usd_value:,.2f}\n"
+                if pnl:
+                    emoji = "🟢" if pnl > 0 else "🔴"
+                    msg += f"{emoji} PnL: {pnl:,.2f}\n"
+
+                msg += "\n"
 
             await event.respond(msg)
 
