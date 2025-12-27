@@ -8,7 +8,6 @@ from ws_handlers import (
     order_callback_ws,
 )
 from config import (
-    main_loop,
     IS_DEMO,
     SELECTED_API_KEY,
     SELECTED_API_SECRET,
@@ -21,6 +20,8 @@ from telegram_commands import register_command_handlers
 
 
 async def main():
+    loop = asyncio.get_running_loop()
+
     # Initialization Redis and Start periodic refresh (every 1 hour)
     await init_redis()
     asyncio.create_task(periodic_refresh(interval_seconds=3600))

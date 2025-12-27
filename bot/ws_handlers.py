@@ -1,11 +1,13 @@
+# ws_handlers.py
 import asyncio
-from config import main_loop, TARGET_CHANNEL
 from errors import send_error_to_telegram
+from config import TARGET_CHANNEL
 
-def order_callback_ws(telegram_queue):
+
+def order_callback_ws(loop, telegram_queue):
     """
-    Factory function that returns a WS callback
-    with access to telegram_queue.
+    Factory function that returns a thread-safe WS callback
+    with injected event loop and telegram_queue.
     """
 
     def _callback(msg):
@@ -23,10 +25,9 @@ def order_callback_ws(telegram_queue):
                 f"size:{size} closed_pnl:{closed_pnl}"
             )
 
-            # detect closed position
             is_closed = (
-                data.get("reduceOnly") in [True, "True"]
-                and data.get("closeOnTrigger") in [True, "True"]
+                data.get("reduceOnly") in (True, "True")
+                and data.get("closeOnTrigger") in (True, "True")
             ) or closed_pnl != 0
 
             asyncio.run_coroutine_threadsafe(
@@ -41,18 +42,16 @@ def order_callback_ws(telegram_queue):
                         "is_closed": is_closed,
                     }
                 ),
-                main_loop,
+                loop,   # ✅ injected loop
             )
 
         except Exception as e:
             asyncio.run_coroutine_threadsafe(
                 send_error_to_telegram(
-                    client=None,  # اگر خواستی بعداً تزریق می‌کنیم
-                    target_channel=TARGET_CHANNEL,
                     error=e,
                     context="WS order callback",
                 ),
-                main_loop,
+                loop,
             )
 
     return _callback
