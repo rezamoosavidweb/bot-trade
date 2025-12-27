@@ -96,7 +96,7 @@ def register_command_handlers():
     async def wallet_handler(event):
         try:
             balances = get_wallet_balance()
-
+            print(f"balances:\n{balances}")
             if not balances:
                 await event.respond("💰 Wallet is empty.")
                 return
