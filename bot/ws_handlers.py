@@ -13,7 +13,7 @@ def order_callback_ws(loop, telegram_queue):
     def _callback(msg):
         try:
             data = msg["data"][0]
-
+            print(f"data:{data}\n\n")
             symbol_ws = data.get("symbol")
             size = float(data.get("size", 0))
             closed_pnl = float(data.get("closedPnl", 0))
