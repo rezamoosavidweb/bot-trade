@@ -99,18 +99,22 @@ async def process_telegram_queue():
                 ws_type = item.get("msg_type")
                 data = item.get("data")
                 symbol = item.get("symbol")
-                size = item.get("size")
+                size = float(data.get("qty", 0))
+                price = data.get("price")
+                avgPrice = data.get("avgPrice")
                 closed_pnl = item.get("closed_pnl")
                 takeProfit = item.get("takeProfit")
                 stopLoss = item.get("stopLoss")
 
+                # قالب‌بندی پیام با افزودن price, qty, avgPrice
                 if ws_type == "new_order":
                     text = (
                         f"📤 New Order Filled\n"
                         f"Symbol: {symbol}\n"
                         f"Side: {data.get('side')}\n"
                         f"Qty: {size}\n"
-                        f"Price: {data.get('price')}\n"
+                        f"Price: {price}\n"
+                        f"AvgPrice: {avgPrice}\n"
                         f"SL: {stopLoss}\n"
                         f"TP: {takeProfit}\n"
                         f"OrderID: {data.get('orderId')}"
@@ -119,7 +123,9 @@ async def process_telegram_queue():
                     text = (
                         f"❌ Order Cancelled\n"
                         f"Symbol: {symbol}\n"
-                        f"Cancelled Orders: {size}\n"
+                        f"Qty: {size}\n"
+                        f"Price: {price}\n"
+                        f"AvgPrice: {avgPrice}\n"
                         f"Reason: {data.get('cancelType')}\n"
                         f"OrderID: {data.get('orderId')}"
                     )
@@ -129,6 +135,8 @@ async def process_telegram_queue():
                         f"Symbol: {symbol}\n"
                         f"Side: {data.get('side')}\n"
                         f"Size: {size}\n"
+                        f"Price: {price}\n"
+                        f"AvgPrice: {avgPrice}\n"
                         f"Closed PnL: {closed_pnl}\n"
                         f"OrderID: {data.get('orderId')}"
                     )
@@ -137,6 +145,7 @@ async def process_telegram_queue():
 
                 # ارسال به کانال
                 await telClient.send_message(TARGET_CHANNEL, text)
+
         except Exception as e:
             await send_error_to_telegram(e, context="process_telegram_queue")
         finally:
