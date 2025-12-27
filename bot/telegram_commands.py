@@ -1,4 +1,5 @@
-from telethon import events, Button
+from telethon import events
+from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 from clients import telClient
 from api import (
     cancel_all_orders,
@@ -7,38 +8,30 @@ from api import (
     get_closed_pnl,
     close_all_positions,
 )
-from telethon import events, Button
-from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def register_command_handlers():
-    # ---------- /start ----------  
+    # ---------- /start ----------
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
+
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton("📊 Positions")],
                 [KeyboardButton("🛑 Cancel Orders")],
-                [KeyboardButton("❌ Close Positions")]
-            ],
-            resize_keyboard=True,  # Telethon >= 1.24 این را می‌پذیرد
-            selective=True
+                [KeyboardButton("❌ Close Positions")],
+            ]
         )
 
-        await event.respond(
-            "📌 Welcome! Choose an action:",
-            reply_markup=keyboard
-        )
+        await event.respond("📌 Welcome! Choose an action:", reply_markup=keyboard)
 
+    @telClient.on(events.NewMessage)
+    async def menu_handler(event):
+        text = event.raw_text
 
-    # ---------- Inline button handlers ----------
-    @telClient.on(events.CallbackQuery)
-    async def callback_handler(event):
-        data = event.data.decode("utf-8")
         try:
-            if data == "positions":
+            if text == "📊 Positions":
                 msg = "📊 **Open Positions:**\n\n"
-
                 positions = get_positions(settleCoin="USDT")
                 if not positions:
                     msg += "No open positions.\n"
@@ -73,24 +66,26 @@ def register_command_handlers():
                 else:
                     for p in pnl[:10]:
                         emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
-                        msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+                        msg += (
+                            f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+                        )
 
-                await event.edit(msg)
+                await event.respond(msg)
 
-            elif data == "cancel":
+            elif text == "🛑 Cancel Orders":
                 cancel_all_orders(settleCoin="USDT")
-                await event.edit("🛑 All USDT orders cancelled")
+                await event.respond("🛑 All USDT orders cancelled")
 
-            elif data == "close_positions":
+            elif text == "❌ Close Positions":
                 results = close_all_positions(settleCoin="USDT")
                 if not results:
-                    await event.edit("📌 No open positions to close.")
+                    await event.respond("📌 No open positions to close.")
                     return
 
                 msg = "✅ Closed positions:\n\n"
                 for r in results:
                     msg += f"{r['symbol']} | {r['side']} | {r['size']}\n"
-                await event.edit(msg)
+                await event.respond(msg)
 
         except Exception as e:
-            await event.edit(f"❌ Error: {e}")
+            await event.respond(f"❌ Error: {e}")
