@@ -39,7 +39,7 @@ def get_positions(symbol: str | None = None, settleCoin: str | None = None):
         params["settleCoin"] = settleCoin
 
     res = bybitClient.get_positions(**params)
-
+    print(res)
     return res.get("result", {}).get("list", [])
 
 
