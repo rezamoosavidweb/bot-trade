@@ -224,7 +224,7 @@ def set_trading_stop(
 
     payload = {
         "category": "linear",
-        "symbol": "BTCUSDT",
+        "symbol": "ENSUSDT",
         "positionIdx": 0,
         "tpslMode": "Full",
         "takeProfit": "50000",
