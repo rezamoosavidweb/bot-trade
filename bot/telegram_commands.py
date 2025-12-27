@@ -16,11 +16,13 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
         keyboard = ReplyKeyboardMarkup(
-            [[KeyboardButton("📊 Positions")],
-            [KeyboardButton("🛑 Cancel Orders")],
-            [KeyboardButton("❌ Close Positions")]],
-            resize_keyboard=True,
-            one_time_keyboard=False
+            keyboard=[
+                [KeyboardButton("📊 Positions")],
+                [KeyboardButton("🛑 Cancel Orders")],
+                [KeyboardButton("❌ Close Positions")]
+            ],
+            resize_keyboard=True,  # Telethon >= 1.24 این را می‌پذیرد
+            selective=True
         )
 
         await event.respond(
