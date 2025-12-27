@@ -1,6 +1,12 @@
 from telethon import events
 from clients import telClient
-from api import cancel_all_orders, get_positions, get_pending_orders, get_closed_pnl
+from api import (
+    cancel_all_orders,
+    get_positions,
+    get_pending_orders,
+    get_closed_pnl,
+    close_all_positions,
+)
 
 
 def register_command_handlers():
@@ -63,3 +69,19 @@ def register_command_handlers():
             await event.respond("🛑 All USDT orders cancelled")
         except Exception as e:
             await event.respond(f"❌ Error cancelling orders: {e}")
+
+    @telClient.on(events.NewMessage(pattern=r"^/close_positions$"))
+    async def close_positions_handler(event):
+        try:
+            results = close_all_positions(settleCoin="USDT")
+            if not results:
+                await event.respond("📌 No open positions to close.")
+                return
+
+            msg = "✅ Closed positions:\n\n"
+            for r in results:
+                msg += f"{r['symbol']} | {r['side']} | {r['size']}\n"
+            await event.respond(msg)
+
+        except Exception as e:
+            await event.respond(f"❌ Error closing positions: {e}")
