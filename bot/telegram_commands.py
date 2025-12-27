@@ -1,4 +1,4 @@
-from telethon import events
+from telethon import events, Button
 from clients import telClient
 from api import (
     cancel_all_orders,
@@ -8,21 +8,20 @@ from api import (
     close_all_positions,
 )
 
-
 def register_command_handlers():
     # ---------- /start ----------
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-        # دکمه‌ها را به شکل لیست لیست متن دکمه‌ها بدهید
+        # درست کردن کیبورد با Button.text
         buttons = [
-            ["📊 Positions"],
-            ["🛑 Cancel Orders"],
-            ["❌ Close Positions"]
+            [Button.text("📊 Positions")],
+            [Button.text("🛑 Cancel Orders")],
+            [Button.text("❌ Close Positions")]
         ]
 
         await event.respond(
             "📌 Welcome! Choose an action:",
-            buttons=buttons  # Telethon خودکار ReplyKeyboardMarkup می‌سازد
+            buttons=buttons  # باید Button.text استفاده شود
         )
 
     # ---------- هندل پیام‌های دکمه‌ای ----------
