@@ -106,7 +106,7 @@ def register_telegram_handlers(source_channel):
         formatted_time = msg_time.strftime("%Y-%m-%d | %H:%M:%S")
 
         if is_signal_message(message_text):
-            print("[INFO] Signal detected")
+            print(f"[INFO] Signal detected / {formatted_time}")
             # await telClient.send_message(
             #     TARGET_CHANNEL,
             #     (
@@ -121,5 +121,5 @@ def register_telegram_handlers(source_channel):
             # )
             await telegram_queue.put(event.message)
         else:
-            print("[INFO] Non-signal message ignored")
+            print(f"[INFO] Non-signal message ignored / {formatted_time}")
 
