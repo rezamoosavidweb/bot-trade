@@ -95,22 +95,27 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/wallet$"))
     async def wallet_handler(event):
         try:
-            balances = get_wallet_balance()
-            print(f"balances:\n{balances}")
-            if not balances:
+            data = get_wallet_balance()
+
+            coins = data.get("result", {}).get("list", [])
+            if not coins:
+                await event.respond("💰 Wallet data not found.")
+                return
+
+            coins = coins[0].get("coin", [])
+            if not coins:
                 await event.respond("💰 Wallet is empty.")
                 return
 
             msg = "💰 **Wallet Balance**\n\n"
 
-            for coin in balances:
-                symbol = coin.get("coin", "-")
-                equity = float(coin.get("equity", 0))
-                wallet = float(coin.get("walletBalance", 0))
-                usd_value = float(coin.get("usdValue", 0))
-                pnl = float(coin.get("cumRealisedPnl", 0))
+            for c in coins:
+                symbol = c.get("coin")
+                equity = float(c.get("equity", 0))
+                wallet = float(c.get("walletBalance", 0))
+                usd_value = float(c.get("usdValue", 0))
+                pnl = float(c.get("cumRealisedPnl", 0))
 
-                # رد کردن کوین‌هایی که صفر هستند
                 if equity == 0 and wallet == 0:
                     continue
 
