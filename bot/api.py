@@ -231,7 +231,7 @@ def set_trading_stop(
         "stopLoss": "48000",
     }
 
-    bybitClient.v5.position.trading_stop(
+    bybitClient.trading_stop(
         category="linear",
         symbol="ENSUSDT",
         positionIdx=0,
