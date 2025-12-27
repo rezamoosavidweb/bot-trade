@@ -14,29 +14,53 @@ telegram_queue = asyncio.Queue()
 
 
 # ---------------- HELPER FUNCTIONS ---------------- #
-def set_sl_tp_partial(symbol: str, position_idx: int, tp2: float, qty: float):
+def set_sl_tp_partial(
+    symbol: str,
+    position_idx: int,
+    tp1: float,
+    sl1: float,
+    tp2: float,
+    sl2: float,
+    qty: float,
+):
     """
     Set the Stop Loss for the entire position and two partial Take Profits (TP1 and TP2).
 
     :param symbol: Symbol like 'BTCUSDT'
     :param position_idx: Position index (0 for one-way, 1/2 for hedge)
+    :param tp1: Take Profit price for first half
+    :param sl1: Stop Loss for first half
     :param tp2: Take Profit price for second half
+    :param sl2: Stop Loss for second half
     :param qty: Total position quantity
     """
     try:
-        # Set partial Take Profit for remaining half
+        # Set partial TP/SL for first half
+        set_trading_stop(
+            symbol=symbol,
+            tpslMode="Partial",
+            positionIdx=position_idx,
+            takeProfit=str(tp1),
+            stopLoss=str(sl1),
+            tpSize=str(qty / 2),
+            slSize=str(qty / 2),
+        )
+
+        # Set partial TP/SL for second half
         set_trading_stop(
             symbol=symbol,
             tpslMode="Partial",
             positionIdx=position_idx,
             takeProfit=str(tp2),
+            stopLoss=str(sl2),
             tpSize=str(qty / 2),
+            slSize=str(qty / 2),
         )
 
         print(f"[INFO] SL and Partial TPs set for {symbol}")
 
     except Exception as e:
-        print(f"[ERROR] Failed to set SL/TP for eeeeeeee {symbol}: {e}")
+        print(f"[ERROR] Failed to set SL/TP for {symbol}: {e}")
 
 
 async def handle_telegram_signal(item):
@@ -93,20 +117,36 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         side=signal["side"],
         qty=str(qty),
-        sl=str(signal["sl"]),
-        tp=str(
-            signal["targets"][0]  # temporary, main TP replaced by partial logic below
-        ),
+        # sl=str(signal["sl"]),
+        # tp=str(
+        #     signal["targets"][0]  # temporary, main TP replaced by partial logic below
+        # ),
     )
 
     open_positions.add(symbol)
 
-    # Set SL and Partial TPs
-    set_sl_tp_partial(
+    if signal["side"] == "Buy":
+        sl2 = signal["entry"] * (1 + 0.0011)
+    else:  # Sell
+        sl2 = signal["entry"] * (1 - 0.0011)
+
+    set_trading_stop(
         symbol=symbol,
-        position_idx=0,  # assuming one-way mode; adjust if using hedge-mode
-        tp2=signal["targets"][1],
-        qty=qty,
+        tpslMode="Partial",
+        positionIdx=0,
+        takeProfit=signal["targets"][0],
+        stopLoss=str(signal["sl"]),
+        slSize=str(qty / 2),
+        tpSize=str(qty / 2),
+    )
+
+    set_trading_stop(
+        symbol=symbol,
+        tpslMode="Partial",
+        positionIdx=0,
+        takeProfit=signal["targets"][1],
+        stopLoss=None,
+        tpSize=str(qty / 2),
     )
 
     # Notify Telegram channel
@@ -141,10 +181,11 @@ async def handle_ws_message(item):
 
     # ---------------- Check if this message is related to set_trading_stop ----------------
     if stop_order_type in ["TakeProfit", "StopLoss", "PartialTakeProfit"]:
+        side = data.get("side")
         text = (
             f"⚡ SL/TP Update Detected\n\n"
             f"Symbol: {symbol}\n"
-            f"Side: {data.get('side')}\n"
+            f"Side: {size}\n"
             f"Qty: {size}\n"
             f"SL: {stop_loss or '—'}\n"
             f"TP: {take_profit or '—'}\n"
@@ -156,6 +197,21 @@ async def handle_ws_message(item):
 
     # ---------------- Regular WebSocket messages ----------------
     elif ws_type == "new_order":
+        fee_multiplier = 0.0011
+        if side.lower() == "buy":
+            sl2 = price * (1 + fee_multiplier)
+        else:
+            sl2 = price * (1 - fee_multiplier)
+            
+        # set SL2 base on filled price + fee(2*0.0005)
+        set_trading_stop(
+            symbol=symbol,
+            tpslMode="Partial",
+            positionIdx=0,
+            takeProfit=None,
+            stopLoss=str(sl2),
+            slSize=str(size / 2),
+        )
         text = (
             f"📤 New Order Filled\n\n"
             f"Symbol: {symbol}\nSide: {data.get('side')}\nQty: {size}\n"

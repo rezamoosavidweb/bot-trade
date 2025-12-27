@@ -168,8 +168,8 @@ def place_market_order(
         side=side,
         orderType="Market",
         qty=str(qty),
-        stopLoss=str(sl) if sl else None,
-        takeProfit=str(tp) if tp else None,
+        # stopLoss=str(sl) if sl else None,
+        # takeProfit=str(tp) if tp else None,
     )
 
 
