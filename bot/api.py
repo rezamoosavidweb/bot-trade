@@ -49,6 +49,7 @@ def get_pending_orders(settleCoin: str):
         openOnly=0,
         limit=20,
     )
+    print(f"get_open_orders:\n{res}")
     if isinstance(res, dict):
         return res.get("result", {}).get("list", [])
     return []
