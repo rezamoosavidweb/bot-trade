@@ -7,6 +7,7 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/positions$"))
     async def positions_handler(event):
         try:
+            print("call positions")
             msg = "📊 **Open Positions:**\n\n"
 
             positions = get_positions(settleCoin="USDT")
