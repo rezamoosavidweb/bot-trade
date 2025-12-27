@@ -12,7 +12,7 @@ def register_command_handlers():
             msg = "📊 **Open Positions:**\n\n"
 
             positions = get_positions(settleCoin="USDT")
-
+            print(f"positions:\n{positions}")
             if not positions:
                 msg += "No open positions.\n"
             else:
