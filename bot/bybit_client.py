@@ -37,7 +37,7 @@ async def get_usdt_balance() -> float:
 async def is_position_open(symbol: str) -> bool:
     """Check if a symbol has an open position."""
     try:
-        res = await get_symbol_positions(symbol=symbol)
+        res = get_symbol_positions(symbol=symbol)
         positions = res["result"]["list"]
         if not positions:
             return False
