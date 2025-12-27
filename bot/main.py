@@ -26,7 +26,7 @@ async def main():
         f"IS_DEMO:{IS_DEMO}\n",
         f"SELECTED_API_KEY:{SELECTED_API_KEY}\n",
         f"SELECTED_API_SECRET:{SELECTED_API_SECRET}\n",
-        f"SELECTED_SOURCE_CHANNEL:{SELECTED_SOURCE_CHANNEL}",
+        f"SELECTED_SOURCE_CHANNEL:{SELECTED_SOURCE_CHANNEL}\n",
         f"=================================",
     )
     loop = asyncio.get_running_loop()
