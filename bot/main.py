@@ -17,6 +17,7 @@ from config import (
 from pybit.unified_trading import WebSocket
 from errors import send_error_to_telegram
 from cache import periodic_refresh, init_redis
+from telegram_commands import register_command_handlers
 
 
 async def main():
@@ -30,6 +31,9 @@ async def main():
 
     # Register Telegram message handler
     register_telegram_handlers(source_channel=SELECTED_SOURCE_CHANNEL)
+
+    # Register Telegram commands bot
+    register_command_handlers()
 
     # Start Telegram processing queue
     asyncio.create_task(process_telegram_queue())

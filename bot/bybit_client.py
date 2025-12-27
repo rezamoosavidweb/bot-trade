@@ -8,7 +8,7 @@ from config import (
 )
 
 from cache import get_symbol_info as get_cached_symbol_info
-from api import get_wallet_balance, get_symbol_positions
+from api import get_wallet_balance, get_positions
 import asyncio
 
 
@@ -37,7 +37,7 @@ async def get_usdt_balance() -> float:
 async def is_position_open(symbol: str) -> bool:
     """Check if a symbol has an open position."""
     try:
-        res = get_symbol_positions(symbol=symbol)
+        res = get_positions(symbol=symbol)
         positions = res["result"]["list"]
         if not positions:
             return False
