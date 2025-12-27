@@ -5,11 +5,6 @@ from config import TARGET_CHANNEL
 
 
 def order_callback_ws(loop, telegram_queue):
-    """
-    Factory function that returns a thread-safe WS callback
-    with injected event loop and telegram_queue.
-    """
-
     def _callback(msg):
         try:
             data = msg["data"][0]
@@ -20,29 +15,23 @@ def order_callback_ws(loop, telegram_queue):
             takeProfit = float(data.get("takeProfit") or 0)
             stopLoss = float(data.get("stopLoss") or 0)
 
-            print(
-                f"✅ WS message: symbol:{symbol_ws} "
-                f"size:{size} closed_pnl:{closed_pnl}"
-            )
-
             is_closed = (
                 data.get("reduceOnly") in (True, "True")
                 and data.get("closeOnTrigger") in (True, "True")
             ) or closed_pnl != 0
 
             asyncio.run_coroutine_threadsafe(
-                telegram_queue.put(
-                    {
-                        "symbol": symbol_ws,
-                        "size": size,
-                        "closed_pnl": closed_pnl,
-                        "takeProfit": takeProfit,
-                        "stopLoss": stopLoss,
-                        "data": data,
-                        "is_closed": is_closed,
-                    }
-                ),
-                loop,   # ✅ injected loop
+                telegram_queue.put({
+                    "type": "ws",             # مشخص کردن نوع پیام
+                    "symbol": symbol_ws,
+                    "size": size,
+                    "closed_pnl": closed_pnl,
+                    "takeProfit": takeProfit,
+                    "stopLoss": stopLoss,
+                    "data": data,
+                    "is_closed": is_closed,
+                }),
+                loop,
             )
 
         except Exception as e:
