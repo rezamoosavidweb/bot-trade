@@ -14,7 +14,7 @@ telegram_queue = asyncio.Queue()
 
 
 # ---------------- HELPER FUNCTIONS ---------------- #
-async def set_sl_tp_partial(
+def set_sl_tp_partial(
     symbol: str, position_idx: int, tp2: float, qty: float
 ):
     """
@@ -27,7 +27,7 @@ async def set_sl_tp_partial(
     """
     try:
         # Set partial Take Profit for remaining half
-        await set_trading_stop(
+        set_trading_stop(
             category="linear",
             symbol=symbol,
             tpslMode="Partial",
