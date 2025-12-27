@@ -179,9 +179,13 @@ async def handle_ws_message(item):
     tpsl_mode = data.get("tpslMode")
     create_type = data.get("createType")
     side = data.get("side")
+
+    if price is not None:
+        price = float(price)
+
     # ---------------- Check if this message is related to set_trading_stop ----------------
     if stop_order_type in ["TakeProfit", "StopLoss", "PartialTakeProfit"]:
-        
+
         text = (
             f"⚡ SL/TP Update Detected\n\n"
             f"Symbol: {symbol}\n"
@@ -202,7 +206,7 @@ async def handle_ws_message(item):
             sl2 = price * (1 + fee_multiplier)
         else:
             sl2 = price * (1 - fee_multiplier)
-            
+
         # set SL2 base on filled price + fee(2*0.0005)
         set_trading_stop(
             symbol=symbol,
