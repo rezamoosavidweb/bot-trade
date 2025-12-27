@@ -178,14 +178,14 @@ async def handle_ws_message(item):
     stop_order_type = data.get("stopOrderType")
     tpsl_mode = data.get("tpslMode")
     create_type = data.get("createType")
-
+    side = data.get("side")
     # ---------------- Check if this message is related to set_trading_stop ----------------
     if stop_order_type in ["TakeProfit", "StopLoss", "PartialTakeProfit"]:
-        side = data.get("side")
+        
         text = (
             f"⚡ SL/TP Update Detected\n\n"
             f"Symbol: {symbol}\n"
-            f"Side: {size}\n"
+            f"Side: {side}\n"
             f"Qty: {size}\n"
             f"SL: {stop_loss or '—'}\n"
             f"TP: {take_profit or '—'}\n"
@@ -214,7 +214,7 @@ async def handle_ws_message(item):
         )
         text = (
             f"📤 New Order Filled\n\n"
-            f"Symbol: {symbol}\nSide: {data.get('side')}\nQty: {size}\n"
+            f"Symbol: {symbol}\nSide: {side}\nQty: {size}\n"
             f"Price: {price}\nAvgPrice: {avg_price}\nSL: {stop_loss or '—'}\n"
             f"TP: {take_profit or '—'}\nOrderID: {data.get('orderId')}"
         )
@@ -227,7 +227,7 @@ async def handle_ws_message(item):
     elif ws_type == "close_position":
         text = (
             f"🔒 Position Closed\n\n"
-            f"Symbol: {symbol}\nSide: {data.get('side')}\nSize: {size}\n"
+            f"Symbol: {symbol}\nSide: {side}\nSize: {size}\n"
             f"Price: {price}\nAvgPrice: {avg_price}\nClosed PnL: {closed_pnl}\n"
             f"OrderID: {data.get('orderId')}"
         )
