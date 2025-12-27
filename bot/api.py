@@ -90,7 +90,6 @@ def set_leverage_safe(symbol: str, leverage: float):
         return True
     except InvalidRequestError as e:
         if "110043" in str(e):
-            # leverage not modified
             return False
         raise
 
@@ -105,6 +104,42 @@ def place_market_order(symbol, side, qty, sl, tp):
         stopLoss=str(sl),
         takeProfit=str(tp),
     )
+
+
+from clients import bybitClient
+
+
+def close_all_positions(settleCoin="USDT"):
+    positions = bybitClient.get_positions(category="linear", settleCoin=settleCoin)
+    positions_list = positions.get("result", {}).get("list", [])
+
+    closed_positions = []
+
+    for pos in positions_list:
+        symbol = pos["symbol"]
+        side = pos["side"]
+        size = pos["size"]
+
+        if float(size) == 0:
+            continue 
+
+        
+        close_side = "Sell" if side == "Buy" else "Buy"
+
+        
+        order = bybitClient.place_order(
+            category="linear",
+            symbol=symbol,
+            side=close_side,
+            orderType="Market",
+            qty=str(size),
+        )
+
+        closed_positions.append(
+            {"symbol": symbol, "side": side, "size": size, "orderResult": order}
+        )
+
+    return closed_positions
 
 
 def cancel_all_orders(settleCoin="USDT"):

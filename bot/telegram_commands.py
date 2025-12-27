@@ -63,6 +63,3 @@ def register_command_handlers():
             await event.respond("🛑 All USDT orders cancelled")
         except Exception as e:
             await event.respond(f"❌ Error cancelling orders: {e}")
-
-
-
