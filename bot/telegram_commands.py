@@ -1,5 +1,4 @@
 from telethon import events
-from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 from clients import telClient
 from api import (
     cancel_all_orders,
@@ -8,23 +7,25 @@ from api import (
     get_closed_pnl,
     close_all_positions,
 )
-from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def register_command_handlers():
     # ---------- /start ----------
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-        keyboard = ReplyKeyboardMarkup(
-            rows=[
-                [KeyboardButton("📊 Positions")],
-                [KeyboardButton("🛑 Cancel Orders")],
-                [KeyboardButton("❌ Close Positions")],
-            ]
+        # دکمه‌ها را به شکل لیست لیست متن دکمه‌ها بدهید
+        buttons = [
+            ["📊 Positions"],
+            ["🛑 Cancel Orders"],
+            ["❌ Close Positions"]
+        ]
+
+        await event.respond(
+            "📌 Welcome! Choose an action:",
+            buttons=buttons  # Telethon خودکار ReplyKeyboardMarkup می‌سازد
         )
 
-        await event.respond("📌 Welcome! Choose an action:", buttons=keyboard)
-
+    # ---------- هندل پیام‌های دکمه‌ای ----------
     @telClient.on(events.NewMessage)
     async def menu_handler(event):
         text = event.raw_text
@@ -66,9 +67,7 @@ def register_command_handlers():
                 else:
                     for p in pnl[:10]:
                         emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
-                        msg += (
-                            f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
-                        )
+                        msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
 
                 await event.respond(msg)
 
