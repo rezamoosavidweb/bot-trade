@@ -57,7 +57,8 @@ def register_command_handlers():
     async def cancel_handler(event):
         try:
             # ⚠️ برای cancel باید settleCoin یا symbol بدهیم تا ErrCode 10001 ندهد
-            cancel_all_orders(settleCoin="USDT")
+            orders= await cancel_all_orders(settleCoin="USDT")
+            print(f"orders:{orders}")
             await event.respond("🛑 All USDT orders cancelled")
         except Exception as e:
             await event.respond(f"❌ Error cancelling orders: {e}")
