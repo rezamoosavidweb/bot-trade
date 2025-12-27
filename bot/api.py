@@ -218,10 +218,10 @@ def set_trading_stop(
         "tpTriggerBy": tpTriggerBy,
         "slTriggerBy": slTriggerBy,
     }
-
-    payload = {k: v for k, v in payload.items() if v is not None}
+    print("1111111111111111111")
+    # payload = {k: v for k, v in payload.items() if v is not None}
     print(f"\npayload:{payload}\n\n")
-
+    print("22222222222222")
     payload = {
         "category": "linear",
         "symbol": "ENSUSDT",
@@ -230,7 +230,7 @@ def set_trading_stop(
         "takeProfit": "50000",
         "stopLoss": "48000",
     }
-
+    print("3333333333333333")
     bybitClient.trading_stop(
         category="linear",
         symbol="ENSUSDT",
