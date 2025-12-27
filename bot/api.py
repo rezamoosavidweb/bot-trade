@@ -201,7 +201,7 @@ def set_trading_stop(
     """
 
     # Remove None values to avoid API errors
-    payload = {k: v for k, v in payload.items() if v is not None}
+    # payload = {k: v for k, v in payload.items() if v is not None}
 
     return bybitClient.set_trading_stop(
         category="linear",

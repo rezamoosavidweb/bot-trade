@@ -38,7 +38,7 @@ def set_sl_tp_partial(
         print(f"[INFO] SL and Partial TPs set for {symbol}")
 
     except Exception as e:
-        print(f"[ERROR] Failed to set SL/TP for {symbol}: {e}")
+        print(f"[ERROR] Failed to set SL/TP for eeeeeeee {symbol}: {e}")
 
 
 async def handle_telegram_signal(item):
