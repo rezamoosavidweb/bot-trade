@@ -1,70 +1,51 @@
-# ws_handlers.py
 import asyncio
 from errors import send_error_to_telegram
 
 
 def order_callback_ws(loop, telegram_queue):
     """
-    Thread-safe callback for Bybit WebSocket order updates.
-    Sends detailed order info to the telegram_queue.
+    Thread-safe WS callback with loop and telegram_queue injection.
+    Determines type of WS message: New Order, Cancel Order, Close Position.
     """
 
     def _callback(msg):
         try:
             data = msg["data"][0]
-            print(f"data :\n{data}\n\n")
+            print(f"data:{data}\n\n")
+
+            # مقادیر اصلی
             symbol_ws = data.get("symbol")
-            size = float(data.get("size", 0))
+            size = float(data.get("qty", 0))
             closed_pnl = float(data.get("closedPnl", 0))
             takeProfit = float(data.get("takeProfit") or 0)
             stopLoss = float(data.get("stopLoss") or 0)
+            reduceOnly = data.get("reduceOnly") in [True, "True"]
+            closeOnTrigger = data.get("closeOnTrigger") in [True, "True"]
+            createType = data.get("createType", "")
+            orderStatus = data.get("orderStatus", "")
 
-            # is_closed according to your formula
-            is_closed = (
-                data.get("reduceOnly") in [True, "True"]
-                and data.get("closeOnTrigger") in [True, "True"]
-            ) or closed_pnl != 0
+            # تعیین نوع پیام
+            if orderStatus == "Deactivated" and reduceOnly and closeOnTrigger:
+                msg_type = "cancel_order"
+            elif reduceOnly and orderStatus == "Filled" and not closeOnTrigger:
+                msg_type = "close_position"
+            elif not reduceOnly and orderStatus == "Filled":
+                msg_type = "new_order"
+            else:
+                msg_type = "other"
 
-            # Put all relevant info in the queue
+            # ارسال به صف تلگرام
             asyncio.run_coroutine_threadsafe(
                 telegram_queue.put(
                     {
                         "type": "ws",
+                        "msg_type": msg_type,
                         "symbol": symbol_ws,
                         "size": size,
                         "closed_pnl": closed_pnl,
                         "takeProfit": takeProfit,
                         "stopLoss": stopLoss,
-                        "is_closed": is_closed,
-                        "data": {
-                            "category": data.get("category"),
-                            "orderId": data.get("orderId"),
-                            "orderLinkId": data.get("orderLinkId"),
-                            "side": data.get("side"),
-                            "positionIdx": data.get("positionIdx"),
-                            "orderStatus": data.get("orderStatus"),
-                            "createType": data.get("createType"),
-                            "cancelType": data.get("cancelType"),
-                            "rejectReason": data.get("rejectReason"),
-                            "price": data.get("price"),
-                            "avgPrice": data.get("avgPrice"),
-                            "qty": data.get("qty"),
-                            "leavesQty": data.get("leavesQty"),
-                            "cumExecQty": data.get("cumExecQty"),
-                            "cumExecValue": data.get("cumExecValue"),
-                            "cumFeeDetail": data.get("cumFeeDetail"),
-                            "orderType": data.get("orderType"),
-                            "timeInForce": data.get("timeInForce"),
-                            "lastPriceOnCreated": data.get("lastPriceOnCreated"),
-                            "tpslMode": data.get("tpslMode"),
-                            "tpLimitPrice": data.get("tpLimitPrice"),
-                            "slLimitPrice": data.get("slLimitPrice"),
-                            "tpTriggerBy": data.get("tpTriggerBy"),
-                            "slTriggerBy": data.get("slTriggerBy"),
-                            "triggerDirection": data.get("triggerDirection"),
-                            "createdTime": data.get("createdTime"),
-                            "updatedTime": data.get("updatedTime"),
-                        },
+                        "data": data,
                     }
                 ),
                 loop,

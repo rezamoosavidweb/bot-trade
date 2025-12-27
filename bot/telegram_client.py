@@ -96,93 +96,47 @@ async def process_telegram_queue():
 
             elif item.get("type") == "ws":
                 # ---------------- WEBSOCKET MESSAGE ---------------- #
-                data = item["data"]
+                ws_type = item.get("msg_type")
+                data = item.get("data")
                 symbol = item.get("symbol")
                 size = item.get("size")
                 closed_pnl = item.get("closed_pnl")
                 takeProfit = item.get("takeProfit")
                 stopLoss = item.get("stopLoss")
-                is_closed = item.get("is_closed")
-                order_status = data.get("orderStatus", "")
-                cancel_type = data.get("cancelType", "")
-                reduce_only = data.get("reduceOnly", False)
-                close_on_trigger = data.get("closeOnTrigger", False)
-                create_type = data.get("createType", "")
-                order_id = data.get("orderId", "")
-                side = data.get("side")
-                avg_price = data.get("avgPrice")
-                cum_fee = data.get("cumFeeDetail")
 
-                # ----------------- دسته‌بندی پیام ----------------- #
-                if (
-                    order_status.lower() == "filled"
-                    and reduce_only
-                    and not close_on_trigger
-                ):
-                    # Close All Positions (market close)
-                    msg = (
-                        f"❌ **Position Closed**\n"
+                if ws_type == "new_order":
+                    text = (
+                        f"📤 New Order Filled\n"
                         f"Symbol: {symbol}\n"
-                        f"Side: {side}\n"
+                        f"Side: {data.get('side')}\n"
+                        f"Qty: {size}\n"
+                        f"Price: {data.get('price')}\n"
+                        f"SL: {stopLoss}\n"
+                        f"TP: {takeProfit}\n"
+                        f"OrderID: {data.get('orderId')}"
+                    )
+                elif ws_type == "cancel_order":
+                    text = (
+                        f"❌ Order Cancelled\n"
+                        f"Symbol: {symbol}\n"
+                        f"Cancelled Orders: {size}\n"
+                        f"Reason: {data.get('cancelType')}\n"
+                        f"OrderID: {data.get('orderId')}"
+                    )
+                elif ws_type == "close_position":
+                    text = (
+                        f"🔒 Position Closed\n"
+                        f"Symbol: {symbol}\n"
+                        f"Side: {data.get('side')}\n"
                         f"Size: {size}\n"
                         f"Closed PnL: {closed_pnl}\n"
-                        f"Avg Price: {avg_price}\n"
-                        f"Order ID: {order_id}\n"
-                        f"Fee: {cum_fee}"
+                        f"OrderID: {data.get('orderId')}"
                     )
-
-                elif (
-                    order_status.lower() == "deactivated"
-                    and cancel_type.lower() == "cancelbyuser"
-                ):
-                    # Cancel Order (SL/TP canceled)
-                    msg = (
-                        f"⚠️ **Order Cancelled**\n"
-                        f"Symbol: {symbol}\n"
-                        f"Side: {side}\n"
-                        f"Qty: {size}\n"
-                        f"Order ID: {order_id}\n"
-                        f"Cancel Type: {cancel_type}\n"
-                        f"SL: {stopLoss}\n"
-                        f"TP: {takeProfit}"
-                    )
-
-                elif (
-                    order_status.lower() == "filled"
-                    and create_type == "CreateByUser"
-                    and not reduce_only
-                ):
-                    # Place Order
-                    msg = (
-                        f"🚀 **New Position Opened**\n"
-                        f"Symbol: {symbol}\n"
-                        f"Side: {side}\n"
-                        f"Qty: {size}\n"
-                        f"Entry Price: {avg_price}\n"
-                        f"SL: {stopLoss}\n"
-                        f"TP: {takeProfit}\n"
-                        f"Order ID: {order_id}\n"
-                        f"Fee: {cum_fee}"
-                    )
-
                 else:
-                    # سایر آپدیت‌ها مثل SL/TP فعال یا partial update
-                    msg = (
-                        f"ℹ️ **Order Update**\n"
-                        f"Symbol: {symbol}\n"
-                        f"Side: {side}\n"
-                        f"Qty: {size}\n"
-                        f"Order Status: {order_status}\n"
-                        f"ReduceOnly: {reduce_only}\n"
-                        f"CloseOnTrigger: {close_on_trigger}\n"
-                        f"Order ID: {order_id}\n"
-                        f"Avg Price: {avg_price}\n"
-                        f"SL: {stopLoss}\n"
-                        f"TP: {takeProfit}\n"
-                        f"Fee: {cum_fee}"
-                    )
+                    text = f"ℹ️ WS Message: {data}"
 
-                await telClient.send_message(TARGET_CHANNEL, msg)
+                # ارسال به کانال
+                await telClient.send_message(TARGET_CHANNEL, text)
         except Exception as e:
             await send_error_to_telegram(e, context="process_telegram_queue")
         finally:
