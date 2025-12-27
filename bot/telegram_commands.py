@@ -95,7 +95,7 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/wallet$"))
     async def wallet_handler(event):
         try:
-            balances = session.get_wallet_balance()
+            balances = get_wallet_balance()
 
             if not balances:
                 await event.respond("💰 Wallet is empty.")
