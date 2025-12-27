@@ -15,38 +15,17 @@ telegram_queue = asyncio.Queue()
 
 # ---------------- HELPER FUNCTIONS ---------------- #
 async def set_sl_tp_partial(
-    symbol: str, position_idx: int, sl: float, tp1: float, tp2: float, qty: float
+    symbol: str, position_idx: int, tp2: float, qty: float
 ):
     """
     Set the Stop Loss for the entire position and two partial Take Profits (TP1 and TP2).
 
     :param symbol: Symbol like 'BTCUSDT'
     :param position_idx: Position index (0 for one-way, 1/2 for hedge)
-    :param sl: Stop Loss price
-    :param tp1: Take Profit price for first half
     :param tp2: Take Profit price for second half
     :param qty: Total position quantity
     """
     try:
-        # Set full position Stop Loss
-        await set_trading_stop(
-            category="linear",
-            symbol=symbol,
-            tpslMode="Full",
-            positionIdx=position_idx,
-            stopLoss=str(sl),
-        )
-
-        # Set partial Take Profit for first half
-        await set_trading_stop(
-            category="linear",
-            symbol=symbol,
-            tpslMode="Partial",
-            positionIdx=position_idx,
-            takeProfit=str(tp1),
-            tpSize=str(qty / 2),
-        )
-
         # Set partial Take Profit for remaining half
         await set_trading_stop(
             category="linear",
@@ -129,8 +108,6 @@ async def handle_telegram_signal(item):
     await set_sl_tp_partial(
         symbol=symbol,
         position_idx=0,  # assuming one-way mode; adjust if using hedge-mode
-        sl=signal["sl"],
-        tp1=signal["targets"][0],
         tp2=signal["targets"][1],
         qty=qty,
     )

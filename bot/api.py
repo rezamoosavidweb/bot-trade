@@ -222,4 +222,4 @@ def set_trading_stop(
     payload = {k: v for k, v in payload.items() if v is not None}
     print(f"\npayload:{payload}\n\n")
 
-    return bybitClient.v5.position.trading_stop(**payload)
+    return bybitClient.trading_stop(**payload)
