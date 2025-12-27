@@ -107,4 +107,4 @@ def place_market_order(symbol, side, qty, sl, tp):
 
 
 def cancel_all_orders(settleCoin="USDT"):
-    return bybitClient.cancel_all_orders(category="linear", settleCoins=settleCoin)
+    return bybitClient.cancel_all_orders(category="linear", settleCoin=settleCoin)
