@@ -27,11 +27,12 @@ async def process_telegram_queue():
                 if not signal:
                     print("[WARN] Invalid signal")
                     continue
-
+                symbol = signal["symbol"]
+                
                 print(
                     f"[INFO] Detect signal / {symbol} / entry:{signal['entry']} / tp:{signal['tp']} / sl:{signal['sl']} / leverage:{signal['leverage']}"
                 )
-                symbol = signal["symbol"]
+                
 
                 # Check open positions locally and in Bybit
                 position_open = await is_position_open(symbol)
