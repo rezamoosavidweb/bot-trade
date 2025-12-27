@@ -52,7 +52,7 @@ async def process_telegram_queue():
                 leverage = trade["leverage"]
 
                 print(
-                    f"[INFO] Detect signal / {symbol} / qty:{qty} / entry:{signal['entry']} / tp:{signal['targets'][0]} / sl:{signal['sl']} / leverage:{signal['leverage']}"
+                    f"[INFO] Detect signal / {symbol} / qty:{qty} / entry:{signal['entry']} / tp:{signal['targets'][0]} / sl:{signal['sl']} / leverage:{leverage}"
                 )
                 # Set leverage safely
                 try:
