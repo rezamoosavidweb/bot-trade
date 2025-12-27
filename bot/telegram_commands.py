@@ -7,21 +7,27 @@ from api import (
     get_closed_pnl,
     close_all_positions,
 )
+from telethon import events, Button
+from telethon.tl.types import ReplyKeyboardMarkup, KeyboardButton
 
 
 def register_command_handlers():
     # ---------- /start ----------  
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
-        buttons = [
-            [Button.inline("📊 Positions", b"positions")],
-            [Button.inline("🛑 Cancel Orders", b"cancel")],
-            [Button.inline("❌ Close Positions", b"close_positions")]
-        ]
+        keyboard = ReplyKeyboardMarkup(
+            [[KeyboardButton("📊 Positions")],
+            [KeyboardButton("🛑 Cancel Orders")],
+            [KeyboardButton("❌ Close Positions")]],
+            resize_keyboard=True,
+            one_time_keyboard=False
+        )
+
         await event.respond(
             "📌 Welcome! Choose an action:",
-            buttons=buttons
+            reply_markup=keyboard
         )
+
 
     # ---------- Inline button handlers ----------
     @telClient.on(events.CallbackQuery)
