@@ -16,14 +16,14 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/start$"))
     async def start_handler(event):
         keyboard = ReplyKeyboardMarkup(
-            rows=[  # <-- اینجا باید از "rows" استفاده کنید
+            rows=[
                 [KeyboardButton("📊 Positions")],
                 [KeyboardButton("🛑 Cancel Orders")],
                 [KeyboardButton("❌ Close Positions")],
             ]
         )
 
-        await event.respond("📌 Welcome! Choose an action:", reply_markup=keyboard)
+        await event.respond("📌 Welcome! Choose an action:", buttons=keyboard)
 
     @telClient.on(events.NewMessage)
     async def menu_handler(event):
