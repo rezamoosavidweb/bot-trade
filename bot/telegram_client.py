@@ -29,10 +29,6 @@ async def process_telegram_queue():
                     continue
                 symbol = signal["symbol"]
 
-                print(
-                    f"[INFO] Detect signal / {symbol} / entry:{signal['entry']} / tp:{signal['targets'][0]} / sl:{signal['sl']} / leverage:{signal['leverage']}"
-                )
-
                 # Check open positions locally and in Bybit
                 position_open = await is_position_open(symbol)
                 if symbol in open_positions or position_open:
@@ -55,6 +51,9 @@ async def process_telegram_queue():
                 qty = trade["qty"]
                 leverage = trade["leverage"]
 
+                print(
+                    f"[INFO] Detect signal / {symbol} / qty:{qty} / entry:{signal['entry']} / tp:{signal['targets'][0]} / sl:{signal['sl']} / leverage:{signal['leverage']}"
+                )
                 # Set leverage safely
                 try:
                     set_leverage_safe(symbol=symbol, leverage=str(leverage))
