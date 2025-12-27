@@ -114,7 +114,7 @@ def close_all_positions(settleCoin="USDT"):
     positions_list = positions.get("result", {}).get("list", [])
 
     closed_positions = []
-
+    print(f"positions_list:{positions_list}")
     for pos in positions_list:
         symbol = pos["symbol"]
         side = pos["side"]
@@ -138,7 +138,7 @@ def close_all_positions(settleCoin="USDT"):
         closed_positions.append(
             {"symbol": symbol, "side": side, "size": size, "orderResult": order}
         )
-
+    print(f"closed_positions:{closed_positions}")
     return closed_positions
 
 
