@@ -105,7 +105,7 @@ async def handle_telegram_signal(item):
     open_positions.add(symbol)
 
     # Set SL and Partial TPs
-    await set_sl_tp_partial(
+    set_sl_tp_partial(
         symbol=symbol,
         position_idx=0,  # assuming one-way mode; adjust if using hedge-mode
         tp2=signal["targets"][1],

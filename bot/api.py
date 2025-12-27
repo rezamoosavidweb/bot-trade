@@ -184,15 +184,13 @@ def set_trading_stop(
     slSize: float | None = None,
     tpOrderType: str = "Market",
     slOrderType: str = "Market",
-    tpTriggerBy: str = "LastPrice",
-    slTriggerBy: str = "LastPrice",
 ):
     """
     Set Take Profit / Stop Loss / Trailing Stop for a position.
-    Supports both Full and Partial modes according to Bybit v5 API.
+    Supports both Full and Partial modes.
 
     :param symbol: Trading symbol (e.g., BTCUSDT)
-    :param positionIdx: 0 = one-way, 1 = hedge Buy, 2 = hedge Sell
+    :param positionIdx: 0 = one-way, 1/2 = hedge-mode
     :param tpslMode: 'Full' for full position, 'Partial' for partial
     :param takeProfit: TP price
     :param stopLoss: SL price
@@ -200,42 +198,21 @@ def set_trading_stop(
     :param slSize: Quantity for partial SL
     :param tpOrderType: 'Market' or 'Limit' for TP
     :param slOrderType: 'Market' or 'Limit' for SL
-    :param tpTriggerBy: TP trigger price type
-    :param slTriggerBy: SL trigger price type
     """
-
     payload = {
         "category": "linear",
         "symbol": symbol,
         "positionIdx": positionIdx,
         "tpslMode": tpslMode,
-        "takeProfit": str(takeProfit) if takeProfit is not None else None,
-        "stopLoss": str(stopLoss) if stopLoss is not None else None,
-        "tpSize": str(tpSize) if tpSize is not None else None,
-        "slSize": str(slSize) if slSize is not None else None,
+        "takeProfit": str(takeProfit) if takeProfit else None,
+        "stopLoss": str(stopLoss) if stopLoss else None,
+        "tpSize": str(tpSize) if tpSize else None,
+        "slSize": str(slSize) if slSize else None,
         "tpOrderType": tpOrderType,
         "slOrderType": slOrderType,
-        "tpTriggerBy": tpTriggerBy,
-        "slTriggerBy": slTriggerBy,
     }
-    print("1111111111111111111")
-    # payload = {k: v for k, v in payload.items() if v is not None}
-    print(f"\npayload:{payload}\n\n")
-    print("22222222222222")
-    payload = {
-        "category": "linear",
-        "symbol": "ENSUSDT",
-        "positionIdx": 0,
-        "tpslMode": "Full",
-        "takeProfit": "50000",
-        "stopLoss": "48000",
-    }
-    print("3333333333333333")
-    bybitClient.trading_stop(
-        category="linear",
-        symbol="ENSUSDT",
-        positionIdx=0,
-        tpslMode="Full",
-        takeProfit="50000",
-        stopLoss="48000",
-    )
+
+    # Remove None values to avoid API errors
+    payload = {k: v for k, v in payload.items() if v is not None}
+
+    return bybitClient.set_trading_stop(**payload)
