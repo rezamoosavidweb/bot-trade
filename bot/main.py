@@ -1,6 +1,6 @@
 import asyncio
 from clients import telClient
-from bot.telegram_queue_processor import (
+from telegram_queue_processor import (
     process_telegram_queue,
     register_telegram_handlers,
     telegram_queue
