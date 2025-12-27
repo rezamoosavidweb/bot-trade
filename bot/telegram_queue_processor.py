@@ -117,7 +117,7 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         side=signal["side"],
         qty=str(qty),
-        # sl=str(signal["sl"]),
+        stopLoss=signal["sl"],  # Todo:after set sl2 to it should be equal with None
         # tp=str(
         #     signal["targets"][0]  # temporary, main TP replaced by partial logic below
         # ),
@@ -135,7 +135,7 @@ async def handle_telegram_signal(item):
         tpslMode="Partial",
         positionIdx=0,
         takeProfit=signal["targets"][0],
-        stopLoss=str(signal["sl"]),
+        # stopLoss=None,  # Todo:after set sl2 to it should be equal with signal['sl']
         slSize=str(qty / 2),
         tpSize=str(qty / 2),
     )
@@ -145,7 +145,7 @@ async def handle_telegram_signal(item):
         tpslMode="Partial",
         positionIdx=0,
         takeProfit=signal["targets"][1],
-        stopLoss=None,
+        # stopLoss=None,
         tpSize=str(qty / 2),
     )
 
@@ -208,14 +208,15 @@ async def handle_ws_message(item):
             sl2 = price * (1 - fee_multiplier)
 
         # set SL2 base on filled price + fee(2*0.0005)
-        set_trading_stop(
-            symbol=symbol,
-            tpslMode="Partial",
-            positionIdx=0,
-            takeProfit=None,
-            stopLoss=str(sl2),
-            slSize=str(size / 2),
-        )
+        # TODO: should be current price of market higher than current price so i must wait until price move up (in sell is opposite)then  set this sl
+        # set_trading_stop(
+        #     symbol=symbol,
+        #     tpslMode="Partial",
+        #     positionIdx=0,
+        #     takeProfit=None,
+        #     stopLoss=str(sl2),
+        #     slSize=str(size / 2),
+        # )
         text = (
             f"📤 New Order Filled\n\n"
             f"Symbol: {symbol}\nSide: {side}\nQty: {size}\n"
