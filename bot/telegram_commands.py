@@ -1,6 +1,6 @@
 from telethon import events
 from clients import telClient
-from api import cancel_all_orders, get_positions, get_pending_orders, get_profit_loos
+from api import cancel_all_orders, get_positions, get_pending_orders, get_closed_pnl
 
 
 def register_command_handlers():
@@ -37,7 +37,7 @@ def register_command_handlers():
                     "----------------------\n"
                 )
 
-            pnl = get_profit_loos()
+            pnl = get_closed_pnl()
             msg += "\n✅ **Closed PnL:**\n\n"
 
             for p in pnl[:10]:
