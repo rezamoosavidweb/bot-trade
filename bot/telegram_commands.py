@@ -171,7 +171,7 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/transactions$"))
     async def transactions_handler(event):
         try:
-            res = get_transaction_log(limit=10)
+            res = get_transaction_log(limit=30)
             if isinstance(res, dict):
                 results = res.get("result", {}).get("list", [])
             else:
