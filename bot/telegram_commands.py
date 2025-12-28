@@ -176,7 +176,7 @@ def register_command_handlers():
                 results = res.get("result", {}).get("list", [])
             else:
                 results = []
-
+            print(results)
             if not results:
                 await event.respond("📌 No transactions found.")
                 return
