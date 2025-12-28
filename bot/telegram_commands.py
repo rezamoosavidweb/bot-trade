@@ -1,3 +1,4 @@
+import asyncio
 from telethon import events
 from clients import telClient
 from api import (
@@ -8,6 +9,7 @@ from api import (
     get_closed_pnl,
     close_all_positions,
     get_account_info,
+    get_transaction_log,
 )
 
 
@@ -23,6 +25,7 @@ def register_command_handlers():
             "💰 Wallet Balance: /wallet\n"
             "🛑 Cancel Orders: /cancel\n"
             "❌ Close Positions: /close_positions\n"
+            "📄 Transactions: /transactions\n"
         )
         await event.respond(message)
 
@@ -164,3 +167,52 @@ def register_command_handlers():
 
         except Exception as e:
             await event.respond(f"❌ Error closing positions: {e}")
+
+    @telClient.on(events.NewMessage(pattern=r"^/transactions$"))
+    async def transactions_handler(event):
+        try:
+            res = get_transaction_log(limit=10)
+            if isinstance(res, dict):
+                results = res.get("result", {}).get("list", [])
+            else:
+                results = []
+
+            if not results:
+                await event.respond("📌 No transactions found.")
+                return
+
+            # Sort by transaction time (newest first)
+            results.sort(key=lambda x: int(x.get("transactionTime", 0)), reverse=True)
+
+            # Send transactions one by one to avoid message length limits
+            for idx, tx in enumerate(results, start=1):
+                cash_flow = float(tx.get("cashFlow", 0))
+                funding = float(tx.get("funding", 0))
+                fee = float(tx.get("fee", 0))
+                change = float(tx.get("change", 0))
+
+                tx_msg = (
+                    f"📄 **Transaction #{idx}**\n\n"
+                    "```\n"
+                    f"Symbol: {tx.get('symbol')}\n"
+                    f"Type: {tx.get('type')}\n"
+                    f"Side: {tx.get('side')}\n"
+                    f"Qty: {tx.get('qty')}\n"
+                    f"Price: {tx.get('tradePrice')}\n"
+                    f"Cash Flow: {cash_flow}\n"
+                    f"Funding: {funding}\n"
+                    f"Fee: {fee}\n"
+                    f"Change: {change}\n"
+                    f"Balance After: {tx.get('cashBalance')}\n"
+                    f"Order ID: {tx.get('orderId')}\n"
+                    f"Trade ID: {tx.get('tradeId')}\n"
+                    f"Time: {tx.get('transactionTime')}\n"
+                    "```"
+                )
+
+                await event.respond(tx_msg)
+                # Small delay to avoid flood limits
+                await asyncio.sleep(0.2)
+
+        except Exception as e:
+            await event.respond(f"❌ Error getting transactions: {e}")
