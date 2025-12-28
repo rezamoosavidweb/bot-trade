@@ -168,8 +168,8 @@ def place_market_order(
         side=side,
         orderType="Market",
         qty=str(qty),
-        # stopLoss=str(sl) if sl else None,
-        # takeProfit=str(tp) if tp else None,
+        stopLoss=str(sl) if sl else None,
+        takeProfit=str(tp) if tp else None,
     )
 
 
@@ -178,8 +178,8 @@ def set_trading_stop(
     symbol: str,
     positionIdx: int,
     tpslMode: str,
-    takeProfit: float | None = None,
-    stopLoss: float | None = None,
+    tp: float | None = None,
+    sl: float | None = None,
     tpSize: float | None = None,
     slSize: float | None = None,
     tpOrderType: str = "Market",
@@ -205,14 +205,13 @@ def set_trading_stop(
         "symbol": symbol,
         "positionIdx": positionIdx,
         "tpslMode": tpslMode,
-        "takeProfit": str(takeProfit) if takeProfit is not None else None,
-        "stopLoss": str(stopLoss) if stopLoss is not None else None,
+        "takeProfit": str(tp) if tp is not None else None,
+        "stopLoss": str(sl) if sl is not None else None,
         "tpSize": str(tpSize) if tpSize is not None else None,
         "slSize": str(slSize) if slSize is not None else None,
         "tpOrderType": tpOrderType,
         "slOrderType": slOrderType,
     }
-
 
     payload = {k: v for k, v in payload.items() if v is not None}
 

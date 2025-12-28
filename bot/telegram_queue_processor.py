@@ -12,57 +12,6 @@ from clients import telClient
 # ---------------- TELEGRAM QUEUE ---------------- #
 telegram_queue = asyncio.Queue()
 
-
-# ---------------- HELPER FUNCTIONS ---------------- #
-def set_sl_tp_partial(
-    symbol: str,
-    position_idx: int,
-    tp1: float,
-    sl1: float,
-    tp2: float,
-    sl2: float,
-    qty: float,
-):
-    """
-    Set the Stop Loss for the entire position and two partial Take Profits (TP1 and TP2).
-
-    :param symbol: Symbol like 'BTCUSDT'
-    :param position_idx: Position index (0 for one-way, 1/2 for hedge)
-    :param tp1: Take Profit price for first half
-    :param sl1: Stop Loss for first half
-    :param tp2: Take Profit price for second half
-    :param sl2: Stop Loss for second half
-    :param qty: Total position quantity
-    """
-    try:
-        # Set partial TP/SL for first half
-        set_trading_stop(
-            symbol=symbol,
-            tpslMode="Partial",
-            positionIdx=position_idx,
-            takeProfit=str(tp1),
-            stopLoss=str(sl1),
-            tpSize=str(qty / 2),
-            slSize=str(qty / 2),
-        )
-
-        # Set partial TP/SL for second half
-        set_trading_stop(
-            symbol=symbol,
-            tpslMode="Partial",
-            positionIdx=position_idx,
-            takeProfit=str(tp2),
-            stopLoss=str(sl2),
-            tpSize=str(qty / 2),
-            slSize=str(qty / 2),
-        )
-
-        print(f"[INFO] SL and Partial TPs set for {symbol}")
-
-    except Exception as e:
-        print(f"[ERROR] Failed to set SL/TP for {symbol}: {e}")
-
-
 async def handle_telegram_signal(item):
     """
     Handle incoming Telegram signal messages: validate, calculate trade, place order,
@@ -117,7 +66,7 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         side=signal["side"],
         qty=str(qty),
-        stopLoss=signal["sl"],  # Todo:after set sl2 to it should be equal with None
+        sl=signal["sl"],  # Todo:after set sl2 to it should be equal with None
         # tp=str(
         #     signal["targets"][0]  # temporary, main TP replaced by partial logic below
         # ),
@@ -134,8 +83,8 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         tpslMode="Partial",
         positionIdx=0,
-        takeProfit=signal["targets"][0],
-        # stopLoss=None,  # Todo:after set sl2 to it should be equal with signal['sl']
+        tp=signal["targets"][0],
+        # sl=None,  # Todo:after set sl2 to it should be equal with signal['sl']
         slSize=str(qty / 2),
         tpSize=str(qty / 2),
     )
@@ -144,8 +93,8 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         tpslMode="Partial",
         positionIdx=0,
-        takeProfit=signal["targets"][1],
-        # stopLoss=None,
+        tp=signal["targets"][1],
+        # sl=None,
         tpSize=str(qty / 2),
     )
 
@@ -213,8 +162,8 @@ async def handle_ws_message(item):
         #     symbol=symbol,
         #     tpslMode="Partial",
         #     positionIdx=0,
-        #     takeProfit=None,
-        #     stopLoss=str(sl2),
+        #     tp=None,
+        #     sl=str(sl2),
         #     slSize=str(size / 2),
         # )
         text = (
