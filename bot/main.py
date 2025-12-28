@@ -22,7 +22,7 @@ from telegram_commands import register_command_handlers
 
 async def main():
     print(
-        f"================================",
+        f"================================\n",
         f"IS_DEMO:{IS_DEMO}\n",
         f"SELECTED_API_KEY:{SELECTED_API_KEY}\n",
         f"SELECTED_API_SECRET:{SELECTED_API_SECRET}\n",

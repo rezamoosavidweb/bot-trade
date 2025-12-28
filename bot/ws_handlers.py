@@ -11,7 +11,7 @@ def order_callback_ws(loop, telegram_queue):
     def _callback(msg):
         try:
             data = msg["data"][0]
-            print(f"data:{data}\n\n")
+            
 
             # مقادیر اصلی
             symbol_ws = data.get("symbol")
