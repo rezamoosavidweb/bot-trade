@@ -1,5 +1,49 @@
 import asyncio
+import json
+import os
+from datetime import datetime
+from threading import Lock
 from errors import send_error_to_telegram
+
+# Lock for thread-safe file operations
+_ws_file_lock = Lock()
+WS_DATA_FILE = "ws_data.json"
+
+
+def save_ws_message_to_json(msg_data: dict):
+    """
+    ذخیره پیام WebSocket در فایل JSON.
+    هر پیام جدید به آرایه messages اضافه می‌شود.
+    """
+    try:
+        with _ws_file_lock:
+            # خواندن داده‌های موجود
+            if os.path.exists(WS_DATA_FILE):
+                try:
+                    with open(WS_DATA_FILE, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                except (json.JSONDecodeError, IOError):
+                    # اگر فایل خراب است یا خطا دارد، از اول شروع می‌کنیم
+                    data = {"messages": []}
+            else:
+                data = {"messages": []}
+
+            # اضافه کردن timestamp به پیام
+            message_with_timestamp = {
+                "timestamp": datetime.now().isoformat(),
+                "data": msg_data,
+            }
+
+            # اضافه کردن پیام جدید به آرایه
+            data["messages"].append(message_with_timestamp)
+
+            # ذخیره فایل
+            with open(WS_DATA_FILE, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+
+    except Exception as e:
+        # در صورت خطا، فقط لاگ می‌کنیم تا callback اصلی متوقف نشود
+        print(f"[WS][ERROR] Failed to save WS message to JSON: {e}")
 
 
 def order_callback_ws(loop, telegram_queue):
@@ -10,8 +54,10 @@ def order_callback_ws(loop, telegram_queue):
 
     def _callback(msg):
         try:
+            # ذخیره کل پیام WebSocket در فایل JSON
+            save_ws_message_to_json(msg)
+
             data = msg["data"][0]
-            
 
             # مقادیر اصلی
             symbol_ws = data.get("symbol")
