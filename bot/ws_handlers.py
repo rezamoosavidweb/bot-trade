@@ -1,13 +1,15 @@
 import asyncio
 import json
 import os
+import traceback
 from datetime import datetime
 from threading import Lock
 from errors import send_error_to_telegram
 
 # Lock for thread-safe file operations
 _ws_file_lock = Lock()
-WS_DATA_FILE = "ws_data.json"
+# مسیر فایل در root directory پروژه
+WS_DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ws_data.json")
 
 
 def save_ws_message_to_json(msg_data: dict):
@@ -16,16 +18,25 @@ def save_ws_message_to_json(msg_data: dict):
     هر پیام جدید به آرایه messages اضافه می‌شود.
     """
     try:
+        print(f"[WS][DEBUG] Attempting to save WS message to {WS_DATA_FILE}")
+
         with _ws_file_lock:
             # خواندن داده‌های موجود
             if os.path.exists(WS_DATA_FILE):
                 try:
                     with open(WS_DATA_FILE, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                except (json.JSONDecodeError, IOError):
+                    print(
+                        f"[WS][DEBUG] Loaded existing file with {len(data.get('messages', []))} messages"
+                    )
+                except (json.JSONDecodeError, IOError) as e:
                     # اگر فایل خراب است یا خطا دارد، از اول شروع می‌کنیم
+                    print(
+                        f"[WS][WARN] Error reading existing file, starting fresh: {e}"
+                    )
                     data = {"messages": []}
             else:
+                print(f"[WS][DEBUG] File does not exist, creating new file")
                 data = {"messages": []}
 
             # اضافه کردن timestamp به پیام
@@ -36,14 +47,19 @@ def save_ws_message_to_json(msg_data: dict):
 
             # اضافه کردن پیام جدید به آرایه
             data["messages"].append(message_with_timestamp)
+            print(f"[WS][DEBUG] Added message, total messages: {len(data['messages'])}")
 
             # ذخیره فایل
             with open(WS_DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
+            print(f"[WS][SUCCESS] Saved WS message to {WS_DATA_FILE}")
+
     except Exception as e:
-        # در صورت خطا، فقط لاگ می‌کنیم تا callback اصلی متوقف نشود
+        # در صورت خطا، traceback کامل را چاپ می‌کنیم
+        error_trace = traceback.format_exc()
         print(f"[WS][ERROR] Failed to save WS message to JSON: {e}")
+        print(f"[WS][ERROR] Traceback: {error_trace}")
 
 
 def order_callback_ws(loop, telegram_queue):
@@ -54,6 +70,8 @@ def order_callback_ws(loop, telegram_queue):
 
     def _callback(msg):
         try:
+            print(f"[WS][DEBUG] Callback received message: {type(msg)}")
+
             # ذخیره کل پیام WebSocket در فایل JSON
             save_ws_message_to_json(msg)
 
