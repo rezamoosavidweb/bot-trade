@@ -12,6 +12,7 @@ from clients import telClient
 # ---------------- TELEGRAM QUEUE ---------------- #
 telegram_queue = asyncio.Queue()
 
+
 async def handle_telegram_signal(item):
     """
     Handle incoming Telegram signal messages: validate, calculate trade, place order,
@@ -179,6 +180,9 @@ async def handle_ws_message(item):
             f"Reason: {data.get('cancelType')}\nOrderID: {data.get('orderId')}"
         )
     elif ws_type == "close_position":
+        # پاک کردن symbol از open_positions
+        open_positions.discard(symbol)
+
         text = (
             f"🔒 Position Closed\n\n"
             f"Symbol: {symbol}\nSide: {side}\nSize: {size}\n"

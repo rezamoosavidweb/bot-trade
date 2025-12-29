@@ -11,6 +11,8 @@ from api import (
     get_account_info,
     get_transaction_log,
 )
+from config import open_positions
+from cache import refresh_transaction_log
 
 
 def register_command_handlers():
@@ -159,9 +161,22 @@ def register_command_handlers():
                 await event.respond("📌 No open positions to close.")
                 return
 
+            # پاک کردن پوزیشن‌های بسته شده از open_positions
+            closed_symbols = [r["symbol"] for r in results]
+            for symbol in closed_symbols:
+                open_positions.discard(symbol)
+
+            # آپدیت transaction log cache
+            try:
+                await refresh_transaction_log()
+            except Exception as cache_error:
+                print(f"[WARN] Failed to refresh transaction log cache: {cache_error}")
+
             msg = "✅ Closed positions:\n\n"
             for r in results:
                 msg += f"{r['symbol']} | {r['side']} | {r['size']}\n"
+
+            msg += f"\n🔄 Cache updated. Removed {len(closed_symbols)} symbol(s) from open positions."
 
             await event.respond(msg)
 
