@@ -403,11 +403,24 @@ async def handle_ws_message(item: dict):
     stop_order_type = data.get("stopOrderType", "")
     create_type = data.get("createType", "")
 
-    # Skip Untriggered orders - we don't show them unless they are triggered
-    # Only show when they are actually triggered (Filled/Triggered status)
+    # نمایش پیام برای SL/TP orders که ایجاد شده‌اند (Untriggered)
+    # فقط برای createType های مربوط به SL/TP که توسط سیستم ایجاد شده‌اند
     if order_status == "Untriggered" and stop_order_type:
-        # Don't show "SL/TP Update Detected" for Untriggered orders
-        # Only show when they are actually triggered (Filled/Triggered)
+        # نمایش پیام برای SL/TP که ایجاد شده‌اند
+        sl_tp_create_types = [
+            "CreateByPartialTakeProfit",
+            "CreateByStopLoss",
+            "CreateByTakeProfit",
+            "CreateByPartialStopLoss",
+        ]
+        # اگر ws_type == "sl_tp_created" است یا createType مناسب است، پیام نمایش می‌دهیم
+        if ws_type == "sl_tp_created" or create_type in sl_tp_create_types:
+            text = await format_sl_tp_created(data)
+            if text:
+                await telClient.send_message(TARGET_CHANNEL, text)
+                return  # پیام ارسال شد، دیگر نیازی به ادامه نیست
+
+        # اگر createType مناسب نبود، return می‌کنیم (پیام نمایش نمی‌دهیم)
         return
 
     # Handle different message types based on ws_type
