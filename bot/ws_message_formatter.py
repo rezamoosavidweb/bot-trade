@@ -6,6 +6,7 @@ Handles formatting and processing of Bybit WebSocket order messages.
 from config import open_positions
 from clients import telClient
 from config import TARGET_CHANNEL
+from api import get_positions, set_trading_stop
 
 
 # ---------------- ENUMS ---------------- #
@@ -388,6 +389,69 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
     return text
 
 
+# ---------------- SL2 SETTER AFTER TP1 ---------------- #
+async def set_sl2_after_tp1(symbol: str, tp_data: dict):
+    """
+    تنظیم SL2 برای نصف باقی‌مانده position بعد از trigger شدن TP1.
+    SL2 = entry_price * (1 + 0.0011) برای Buy
+    SL2 = entry_price * (1 - 0.0011) برای Sell
+    """
+    try:
+        # دریافت position info برای گرفتن entry price و side
+        positions = get_positions(symbol=symbol)
+        if not positions:
+            print(f"[WARN] Position not found for {symbol}, cannot set SL2")
+            return
+
+        position = positions[0]
+        entry_price = float(position.get("avgPrice", 0))
+        side = position.get("side", "")
+        size = float(position.get("size", 0))
+
+        if entry_price == 0 or size == 0:
+            print(f"[WARN] Invalid position data for {symbol}, cannot set SL2")
+            return
+
+        # محاسبه SL2 بر اساس side
+        if side == "Buy":
+            sl2_price = entry_price * (1 + 0.0011)
+        else:  # Sell
+            sl2_price = entry_price * (1 - 0.0011)
+
+        # تنظیم SL2 برای نصف باقی‌مانده position
+        set_trading_stop(
+            symbol=symbol,
+            positionIdx=0,
+            tpslMode="Partial",
+            sl=str(sl2_price),
+            slSize=str(size),  # برای کل باقی‌مانده position
+        )
+
+        print(
+            f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (entry: {entry_price:.4f}, side: {side}, size: {size})"
+        )
+
+        # اطلاع به تلگرام
+        await telClient.send_message(
+            TARGET_CHANNEL,
+            f"🛡️ **SL2 Set After TP1**\n\n"
+            f"```\n"
+            f"Symbol: {symbol}\n"
+            f"Side: {side}\n"
+            f"Entry Price: {entry_price:,.4f}\n"
+            f"SL2 Price: {sl2_price:,.4f}\n"
+            f"Remaining Size: {size:,.4f}\n"
+            f"```",
+        )
+
+    except Exception as e:
+        print(f"[ERROR] Failed to set SL2 for {symbol}: {e}")
+        await telClient.send_message(
+            TARGET_CHANNEL,
+            f"⚠️ **Error Setting SL2**\n\n" f"Symbol: {symbol}\n" f"Error: {str(e)}",
+        )
+
+
 # ---------------- MAIN HANDLER ---------------- #
 async def handle_ws_message(item: dict):
     """
@@ -446,6 +510,11 @@ async def handle_ws_message(item: dict):
             # اگر position بسته شد، از open_positions حذف می‌کنیم
             if data.get("closeOnTrigger") and data.get("reduceOnly"):
                 open_positions.discard(symbol)
+
+        # اگر TP1 (PartialTakeProfit) trigger شد، SL2 را برای نصف باقی‌مانده تنظیم می‌کنیم
+        stop_order_type = data.get("stopOrderType", "")
+        if stop_order_type == "PartialTakeProfit":
+            await set_sl2_after_tp1(symbol, data)
 
     elif ws_type == "sl_tp_created":
         # SL/TP created (Untriggered) - فقط برای اطلاعات
