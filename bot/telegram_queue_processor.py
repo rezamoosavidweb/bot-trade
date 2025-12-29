@@ -8,6 +8,7 @@ from regex_utils import parse_signal, is_signal_message
 from errors import send_error_to_telegram
 from api import set_leverage_safe, place_market_order, set_trading_stop
 from clients import telClient
+from ws_message_formatter import handle_ws_message
 
 # ---------------- TELEGRAM QUEUE ---------------- #
 telegram_queue = asyncio.Queue()
@@ -111,88 +112,7 @@ async def handle_telegram_signal(item):
     print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
 
 
-async def handle_ws_message(item):
-    """
-    Handle WebSocket messages from Bybit: new order, cancel, close position, or SL/TP updates.
-    Formats message and sends to Telegram channel.
-    """
-    ws_type = item.get("msg_type")
-    data = item.get("data")
-    symbol = item.get("symbol")
-    size = float(data.get("qty", 0))
-    price = data.get("price")
-    avg_price = data.get("avgPrice")
-    closed_pnl = item.get("closed_pnl")
-    take_profit = data.get("takeProfit")
-    stop_loss = data.get("stopLoss")
-    stop_order_type = data.get("stopOrderType")
-    tpsl_mode = data.get("tpslMode")
-    create_type = data.get("createType")
-    side = data.get("side")
-
-    if price is not None:
-        price = float(price)
-
-    # ---------------- Check if this message is related to set_trading_stop ----------------
-    if stop_order_type in ["TakeProfit", "StopLoss", "PartialTakeProfit"]:
-
-        text = (
-            f"⚡ SL/TP Update Detected\n\n"
-            f"Symbol: {symbol}\n"
-            f"Side: {side}\n"
-            f"Qty: {size}\n"
-            f"SL: {stop_loss or '—'}\n"
-            f"TP: {take_profit or '—'}\n"
-            f"Mode: {tpsl_mode}\n"
-            f"Type: {stop_order_type}\n"
-            f"CreatedBy: {create_type}\n"
-            f"OrderID: {data.get('orderId')}"
-        )
-
-    # ---------------- Regular WebSocket messages ----------------
-    elif ws_type == "new_order":
-        fee_multiplier = 0.0011
-        if side.lower() == "buy":
-            sl2 = price * (1 + fee_multiplier)
-        else:
-            sl2 = price * (1 - fee_multiplier)
-
-        # set SL2 base on filled price + fee(2*0.0005)
-        # TODO: should be current price of market higher than current price so i must wait until price move up (in sell is opposite)then  set this sl
-        # set_trading_stop(
-        #     symbol=symbol,
-        #     tpslMode="Partial",
-        #     positionIdx=0,
-        #     tp=None,
-        #     sl=str(sl2),
-        #     slSize=str(size / 2),
-        # )
-        text = (
-            f"📤 New Order Filled\n\n"
-            f"Symbol: {symbol}\nSide: {side}\nQty: {size}\n"
-            f"Price: {price}\nAvgPrice: {avg_price}\nSL: {stop_loss or '—'}\n"
-            f"TP: {take_profit or '—'}\nOrderID: {data.get('orderId')}"
-        )
-    elif ws_type == "cancel_order":
-        text = (
-            f"❌ Order Cancelled\n\n"
-            f"Symbol: {symbol}\nQty: {size}\nPrice: {price}\nAvgPrice: {avg_price}\n"
-            f"Reason: {data.get('cancelType')}\nOrderID: {data.get('orderId')}"
-        )
-    elif ws_type == "close_position":
-        # پاک کردن symbol از open_positions
-        open_positions.discard(symbol)
-
-        text = (
-            f"🔒 Position Closed\n\n"
-            f"Symbol: {symbol}\nSide: {side}\nSize: {size}\n"
-            f"Price: {price}\nAvgPrice: {avg_price}\nClosed PnL: {closed_pnl}\n"
-            f"OrderID: {data.get('orderId')}"
-        )
-    else:
-        text = f"ℹ️ WS Message: {data}"
-
-    await telClient.send_message(TARGET_CHANNEL, text)
+# handle_ws_message moved to ws_message_formatter.py
 
 
 # ---------------- QUEUE PROCESSOR ---------------- #

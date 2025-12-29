@@ -75,45 +75,70 @@ def order_callback_ws(loop, telegram_queue):
             # ذخیره کل پیام WebSocket در فایل JSON
             save_ws_message_to_json(msg)
 
-            data = msg["data"][0]
+            # پردازش همه orderها در پیام (نه فقط اولین order)
+            orders = msg.get("data", [])
+            if not orders:
+                print("[WS][WARN] No orders in message")
+                return
 
-            # مقادیر اصلی
-            symbol_ws = data.get("symbol")
-            size = float(data.get("qty", 0))
-            closed_pnl = float(data.get("closedPnl", 0))
-            takeProfit = float(data.get("takeProfit") or 0)
-            stopLoss = float(data.get("stopLoss") or 0)
-            reduceOnly = data.get("reduceOnly") in [True, "True"]
-            closeOnTrigger = data.get("closeOnTrigger") in [True, "True"]
-            createType = data.get("createType", "")
-            orderStatus = data.get("orderStatus", "")
+            # پردازش هر order به صورت جداگانه
+            for data in orders:
+                # مقادیر اصلی
+                symbol_ws = data.get("symbol")
+                size = float(data.get("qty", 0))
+                closed_pnl = float(data.get("closedPnl", 0))
+                takeProfit = float(data.get("takeProfit") or 0)
+                stopLoss = float(data.get("stopLoss") or 0)
+                reduceOnly = data.get("reduceOnly") in [True, "True"]
+                closeOnTrigger = data.get("closeOnTrigger") in [True, "True"]
+                createType = data.get("createType", "")
+                orderStatus = data.get("orderStatus", "")
+                stopOrderType = data.get("stopOrderType", "")
 
-            # تعیین نوع پیام
-            if orderStatus == "Deactivated" and reduceOnly and closeOnTrigger:
-                msg_type = "cancel_order"
-            elif reduceOnly and orderStatus == "Filled" and not closeOnTrigger:
-                msg_type = "close_position"
-            elif not reduceOnly and orderStatus == "Filled":
-                msg_type = "new_order"
-            else:
-                msg_type = "other"
+                # تعیین نوع پیام با دقت بیشتر
+                if orderStatus in ["Cancelled", "Deactivated"]:
+                    msg_type = "cancel_order"
+                elif orderStatus == "Filled":
+                    if reduceOnly and closeOnTrigger:
+                        # Position closed
+                        msg_type = "close_position"
+                    elif stopOrderType in [
+                        "TakeProfit",
+                        "StopLoss",
+                        "PartialTakeProfit",
+                        "PartialStopLoss",
+                    ]:
+                        # SL/TP triggered
+                        msg_type = "sl_tp_triggered"
+                    elif not reduceOnly:
+                        # New order filled
+                        msg_type = "new_order"
+                    else:
+                        msg_type = "other"
+                elif orderStatus == "Untriggered" and stopOrderType:
+                    # SL/TP created but not triggered yet
+                    msg_type = "sl_tp_created"
+                elif orderStatus == "Rejected":
+                    msg_type = "rejected"
+                else:
+                    msg_type = "other"
 
-            # ارسال به صف تلگرام
-            asyncio.run_coroutine_threadsafe(
-                telegram_queue.put(
-                    {
-                        "type": "ws",
-                        "msg_type": msg_type,
-                        "symbol": symbol_ws,
-                        "size": size,
-                        "closed_pnl": closed_pnl,
-                        "takeProfit": takeProfit,
-                        "stopLoss": stopLoss,
-                        "data": data,
-                    }
-                ),
-                loop,
-            )
+                # ارسال به صف تلگرام برای هر order
+                asyncio.run_coroutine_threadsafe(
+                    telegram_queue.put(
+                        {
+                            "type": "ws",
+                            "msg_type": msg_type,
+                            "symbol": symbol_ws,
+                            "size": size,
+                            "closed_pnl": closed_pnl,
+                            "takeProfit": takeProfit,
+                            "stopLoss": stopLoss,
+                            "data": data,
+                        }
+                    ),
+                    loop,
+                )
 
         except Exception as e:
             asyncio.run_coroutine_threadsafe(
