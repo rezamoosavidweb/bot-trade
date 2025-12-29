@@ -470,17 +470,16 @@ async def handle_ws_message(item: dict):
 
     # Fallback: handle by order_status if ws_type is "other"
     elif ws_type == "other":
-        if order_status == "Filled" and not data.get("reduceOnly"):
-            text = await format_new_order_filled(data)
-            await telClient.send_message(TARGET_CHANNEL, text)
-        elif (
-            order_status == "Filled"
-            and data.get("reduceOnly")
-            and data.get("closeOnTrigger")
-        ):
-            open_positions.discard(symbol)
-            text = await format_position_closed(data, closed_pnl)
-            await telClient.send_message(TARGET_CHANNEL, text)
+        if order_status == "Filled":
+            if data.get("reduceOnly"):
+                # Position closed by market order
+                open_positions.discard(symbol)
+                text = await format_position_closed(data, closed_pnl)
+                await telClient.send_message(TARGET_CHANNEL, text)
+            else:
+                # New order filled
+                text = await format_new_order_filled(data)
+                await telClient.send_message(TARGET_CHANNEL, text)
         elif stop_order_type and order_status in ["Filled", "Triggered"]:
             text = await format_sl_tp_triggered(data)
             if text:

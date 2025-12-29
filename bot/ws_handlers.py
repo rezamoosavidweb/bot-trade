@@ -99,22 +99,30 @@ def order_callback_ws(loop, telegram_queue):
                 if orderStatus in ["Cancelled", "Deactivated"]:
                     msg_type = "cancel_order"
                 elif orderStatus == "Filled":
-                    if reduceOnly and closeOnTrigger:
-                        # Position closed
-                        msg_type = "close_position"
+                    # اگر reduceOnly است، یعنی position بسته شده (چه closeOnTrigger باشد یا نباشد)
+                    if reduceOnly:
+                        if stopOrderType in [
+                            "TakeProfit",
+                            "StopLoss",
+                            "PartialTakeProfit",
+                            "PartialStopLoss",
+                        ]:
+                            # SL/TP triggered
+                            msg_type = "sl_tp_triggered"
+                        else:
+                            # Position closed by market order
+                            msg_type = "close_position"
                     elif stopOrderType in [
                         "TakeProfit",
                         "StopLoss",
                         "PartialTakeProfit",
                         "PartialStopLoss",
                     ]:
-                        # SL/TP triggered
+                        # SL/TP triggered (rare case)
                         msg_type = "sl_tp_triggered"
-                    elif not reduceOnly:
+                    else:
                         # New order filled
                         msg_type = "new_order"
-                    else:
-                        msg_type = "other"
                 elif orderStatus == "Untriggered" and stopOrderType:
                     # SL/TP created but not triggered yet
                     msg_type = "sl_tp_created"
