@@ -205,6 +205,12 @@ def register_command_handlers():
                 fee = float(tx.get("fee", 0))
                 change = float(tx.get("change", 0))
 
+                # تعیین emoji بر اساس مثبت یا منفی بودن
+                cash_flow_emoji = (
+                    "🟢" if cash_flow > 0 else "🔴" if cash_flow < 0 else "⚪"
+                )
+                change_emoji = "🟢" if change > 0 else "🔴" if change < 0 else "⚪"
+
                 tx_msg = (
                     f"📄 **Transaction #{idx}**\n\n"
                     "```\n"
@@ -213,10 +219,10 @@ def register_command_handlers():
                     f"Side: {tx.get('side')}\n"
                     f"Qty: {tx.get('qty')}\n"
                     f"Price: {tx.get('tradePrice')}\n"
-                    f"Cash Flow: {cash_flow}\n"
+                    f"{cash_flow_emoji} Cash Flow (PNL): {cash_flow}\n"
                     f"Funding: {funding}\n"
                     f"Fee: {fee}\n"
-                    f"Change: {change}\n"
+                    f"{change_emoji} Change: {change}\n"
                     f"Balance After: {tx.get('cashBalance')}\n"
                     f"Order ID: {tx.get('orderId')}\n"
                     f"Trade ID: {tx.get('tradeId')}\n"
