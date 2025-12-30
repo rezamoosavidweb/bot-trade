@@ -3,7 +3,12 @@ from zoneinfo import ZoneInfo
 from telethon import events
 
 from config import TARGET_CHANNEL, open_positions
-from bybit_client import calculate_fixed_trade, is_position_open
+from bybit_client import (
+    calculate_fixed_trade,
+    is_position_open,
+    normalize_qty,
+    get_symbol_info,
+)
 from regex_utils import parse_signal, is_signal_message
 from errors import send_error_to_telegram
 from api import set_leverage_safe, place_market_order, set_trading_stop
@@ -81,14 +86,33 @@ async def handle_telegram_signal(item):
     else:  # Sell
         sl2 = signal["entry"] * (1 - 0.0011)
 
+    # محاسبه TP1 و TP2 به گونه‌ای که کل position بسته شود
+    # TP1: نصف اول (یا کمتر اگر qty فرد باشد)
+    # TP2: باقی‌مانده (برای اطمینان از بسته شدن کامل position)
+    # دریافت qty_step برای normalize کردن
+    symbol_info = await get_symbol_info(symbol)
+    qty_step = symbol_info.get("qty_step", 1)
+
+    tp1_qty = qty // 2  # تقسیم صحیح (floor)
+    tp2_qty = qty - tp1_qty  # باقی‌مانده
+
+    # Normalize کردن qty ها با step size
+    tp1_qty = normalize_qty(tp1_qty, qty_step)
+    tp2_qty = normalize_qty(tp2_qty, qty_step)
+
+    # اطمینان از اینکه tp1_qty + tp2_qty = qty
+    if tp1_qty + tp2_qty != qty:
+        # اگر normalize باعث تغییر شد، tp2_qty را تنظیم می‌کنیم
+        tp2_qty = normalize_qty(qty - tp1_qty, qty_step)
+
     set_trading_stop(
         symbol=symbol,
         tpslMode="Partial",
         positionIdx=0,
         tp=signal["targets"][0],
         # sl=None,  # Todo:after set sl2 to it should be equal with signal['sl']
-        slSize=str(qty / 2),
-        tpSize=str(qty / 2),
+        slSize=str(tp1_qty),
+        tpSize=str(tp1_qty),
     )
 
     set_trading_stop(
@@ -97,7 +121,7 @@ async def handle_telegram_signal(item):
         positionIdx=0,
         tp=signal["targets"][1],
         # sl=None,
-        tpSize=str(qty / 2),
+        tpSize=str(tp2_qty),  # باقی‌مانده برای اطمینان از بسته شدن کامل
     )
 
     # Notify Telegram channel
