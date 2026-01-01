@@ -161,12 +161,12 @@ def register_command_handlers():
                 await event.respond("📌 No open positions to close.")
                 return
 
-            # پاک کردن پوزیشن‌های بسته شده از open_positions
+            # Remove closed positions from open_positions
             closed_symbols = [r["symbol"] for r in results]
             for symbol in closed_symbols:
                 open_positions.discard(symbol)
 
-            # آپدیت transaction log cache
+            # Update transaction log cache
             try:
                 await refresh_transaction_log()
             except Exception as cache_error:
@@ -205,7 +205,7 @@ def register_command_handlers():
                 fee = float(tx.get("fee", 0))
                 change = float(tx.get("change", 0))
 
-                # تعیین emoji بر اساس مثبت یا منفی بودن
+                # Determine emoji based on positive or negative value
                 cash_flow_emoji = (
                     "🟢" if cash_flow > 0 else "🔴" if cash_flow < 0 else "⚪"
                 )

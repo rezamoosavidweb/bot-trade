@@ -1,6 +1,7 @@
 asyncio
 pybit
 python-dotenv
+jdatetime
 redis
 telethon
 tzdata

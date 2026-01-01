@@ -1,8 +1,14 @@
 import asyncio
+from datetime import datetime
 from zoneinfo import ZoneInfo
 from telethon import events
 
-from config import TARGET_CHANNEL, open_positions
+from config import (
+    TARGET_CHANNEL,
+    open_positions,
+    position_entry_times,
+    position_tp_prices,
+)
 from bybit_client import (
     calculate_fixed_trade,
     is_position_open,
@@ -50,9 +56,12 @@ async def handle_telegram_signal(item):
 
     qty, leverage = trade["qty"], trade["leverage"]
 
+    tp_info = f"tp1:{signal['targets'][0]} / tp2:{signal['targets'][1]}"
+    if len(signal["targets"]) >= 3:
+        tp_info += f" / tp3:{signal['targets'][2]}"
     print(
         f"[INFO] Detected signal / {symbol} / qty:{qty} / entry:{signal['entry']} "
-        f"/ tp1:{signal['targets'][0]} / tp2:{signal['targets'][1]} / sl:{signal['sl']} / leverage:{leverage}"
+        f"/ {tp_info} / sl:{signal['sl']} / leverage:{leverage}"
     )
 
     # Set leverage safely
@@ -73,64 +82,85 @@ async def handle_telegram_signal(item):
         symbol=symbol,
         side=signal["side"],
         qty=str(qty),
-        sl=signal["sl"],  # Todo:after set sl2 to it should be equal with None
-        # tp=str(
-        #     signal["targets"][0]  # temporary, main TP replaced by partial logic below
-        # ),
+        sl=signal["sl"],
     )
 
     open_positions.add(symbol)
 
-    if signal["side"] == "Buy":
-        sl2 = signal["entry"] * (1 + 0.0011)
-    else:  # Sell
-        sl2 = signal["entry"] * (1 - 0.0011)
+    # Store entry time to check 30-minute rule
+    position_entry_times[symbol] = datetime.now()
+    # Store TP prices and entry to identify which TP/SL was triggered
+    position_tp_prices[symbol] = {
+        "entry": signal["entry"],
+        "tp1": signal["targets"][0],
+        "tp2": signal["targets"][1],
+        "sl": signal["sl"],
+        "side": signal["side"],
+    }
+    if len(signal["targets"]) >= 3:
+        position_tp_prices[symbol]["tp3"] = signal["targets"][2]
 
-    # محاسبه TP1 و TP2 به گونه‌ای که کل position بسته شود
-    # TP1: نصف اول (یا کمتر اگر qty فرد باشد)
-    # TP2: باقی‌مانده (برای اطمینان از بسته شدن کامل position)
-    # دریافت qty_step برای normalize کردن
+    # Calculate TP1, TP2, TP3 with distribution 30%, 45%, 30%
+    # Get qty_step for normalization
     symbol_info = await get_symbol_info(symbol)
     qty_step = symbol_info.get("qty_step", 1)
 
-    tp1_qty = qty // 2  # تقسیم صحیح (floor)
-    tp2_qty = qty - tp1_qty  # باقی‌مانده
+    # Calculate quantities: 30% TP1, 45% TP2, 30% TP3
+    tp1_qty = int(qty * 0.30)
+    tp2_qty = int(qty * 0.45)
+    tp3_qty = qty - tp1_qty - tp2_qty  # Remaining for TP3
 
-    # Normalize کردن qty ها با step size
+    # Normalize qty values with step size
     tp1_qty = normalize_qty(tp1_qty, qty_step)
     tp2_qty = normalize_qty(tp2_qty, qty_step)
+    tp3_qty = normalize_qty(tp3_qty, qty_step)
 
-    # اطمینان از اینکه tp1_qty + tp2_qty = qty
-    if tp1_qty + tp2_qty != qty:
-        # اگر normalize باعث تغییر شد، tp2_qty را تنظیم می‌کنیم
-        tp2_qty = normalize_qty(qty - tp1_qty, qty_step)
+    # Ensure that tp1_qty + tp2_qty + tp3_qty = qty
+    if tp1_qty + tp2_qty + tp3_qty != qty:
+        # If normalization caused changes, adjust tp3_qty
+        tp3_qty = normalize_qty(qty - tp1_qty - tp2_qty, qty_step)
 
+    # Set TP1
     set_trading_stop(
         symbol=symbol,
         tpslMode="Partial",
         positionIdx=0,
         tp=signal["targets"][0],
-        # sl=None,  # Todo:after set sl2 to it should be equal with signal['sl']
         slSize=str(tp1_qty),
         tpSize=str(tp1_qty),
     )
 
+    # Set TP2
     set_trading_stop(
         symbol=symbol,
         tpslMode="Partial",
         positionIdx=0,
         tp=signal["targets"][1],
-        # sl=None,
-        tpSize=str(tp2_qty),  # باقی‌مانده برای اطمینان از بسته شدن کامل
+        tpSize=str(tp2_qty),
     )
 
+    # Set TP3 (if exists)
+    if len(signal["targets"]) >= 3:
+        set_trading_stop(
+            symbol=symbol,
+            tpslMode="Partial",
+            positionIdx=0,
+            tp=signal["targets"][2],
+            tpSize=str(tp3_qty),
+        )
+
     # Notify Telegram channel
+    tp_message = f"TP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}"
+    if len(signal["targets"]) >= 3:
+        tp_message += f"\nTP3: {signal['targets'][2]}"
+
     await telClient.send_message(
         TARGET_CHANNEL,
         f"🚀 New Order Placed:\n"
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
-        f"Qty: {qty}\nSL: {signal['sl']}\nTP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}\n"
-        f"Leverage: {leverage}",
+        f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
+        f"Leverage: {leverage}\n"
+        f"TP1 Qty: {tp1_qty} (30%)\nTP2 Qty: {tp2_qty} (40%)\nTP3 Qty: {tp3_qty} (30%)",
     )
 
     print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")

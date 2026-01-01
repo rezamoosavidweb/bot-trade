@@ -3,9 +3,14 @@ WebSocket Message Formatter
 Handles formatting and processing of Bybit WebSocket order messages.
 """
 
-from config import open_positions
+from datetime import datetime, timedelta
+from config import (
+    open_positions,
+    position_entry_times,
+    position_tp_prices,
+    TARGET_CHANNEL,
+)
 from clients import telClient
-from config import TARGET_CHANNEL
 from api import get_positions, set_trading_stop
 
 
@@ -155,6 +160,86 @@ def format_reject_reason(reason: str) -> str:
     return REJECT_REASON.get(reason, f"❓ {reason}")
 
 
+def identify_tp_sl_level(
+    symbol: str, stop_order_type: str, trigger_price: float
+) -> str:
+    """
+    Identify which TP or SL level this is (TP1, TP2, TP3, SL, SL2, SL3).
+
+    :param symbol: Trading symbol
+    :param stop_order_type: Order type (TakeProfit, PartialTakeProfit, StopLoss, PartialStopLoss)
+    :param trigger_price: Trigger price
+    :return: TP/SL identifier (e.g., "TP1", "SL2", "SL", etc.)
+    """
+    if not trigger_price or trigger_price == 0:
+        # If trigger price is not available, return general type
+        if "TakeProfit" in stop_order_type:
+            return "TP" if "Partial" not in stop_order_type else "Partial TP"
+        else:
+            return "SL" if "Partial" not in stop_order_type else "Partial SL"
+
+    tp_info = position_tp_prices.get(symbol)
+    if not tp_info:
+        # If TP info is not available, return general type
+        if "TakeProfit" in stop_order_type:
+            return "TP" if "Partial" not in stop_order_type else "Partial TP"
+        else:
+            return "SL" if "Partial" not in stop_order_type else "Partial SL"
+
+    tolerance = 0.0001  # 0.01% tolerance
+
+    # For TakeProfit
+    if "TakeProfit" in stop_order_type:
+        tp1_price = tp_info.get("tp1", 0)
+        tp2_price = tp_info.get("tp2", 0)
+        tp3_price = tp_info.get("tp3")
+
+        if tp1_price and abs(trigger_price - tp1_price) / tp1_price < tolerance:
+            return "TP1"
+        elif tp2_price and abs(trigger_price - tp2_price) / tp2_price < tolerance:
+            return "TP2"
+        elif tp3_price and abs(trigger_price - tp3_price) / tp3_price < tolerance:
+            return "TP3"
+        else:
+            return "TP" if "Partial" not in stop_order_type else "Partial TP"
+
+    # For StopLoss
+    if "StopLoss" in stop_order_type:
+        entry_price = tp_info.get("entry", 0)
+        sl_price = tp_info.get("sl", 0)
+        side = tp_info.get("side", "")
+        tp2_price = tp_info.get("tp2", 0)
+
+        # Check initial SL
+        if sl_price and abs(trigger_price - sl_price) / sl_price < tolerance:
+            return "SL"
+
+        # Check SL2 (entry * (1±0.0011))
+        if entry_price > 0:
+            if side == "Buy":
+                expected_sl2 = entry_price * (1 + 0.0011)
+            else:
+                expected_sl2 = entry_price * (1 - 0.0011)
+
+            if abs(trigger_price - expected_sl2) / expected_sl2 < tolerance:
+                return "SL2"
+
+        # Check SL3 (TP2 * (1±0.0011))
+        if tp2_price > 0:
+            if side == "Buy":
+                expected_sl3 = tp2_price * (1 + 0.0011)
+            else:
+                expected_sl3 = tp2_price * (1 - 0.0011)
+
+            if abs(trigger_price - expected_sl3) / expected_sl3 < tolerance:
+                return "SL3"
+
+        # If none matched, return general type
+        return "SL" if "Partial" not in stop_order_type else "Partial SL"
+
+    return stop_order_type
+
+
 def safe_float(value, default=0.0):
     """Safely convert value to float."""
     if value is None or value == "":
@@ -225,7 +310,7 @@ async def format_new_order_filled(data: dict) -> str:
 
 async def format_sl_tp_created(data: dict) -> str:
     """Format message for SL/TP order created (Untriggered)."""
-    # فقط برای اطلاعات - معمولاً نمایش نمی‌دهیم
+    # For information only - usually not displayed
     symbol = data.get("symbol", "—")
     stop_order_type = data.get("stopOrderType", "—")
     order_status = data.get("orderStatus", "—")
@@ -234,14 +319,19 @@ async def format_sl_tp_created(data: dict) -> str:
     create_type = format_create_type(data.get("createType", "—"))
     order_id = data.get("orderId", "—")
 
-    # فقط اگر Untriggered است، پیام ساده نمایش می‌دهیم
+    # Only show simple message if Untriggered
     if order_status == "Untriggered":
         tp_sl_emoji = "🎯" if "TakeProfit" in stop_order_type else "🛑"
+
+        # Identify which TP or SL this is
+        tp_sl_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
+
         text = (
-            f"{tp_sl_emoji} **{stop_order_type} Created**\n\n"
+            f"{tp_sl_emoji} **{tp_sl_level} Created**\n\n"
             f"```\n"
             f"Symbol: {symbol}\n"
             f"Type: {stop_order_type}\n"
+            f"Level: {tp_sl_level}\n"
             f"Status: {format_status(order_status)}\n"
             f"Quantity: {qty:,.4f}\n"
             f"Trigger Price: {trigger_price:,.4f}\n"
@@ -274,12 +364,16 @@ async def format_sl_tp_triggered(data: dict) -> str:
 
     emoji = "🎯" if "TakeProfit" in stop_order_type else "🛑"
 
+    # Identify which TP or SL this is
+    tp_sl_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
+
     text = (
-        f"{emoji} **{stop_order_type} Triggered**\n\n"
+        f"{emoji} **{tp_sl_level} Triggered**\n\n"
         f"```\n"
         f"Symbol: {symbol}\n"
         f"Side: {side}\n"
         f"Type: {stop_order_type}\n"
+        f"Level: {tp_sl_level}\n"
         f"Status: {format_status(order_status)}\n"
         f"Mode: {tpsl_mode}\n\n"
         f"Quantity: {qty:,.4f}\n"
@@ -315,10 +409,14 @@ async def format_order_cancelled(data: dict) -> str:
     order_id = data.get("orderId", "—")
     create_type = format_create_type(data.get("createType", "—"))
 
-    # اگر SL/TP order است، پیام خاص نمایش می‌دهیم
+    # If it's an SL/TP order, show special message
     if stop_order_type:
         emoji = "🎯" if "TakeProfit" in stop_order_type else "🛑"
-        title = f"{emoji} **{stop_order_type} Cancelled**"
+
+        # Identify which TP or SL this is
+        tp_sl_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
+
+        title = f"{emoji} **{tp_sl_level} Cancelled**"
     else:
         title = "❌ **Order Cancelled**"
 
@@ -333,6 +431,7 @@ async def format_order_cancelled(data: dict) -> str:
     if stop_order_type:
         text += f"Type: {stop_order_type}\n"
         if trigger_price > 0:
+            text += f"Level: {tp_sl_level}\n"
             text += f"Trigger Price: {trigger_price:,.4f}\n"
 
     text += f"Quantity: {qty:,.4f}\n" f"Executed Qty: {cum_exec_qty:,.4f}\n"
@@ -392,12 +491,38 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
 # ---------------- SL2 SETTER AFTER TP1 ---------------- #
 async def set_sl2_after_tp1(symbol: str, tp_data: dict):
     """
-    تنظیم SL2 برای نصف باقی‌مانده position بعد از trigger شدن TP1.
-    SL2 = entry_price * (1 + 0.0011) برای Buy
-    SL2 = entry_price * (1 - 0.0011) برای Sell
+    Set SL2 for remaining position after TP1 is triggered.
+    SL2 is only set if 30 minutes have passed since entry time.
+    SL2 = entry_price * (1 + 0.0011) for Buy
+    SL2 = entry_price * (1 - 0.0011) for Sell
     """
     try:
-        # دریافت position info برای گرفتن entry price و side
+        # Check if 30 minutes have passed since entry time
+        entry_time = position_entry_times.get(symbol)
+        if not entry_time:
+            print(
+                f"[WARN] Entry time not found for {symbol}, cannot verify 30-minute rule"
+            )
+            # If entry time not found, don't set SL2
+            return
+
+        time_elapsed = datetime.now() - entry_time
+        if time_elapsed < timedelta(minutes=30):
+            print(
+                f"[INFO] SL2 skipped for {symbol}: Only {time_elapsed.total_seconds()/60:.1f} minutes elapsed (need 30 minutes)"
+            )
+            await telClient.send_message(
+                TARGET_CHANNEL,
+                f"⏰ **SL2 Skipped**\n\n"
+                f"```\n"
+                f"Symbol: {symbol}\n"
+                f"Reason: Price reached TP1 too quickly\n"
+                f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
+                f"Required: 30 minutes\n"
+                f"```",
+            )
+            return
+
         positions = get_positions(symbol=symbol)
         if not positions:
             print(f"[WARN] Position not found for {symbol}, cannot set SL2")
@@ -412,26 +537,24 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             print(f"[WARN] Invalid position data for {symbol}, cannot set SL2")
             return
 
-        # محاسبه SL2 بر اساس side
         if side == "Buy":
             sl2_price = entry_price * (1 + 0.0011)
         else:  # Sell
             sl2_price = entry_price * (1 - 0.0011)
 
-        # تنظیم SL2 برای نصف باقی‌مانده position
         set_trading_stop(
             symbol=symbol,
             positionIdx=0,
             tpslMode="Partial",
             sl=str(sl2_price),
-            slSize=str(size),  # برای کل باقی‌مانده position
+            slSize=str(size),
         )
 
         print(
             f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (entry: {entry_price:.4f}, side: {side}, size: {size})"
         )
 
-        # اطلاع به تلگرام
+        # Notify Telegram
         await telClient.send_message(
             TARGET_CHANNEL,
             f"🛡️ **SL2 Set After TP1**\n\n"
@@ -441,6 +564,7 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             f"Entry Price: {entry_price:,.4f}\n"
             f"SL2 Price: {sl2_price:,.4f}\n"
             f"Remaining Size: {size:,.4f}\n"
+            f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
             f"```",
         )
 
@@ -449,6 +573,104 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
         await telClient.send_message(
             TARGET_CHANNEL,
             f"⚠️ **Error Setting SL2**\n\n" f"Symbol: {symbol}\n" f"Error: {str(e)}",
+        )
+
+
+# ---------------- SL3 SETTER AFTER TP2 ---------------- #
+async def set_sl3_after_tp2(symbol: str, tp_data: dict):
+    """
+    Set SL3 for remaining position after TP2 is triggered.
+    SL3 is only set if 30 minutes have passed since entry time.
+    SL3 = TP2 * (1 + 0.0011) for Buy
+    SL3 = TP2 * (1 - 0.0011) for Sell
+    """
+    try:
+        # Check if 30 minutes have passed since entry time
+        entry_time = position_entry_times.get(symbol)
+        if not entry_time:
+            print(
+                f"[WARN] Entry time not found for {symbol}, cannot verify 30-minute rule"
+            )
+            return
+
+        time_elapsed = datetime.now() - entry_time
+        if time_elapsed < timedelta(minutes=30):
+            print(
+                f"[INFO] SL3 skipped for {symbol}: Only {time_elapsed.total_seconds()/60:.1f} minutes elapsed (need 30 minutes)"
+            )
+            await telClient.send_message(
+                TARGET_CHANNEL,
+                f"⏰ **SL3 Skipped**\n\n"
+                f"```\n"
+                f"Symbol: {symbol}\n"
+                f"Reason: Price reached TP2 too quickly\n"
+                f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
+                f"Required: 30 minutes\n"
+                f"```",
+            )
+            return
+
+        positions = get_positions(symbol=symbol)
+        if not positions:
+            print(f"[WARN] Position not found for {symbol}, cannot set SL3")
+            return
+
+        position = positions[0]
+        side = position.get("side", "")
+        size = float(position.get("size", 0))
+
+        # Get TP2 from triggered price or stored data
+        tp2_price = float(tp_data.get("triggerPrice", 0))
+        if tp2_price == 0:
+            # If triggerPrice is not available, use position_tp_prices
+            tp_info = position_tp_prices.get(symbol)
+            if tp_info:
+                tp2_price = tp_info.get("tp2", 0)
+            if tp2_price == 0:
+                # If still not found, use avgPrice
+                tp2_price = float(position.get("avgPrice", 0))
+
+        if tp2_price == 0 or size == 0:
+            print(f"[WARN] Invalid position data for {symbol}, cannot set SL3")
+            return
+
+        # Calculate SL3 based on TP2
+        if side == "Buy":
+            sl3_price = tp2_price * (1 + 0.0011)
+        else:  # Sell
+            sl3_price = tp2_price * (1 - 0.0011)
+
+        set_trading_stop(
+            symbol=symbol,
+            positionIdx=0,
+            tpslMode="Partial",
+            sl=str(sl3_price),
+            slSize=str(size),
+        )
+
+        print(
+            f"[INFO] SL3 set for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
+        )
+
+        # Notify Telegram
+        await telClient.send_message(
+            TARGET_CHANNEL,
+            f"🛡️ **SL3 Set After TP2**\n\n"
+            f"```\n"
+            f"Symbol: {symbol}\n"
+            f"Side: {side}\n"
+            f"TP2 Price: {tp2_price:,.4f}\n"
+            f"SL3 Price: {sl3_price:,.4f}\n"
+            f"Remaining Size: {size:,.4f}\n"
+            f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
+            f"```",
+        )
+
+    except Exception as e:
+        print(f"[ERROR] Failed to set SL3 for {symbol}: {e}")
+        await telClient.send_message(
+            TARGET_CHANNEL,
+            f"⚠️ **Error Setting SL3**\n\n" f"Symbol: {symbol}\n" f"Error: {str(e)}",
         )
 
 
@@ -467,24 +689,24 @@ async def handle_ws_message(item: dict):
     stop_order_type = data.get("stopOrderType", "")
     create_type = data.get("createType", "")
 
-    # نمایش پیام برای SL/TP orders که ایجاد شده‌اند (Untriggered)
-    # فقط برای createType های مربوط به SL/TP که توسط سیستم ایجاد شده‌اند
+    # Show message for SL/TP orders that have been created (Untriggered)
+    # Only for createType related to SL/TP created by the system
     if order_status == "Untriggered" and stop_order_type:
-        # نمایش پیام برای SL/TP که ایجاد شده‌اند
+        # Show message for SL/TP that have been created
         sl_tp_create_types = [
             "CreateByPartialTakeProfit",
             "CreateByStopLoss",
             "CreateByTakeProfit",
             "CreateByPartialStopLoss",
         ]
-        # اگر ws_type == "sl_tp_created" است یا createType مناسب است، پیام نمایش می‌دهیم
+        # If ws_type == "sl_tp_created" or createType is appropriate, show message
         if ws_type == "sl_tp_created" or create_type in sl_tp_create_types:
             text = await format_sl_tp_created(data)
             if text:
                 await telClient.send_message(TARGET_CHANNEL, text)
-                return  # پیام ارسال شد، دیگر نیازی به ادامه نیست
+                return  # Message sent, no need to continue
 
-        # اگر createType مناسب نبود، return می‌کنیم (پیام نمایش نمی‌دهیم)
+        # If createType is not appropriate, return (don't show message)
         return
 
     # Handle different message types based on ws_type
@@ -493,8 +715,10 @@ async def handle_ws_message(item: dict):
         await telClient.send_message(TARGET_CHANNEL, text)
 
     elif ws_type == "close_position":
-        # پاک کردن symbol از open_positions
+        # Remove symbol from open_positions and related data
         open_positions.discard(symbol)
+        position_entry_times.pop(symbol, None)
+        position_tp_prices.pop(symbol, None)
         text = await format_position_closed(data, closed_pnl)
         await telClient.send_message(TARGET_CHANNEL, text)
 
@@ -507,17 +731,43 @@ async def handle_ws_message(item: dict):
         text = await format_sl_tp_triggered(data)
         if text:
             await telClient.send_message(TARGET_CHANNEL, text)
-            # اگر position بسته شد، از open_positions حذف می‌کنیم
+            # If position closed, remove from open_positions and related data
             if data.get("closeOnTrigger") and data.get("reduceOnly"):
                 open_positions.discard(symbol)
+                position_entry_times.pop(symbol, None)
+                position_tp_prices.pop(symbol, None)
 
-        # اگر TP1 (PartialTakeProfit) trigger شد، SL2 را برای نصف باقی‌مانده تنظیم می‌کنیم
+        # If TP1 or TP2 (PartialTakeProfit) triggered, set SL2 or SL3
         stop_order_type = data.get("stopOrderType", "")
         if stop_order_type == "PartialTakeProfit":
-            await set_sl2_after_tp1(symbol, data)
+            # Identify which TP was triggered
+            # To do this, we need to check the number of triggered TPs
+            # or use triggerPrice
+            # Currently assume first PartialTakeProfit = TP1 and second = TP2
+            # We can identify this by checking position size or number of previous TPs
+
+            # A simple way: check if SL2 has been set before
+            # If SL2 not set, this is TP1
+            # If SL2 set, this is TP2
+            positions = get_positions(symbol=symbol)
+            if positions:
+                position = positions[0]
+                current_sl = position.get("stopLoss", "")
+
+                # If SL2 not set (or only initial SL), this is TP1
+                # Otherwise this is TP2
+                if not current_sl or float(current_sl) == 0:
+                    # This is probably TP1
+                    await set_sl2_after_tp1(symbol, data)
+                else:
+                    # This is probably TP2
+                    await set_sl3_after_tp2(symbol, data)
+            else:
+                # If position not found, assume TP1
+                await set_sl2_after_tp1(symbol, data)
 
     elif ws_type == "sl_tp_created":
-        # SL/TP created (Untriggered) - فقط برای اطلاعات
+        # SL/TP created (Untriggered) - for information only
         text = await format_sl_tp_created(data)
         if text:
             await telClient.send_message(TARGET_CHANNEL, text)
@@ -555,3 +805,5 @@ async def handle_ws_message(item: dict):
                 await telClient.send_message(TARGET_CHANNEL, text)
                 if data.get("closeOnTrigger") and data.get("reduceOnly"):
                     open_positions.discard(symbol)
+                    position_entry_times.pop(symbol, None)
+                    position_tp_prices.pop(symbol, None)

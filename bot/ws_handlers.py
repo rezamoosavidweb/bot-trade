@@ -8,20 +8,20 @@ from errors import send_error_to_telegram
 
 # Lock for thread-safe file operations
 _ws_file_lock = Lock()
-# مسیر فایل در root directory پروژه
+# File path in project root directory
 WS_DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ws_data.json")
 
 
 def save_ws_message_to_json(msg_data: dict):
     """
-    ذخیره پیام WebSocket در فایل JSON.
-    هر پیام جدید به آرایه messages اضافه می‌شود.
+    Save WebSocket message to JSON file.
+    Each new message is added to the messages array.
     """
     try:
         print(f"[WS][DEBUG] Attempting to save WS message to {WS_DATA_FILE}")
 
         with _ws_file_lock:
-            # خواندن داده‌های موجود
+            # Read existing data
             if os.path.exists(WS_DATA_FILE):
                 try:
                     with open(WS_DATA_FILE, "r", encoding="utf-8") as f:
@@ -30,7 +30,7 @@ def save_ws_message_to_json(msg_data: dict):
                         f"[WS][DEBUG] Loaded existing file with {len(data.get('messages', []))} messages"
                     )
                 except (json.JSONDecodeError, IOError) as e:
-                    # اگر فایل خراب است یا خطا دارد، از اول شروع می‌کنیم
+                    # If file is corrupted or has errors, start fresh
                     print(
                         f"[WS][WARN] Error reading existing file, starting fresh: {e}"
                     )
@@ -39,24 +39,24 @@ def save_ws_message_to_json(msg_data: dict):
                 print(f"[WS][DEBUG] File does not exist, creating new file")
                 data = {"messages": []}
 
-            # اضافه کردن timestamp به پیام
+            # Add timestamp to message
             message_with_timestamp = {
                 "timestamp": datetime.now().isoformat(),
                 "data": msg_data,
             }
 
-            # اضافه کردن پیام جدید به آرایه
+            # Add new message to array
             data["messages"].append(message_with_timestamp)
             print(f"[WS][DEBUG] Added message, total messages: {len(data['messages'])}")
 
-            # ذخیره فایل
+            # Save file
             with open(WS_DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
             print(f"[WS][SUCCESS] Saved WS message to {WS_DATA_FILE}")
 
     except Exception as e:
-        # در صورت خطا، traceback کامل را چاپ می‌کنیم
+        # On error, print full traceback
         error_trace = traceback.format_exc()
         print(f"[WS][ERROR] Failed to save WS message to JSON: {e}")
         print(f"[WS][ERROR] Traceback: {error_trace}")
@@ -72,18 +72,18 @@ def order_callback_ws(loop, telegram_queue):
         try:
             print(f"[WS][DEBUG] Callback received message: {type(msg)}")
 
-            # ذخیره کل پیام WebSocket در فایل JSON
+            # Save entire WebSocket message to JSON file
             save_ws_message_to_json(msg)
 
-            # پردازش همه orderها در پیام (نه فقط اولین order)
+            # Process all orders in message (not just first order)
             orders = msg.get("data", [])
             if not orders:
                 print("[WS][WARN] No orders in message")
                 return
 
-            # پردازش هر order به صورت جداگانه
+            # Process each order separately
             for data in orders:
-                # مقادیر اصلی
+                # Main values
                 symbol_ws = data.get("symbol")
                 size = float(data.get("qty", 0))
                 closed_pnl = float(data.get("closedPnl", 0))
@@ -95,11 +95,11 @@ def order_callback_ws(loop, telegram_queue):
                 orderStatus = data.get("orderStatus", "")
                 stopOrderType = data.get("stopOrderType", "")
 
-                # تعیین نوع پیام با دقت بیشتر
+                # Determine message type with more precision
                 if orderStatus in ["Cancelled", "Deactivated"]:
                     msg_type = "cancel_order"
                 elif orderStatus == "Filled":
-                    # اگر reduceOnly است، یعنی position بسته شده (چه closeOnTrigger باشد یا نباشد)
+                    # If reduceOnly, position is closed (whether closeOnTrigger or not)
                     if reduceOnly:
                         if stopOrderType in [
                             "TakeProfit",
@@ -131,7 +131,6 @@ def order_callback_ws(loop, telegram_queue):
                 else:
                     msg_type = "other"
 
-                # ارسال به صف تلگرام برای هر order
                 asyncio.run_coroutine_threadsafe(
                     telegram_queue.put(
                         {
