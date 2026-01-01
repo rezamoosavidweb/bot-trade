@@ -84,15 +84,21 @@ def process_message(text: str, message_date=None, return_data=False):
     count_total_positives = len(positives)
     count_total_negatives = len(negatives)
     count_total_numbers = len(numbers)
-    
-    # 🔹 محاسبه مجموع اعداد منفی
-    sum_negatives = sum(negatives)
-    
-    # 🔹 محاسبه سود و ضرر بر اساس فرمول
-    loss = count_total_negatives * 2 * 30
-    profit = (count_total_positives * 1 * 70) + (count_positives_above_20 * 45 * 1) + (count_positives_above_27 * 28 * 1)
-    net_profit = profit - loss
 
+    # 🔹 محاسبه مجموع اعداد منفی (فقط برای نمایش)
+    sum_negatives = sum(negatives)
+
+    # 🔹 محاسبه سود و ضرر بر اساس فرمول جدید
+    # ضرر = تعداد اعداد منفی * 32
+    loss = count_total_negatives * 32
+
+    profit = (
+        (count_total_positives * 1 * 13.2)
+        + (count_positives_above_20  * 13.2)
+        + (count_positives_above_27 * 13.2)
+    )
+    all_fee = count_total_numbers * 2
+    net_profit = profit - loss - all_fee
     # 🔹 پیدا کردن کوچکترین عدد مثبت <= 20
     valid_small_positives = [n for n in positives if n <= 20]
 
@@ -158,9 +164,9 @@ def process_message(text: str, message_date=None, return_data=False):
         f"🚫 تعداد معاملات منفی: {count_total_negatives}\n"
         f"➖ مجموع اعداد منفی: {sum_negatives:.2f}%\n\n"
         f"💰 محاسبات:\n"
-        f"   • ضرر: {count_total_negatives} × 2 × 30 = {loss}\n"
-        f"   • سود: ({count_total_positives} × 1 × 70) + ({count_positives_above_20} × 45 × 1) + ({count_positives_above_27} × 28 × 1) = {profit}\n"
-        f"   • سود خالص: {net_profit}\n\n"
+        f"   • ضرر: {count_total_negatives} × 32 = {loss:.2f}\n"
+        f"   • سود: ({count_total_positives} × 0.3 × 13.7) + ({count_positives_above_20} × 0.45 × 13.5) + ({count_positives_above_27} × 0.25 × 13.7) = {profit:.2f}\n"
+        f"   • سود خالص: {net_profit:.2f}\n\n"
         f"📅 تاریخ میلادی: {gregorian_date}\n"
         f"📅 تاریخ شمسی: {persian_date}"
     )
@@ -177,19 +183,24 @@ def calculate_batch_summaries(results):
 
     total_messages = len(results)
 
-    # محاسبه میانگین Win Rate (میانگین Win Rate هر پیام)
-    win_rates = [r["win_rate"] for r in results]
-    avg_win_rate = sum(win_rates) / total_messages if win_rates else 0.0
-
-    # محاسبه مجموع مقادیر
-    total_positives = sum(r["count_total_positives"] for r in results)
-    total_negatives = sum(r["count_total_negatives"] for r in results)
-    total_positives_above_20 = sum(r["count_positives_above_20"] for r in results)
-    total_positives_above_27 = sum(r["count_positives_above_27"] for r in results)
-    total_sum_negatives = sum(r["sum_negatives"] for r in results)
-    total_loss = sum(r["loss"] for r in results)
-    total_profit = sum(r["profit"] for r in results)
+    # محاسبه net_total (مجموع net_profit همه روزها)
     total_net_profit = sum(r["net_profit"] for r in results)
+
+    # پیدا کردن بزرگترین منفی (کمترین net_profit)
+    min_net_profit = min(r["net_profit"] for r in results)
+    min_net_profit_date = None
+    for r in results:
+        if r["net_profit"] == min_net_profit:
+            min_net_profit_date = r["persian_date"]
+            break
+
+    # پیدا کردن بیشترین سود (بیشترین net_profit)
+    max_net_profit = max(r["net_profit"] for r in results)
+    max_net_profit_date = None
+    for r in results:
+        if r["net_profit"] == max_net_profit:
+            max_net_profit_date = r["persian_date"]
+            break
 
     # تاریخ اول و آخر
     first_date_persian = results[0]["persian_date"]
@@ -200,7 +211,7 @@ def calculate_batch_summaries(results):
     # پیام اول: لیست 30 تایی
     message1_lines = [
         f"📊 لیست {total_messages} پیام گذشته",
-        f"{'='*60}",
+        f"{'='*56}",
         "",
         f"Calls ➤ Win Rate | + | - | +>20 | +>27 | Loss | Profit 🌟 Net 🌟 Date",
         f"{'-'*80}",
@@ -217,32 +228,24 @@ def calculate_batch_summaries(results):
         profit_val = r["profit"]
         net_val = r["net_profit"]
         message1_lines.append(
-            f"{i:2d}. {signal_calls:4d} ➤ {win_rate_val:6.2f}% | {count_pos:2d} | {count_neg:2d} | {count_20:4d} | {count_27:4d} | {loss_val:4d} | {profit_val:4d} 🌟 {net_val:5d} 🌟 ({r['persian_date']})"
+            f"{i:2d}. {signal_calls:4d} ➤ {win_rate_val:6.2f}% | {count_pos:2d} | {count_neg:2d} | {count_20:4d} | {count_27:4d} | {loss_val:6.2f} | {profit_val:6.2f} 🌟 {net_val:7.2f} 🌟 ({r['persian_date']})"
         )
 
     message1 = "\n".join(message1_lines)
 
-    # پیام دوم: میانگین کلی
+    # پیام دوم: خلاصه
     message2_lines = [
         f"📈 خلاصه {total_messages} پیام",
-        f"{'='*60}",
+        f"{'='*56}",
         "",
         f"📅 بازه تاریخ:",
         f"   از: {first_date_gregorian} ({first_date_persian})",
         f"   تا: {last_date_gregorian} ({last_date_persian})",
         "",
-        f"📊 آمار کلی:",
-        f"   • Avg Win Rate: {avg_win_rate:.2f}%",
-        f"   • تعداد کل اعداد مثبت: {total_positives}",
-        f"   • تعداد کل اعداد منفی: {total_negatives}",
-        f"   • تعداد اعداد مثبت بالای 20: {total_positives_above_20}",
-        f"   • تعداد اعداد مثبت بالای 27: {total_positives_above_27}",
-        f"   • مجموع اعداد منفی: {total_sum_negatives:.2f}%",
-        "",
-        f"💰 محاسبات کلی:",
-        f"   • کل ضرر: {total_loss}",
-        f"   • کل سود: {total_profit}",
-        f"   • سود خالص: {total_net_profit}",
+        f"💰 نتایج:",
+        f"   • Net Total: {total_net_profit:.2f}",
+        f"   • Max Loss: {min_net_profit:.2f} ({min_net_profit_date})",
+        f"   • Max Profit: {max_net_profit:.2f} ({max_net_profit_date})",
     ]
     message2 = "\n".join(message2_lines)
 
