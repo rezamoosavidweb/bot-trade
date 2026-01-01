@@ -160,7 +160,7 @@ async def handle_telegram_signal(item):
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
         f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
         f"Leverage: {leverage}\n"
-        f"TP1 Qty: {tp1_qty} (30%)\nTP2 Qty: {tp2_qty} (40%)\nTP3 Qty: {tp3_qty} (30%)",
+        f"TP1 Qty: {tp1_qty} (~30%)\nTP2 Qty: {tp2_qty} (~45%)\nTP3 Qty: {tp3_qty} (~25%)",
     )
 
     print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")

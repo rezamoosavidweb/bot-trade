@@ -82,16 +82,16 @@ def process_message(text: str, message_date=None, return_data=False):
     count_positives_above_20 = len(positives_above_20)
     count_positives_above_27 = len(positives_above_27)
     count_total_positives = len(positives)
+    count_total_negatives = len(negatives)
     count_total_numbers = len(numbers)
-
-    # 🔹 محاسبه درصد اعداد بالای 20 و 27 (تعداد بالای 20/27 تقسیم بر تعداد کل مثبت * 100)
-    avg_above_20 = 0.0
-    if count_total_positives > 0:
-        avg_above_20 = (count_positives_above_20 / count_total_positives) * 100
-
-    avg_above_27 = 0.0
-    if count_total_positives > 0:
-        avg_above_27 = (count_positives_above_27 / count_total_positives) * 100
+    
+    # 🔹 محاسبه مجموع اعداد منفی
+    sum_negatives = sum(negatives)
+    
+    # 🔹 محاسبه سود و ضرر بر اساس فرمول
+    loss = count_total_negatives * 2 * 30
+    profit = (count_total_positives * 1 * 70) + (count_positives_above_20 * 45 * 1) + (count_positives_above_27 * 28 * 1)
+    net_profit = profit - loss
 
     # 🔹 پیدا کردن کوچکترین عدد مثبت <= 20
     valid_small_positives = [n for n in positives if n <= 20]
@@ -127,13 +127,17 @@ def process_message(text: str, message_date=None, return_data=False):
 
     # 🔹 داده‌های خام برای محاسبه میانگین
     data = {
-        "avg_above_20": avg_above_20,  # درصد اعداد مثبت بالای 20 از کل مثبت‌ها
-        "avg_above_27": avg_above_27,  # درصد اعداد مثبت بالای 27 از کل مثبت‌ها
         "win_rate": win_rate,  # Win Rate از پیام
         "signal_calls": signal_calls,  # تعداد کل سیگنال‌ها
         "profit_trades": profit_trades,  # تعداد معاملات مثبت
         "count_total_positives": count_total_positives,
-        "count_total_negatives": len(negatives),
+        "count_total_negatives": count_total_negatives,
+        "count_positives_above_20": count_positives_above_20,
+        "count_positives_above_27": count_positives_above_27,
+        "sum_negatives": sum_negatives,
+        "loss": loss,
+        "profit": profit,
+        "net_profit": net_profit,
         "count_total_numbers": count_total_numbers,
         "total": total,
         "gregorian_date": gregorian_date,
@@ -148,14 +152,15 @@ def process_message(text: str, message_date=None, return_data=False):
         f"📊 Result Summary\n\n"
         f"🟢 اعداد مثبت نهایی:\n{final_positives}\n\n"
         f"🚫 اعداد منفی:\n{negatives}\n\n"
-        f"🟢 تعداد معاملات مثبت: {count_total_positives}\n"
+        f"🟢 تعداد کل اعداد مثبت: {count_total_positives}\n"
         f"📈 تعداد اعداد مثبت بالای 20: {count_positives_above_20}\n"
-        f"📊 درصد اعداد مثبت بالای 20 به کل اعداد مثبت: {avg_above_20:.2f}%\n"
-        f"📊 درصد اعداد مثبت بالای 27 به کل اعداد مثبت: {avg_above_27:.2f}%\n"
-        f"🚫 تعداد معاملات منفی: {len(negatives)}\n"
-        f"➕ جمع سود معاملات مثبت: {total_positive:.2f}%\n"
-        f"➖ جمع ضرر معاملات منفی: {total_negative:.2f}%\n\n"
-        f"💰 سود نهایی: {total:.2f}%\n\n"
+        f"📈 تعداد اعداد مثبت بالای 27: {count_positives_above_27}\n"
+        f"🚫 تعداد معاملات منفی: {count_total_negatives}\n"
+        f"➖ مجموع اعداد منفی: {sum_negatives:.2f}%\n\n"
+        f"💰 محاسبات:\n"
+        f"   • ضرر: {count_total_negatives} × 2 × 30 = {loss}\n"
+        f"   • سود: ({count_total_positives} × 1 × 70) + ({count_positives_above_20} × 45 × 1) + ({count_positives_above_27} × 28 × 1) = {profit}\n"
+        f"   • سود خالص: {net_profit}\n\n"
         f"📅 تاریخ میلادی: {gregorian_date}\n"
         f"📅 تاریخ شمسی: {persian_date}"
     )
@@ -176,11 +181,15 @@ def calculate_batch_summaries(results):
     win_rates = [r["win_rate"] for r in results]
     avg_win_rate = sum(win_rates) / total_messages if win_rates else 0.0
 
-    # محاسبه میانگین اعداد بالای 20 (میانگین درصد از کل پیام‌ها)
-    avg_above_20 = sum(r["avg_above_20"] for r in results) / total_messages
-
-    # محاسبه میانگین اعداد بالای 27 (میانگین درصد از کل پیام‌ها)
-    avg_above_27 = sum(r["avg_above_27"] for r in results) / total_messages
+    # محاسبه مجموع مقادیر
+    total_positives = sum(r["count_total_positives"] for r in results)
+    total_negatives = sum(r["count_total_negatives"] for r in results)
+    total_positives_above_20 = sum(r["count_positives_above_20"] for r in results)
+    total_positives_above_27 = sum(r["count_positives_above_27"] for r in results)
+    total_sum_negatives = sum(r["sum_negatives"] for r in results)
+    total_loss = sum(r["loss"] for r in results)
+    total_profit = sum(r["profit"] for r in results)
+    total_net_profit = sum(r["net_profit"] for r in results)
 
     # تاریخ اول و آخر
     first_date_persian = results[0]["persian_date"]
@@ -193,36 +202,47 @@ def calculate_batch_summaries(results):
         f"📊 لیست {total_messages} پیام گذشته",
         f"{'='*60}",
         "",
-        f"Calls | Win Rate | Avg >=20 | Avg >=27 | تاریخ",
-        f"{'-'*60}",
+        f"Calls ➤ Win Rate | + | - | +>20 | +>27 | Loss | Profit 🌟 Net 🌟 Date",
+        f"{'-'*80}",
     ]
 
     for i, r in enumerate(results, 1):
         win_rate_val = r["win_rate"]  # استفاده از Win Rate از پیام
         signal_calls = r.get("signal_calls", 0)
-        avg_20_val = r["avg_above_20"]  # درصد اعداد بالای 20 از کل مثبت‌ها
-        avg_27_val = r["avg_above_27"]  # درصد اعداد بالای 27 از کل مثبت‌ها
-        avg_20_str = f"{avg_20_val:6.2f}%" if avg_20_val > 0 else "   -   "
-        avg_27_str = f"{avg_27_val:6.2f}%" if avg_27_val > 0 else "   -   "
+        count_pos = r["count_total_positives"]
+        count_neg = r["count_total_negatives"]
+        count_20 = r["count_positives_above_20"]
+        count_27 = r["count_positives_above_27"]
+        loss_val = r["loss"]
+        profit_val = r["profit"]
+        net_val = r["net_profit"]
         message1_lines.append(
-            f"{i:2d}. {signal_calls:4d} | {win_rate_val:6.2f}% | {avg_20_str:8s} | {avg_27_str:8s} | ({r['persian_date']})"
+            f"{i:2d}. {signal_calls:4d} ➤ {win_rate_val:6.2f}% | {count_pos:2d} | {count_neg:2d} | {count_20:4d} | {count_27:4d} | {loss_val:4d} | {profit_val:4d} 🌟 {net_val:5d} 🌟 ({r['persian_date']})"
         )
 
     message1 = "\n".join(message1_lines)
 
     # پیام دوم: میانگین کلی
     message2_lines = [
-        f"📈 میانگین کلی {total_messages} پیام",
-        f"{'='*50}",
+        f"📈 خلاصه {total_messages} پیام",
+        f"{'='*60}",
         "",
         f"📅 بازه تاریخ:",
         f"   از: {first_date_gregorian} ({first_date_persian})",
         f"   تا: {last_date_gregorian} ({last_date_persian})",
         "",
-        f"📊 نتایج:",
+        f"📊 آمار کلی:",
         f"   • Avg Win Rate: {avg_win_rate:.2f}%",
-        f"   • Avg >=20:     {avg_above_20:.2f}%",
-        f"   • Avg >=27:     {avg_above_27:.2f}%",
+        f"   • تعداد کل اعداد مثبت: {total_positives}",
+        f"   • تعداد کل اعداد منفی: {total_negatives}",
+        f"   • تعداد اعداد مثبت بالای 20: {total_positives_above_20}",
+        f"   • تعداد اعداد مثبت بالای 27: {total_positives_above_27}",
+        f"   • مجموع اعداد منفی: {total_sum_negatives:.2f}%",
+        "",
+        f"💰 محاسبات کلی:",
+        f"   • کل ضرر: {total_loss}",
+        f"   • کل سود: {total_profit}",
+        f"   • سود خالص: {total_net_profit}",
     ]
     message2 = "\n".join(message2_lines)
 
