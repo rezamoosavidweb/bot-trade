@@ -21,6 +21,11 @@ from api import set_leverage_safe, place_market_order, set_trading_stop
 from clients import telClient
 from ws_message_formatter import handle_ws_message
 from capital_tracker import track_position_opened
+from liquidity_analyzer import (
+    analyze_symbol_liquidity,
+    track_order_execution,
+    calculate_liquidity_metrics,
+)
 from config import FIXED_MARGIN_USDT
 
 # ---------------- TELEGRAM QUEUE ---------------- #
@@ -79,14 +84,52 @@ async def handle_telegram_signal(item):
             )
             raise e
 
+    # Analyze liquidity before placing order
+    liquidity_analysis = analyze_symbol_liquidity(symbol, qty)
+    liquidity_metrics = calculate_liquidity_metrics(symbol, qty, signal["side"])
+
+    # Warn if liquidity is low
+    if liquidity_analysis.get("risk_level") in ["HIGH", "MEDIUM"]:
+        recommendations = liquidity_analysis.get("recommendations", [])
+        warning_msg = (
+            f"⚠️ **Liquidity Warning for {symbol}**\n\n"
+            f"Risk Level: {liquidity_analysis.get('risk_level')}\n"
+            f"Fill Percentage: {liquidity_metrics.get('fill_percentage', 0):.1f}%\n"
+            f"Max Slippage: {liquidity_metrics.get('max_slippage_percent', 0):.2f}%\n\n"
+        )
+        if recommendations:
+            warning_msg += "\n".join(
+                recommendations[:3]
+            )  # Show first 3 recommendations
+        await telClient.send_message(TARGET_CHANNEL, warning_msg)
+
     # Place market order
     try:
-        place_market_order(
+        order_result = place_market_order(
             symbol=symbol,
             side=signal["side"],
             qty=str(qty),
             sl=signal["sl"],
         )
+
+        # Extract order ID from result
+        order_id = None
+        if isinstance(order_result, dict):
+            order_id = order_result.get("result", {}).get(
+                "orderId"
+            ) or order_result.get("result", {}).get("orderLinkId")
+
+        # Track order execution for liquidity analysis
+        if order_id:
+            track_order_execution(
+                symbol=symbol,
+                side=signal["side"],
+                qty=qty,
+                order_id=str(order_id),
+                order_type="Market",
+                liquidity_metrics=liquidity_metrics,
+            )
+
         # If order succeeded, track position opened
         open_positions.add(symbol)
         # Track position opened for capital tracking

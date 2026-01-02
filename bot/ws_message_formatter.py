@@ -14,6 +14,7 @@ from config import (
 from clients import telClient
 from api import get_positions, set_trading_stop
 from capital_tracker import track_position_closed, track_rejected_order
+from liquidity_analyzer import update_order_fill
 
 
 # ---------------- ENUMS ---------------- #
@@ -284,6 +285,22 @@ async def format_new_order_filled(data: dict) -> str:
     reject_reason = format_reject_reason(data.get("rejectReason", "EC_NoError"))
 
     emoji = "📤" if order_status == "Filled" else "⏳"
+
+    # Track order execution for liquidity analysis
+    if order_id != "—" and order_status in ["Filled", "PartiallyFilled"]:
+        fill_percentage = (cum_exec_qty / qty * 100) if qty > 0 else 0
+        execution_price = avg_price if avg_price > 0 else price
+
+        # Calculate slippage if we have expected price (from liquidity metrics)
+        slippage = None
+        # Note: Slippage calculation would need expected price from order placement
+
+        update_order_fill(
+            order_id=str(order_id),
+            fill_percentage=fill_percentage,
+            execution_price=execution_price,
+            slippage=slippage,
+        )
 
     text = (
         f"{emoji} **Order Filled**\n\n"

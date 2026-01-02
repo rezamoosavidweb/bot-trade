@@ -15,6 +15,7 @@ from api import (
 from config import open_positions
 from cache import refresh_transaction_log
 from capital_tracker import get_capital_report
+from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
 
 # Global flag to cancel transaction sending
 cancel_transaction_sending = False
@@ -35,6 +36,7 @@ def register_command_handlers():
             "📄 Capital Report: /capital_report\n"
             "📄 Transactions: /transactions\n"
             "🛑 Cancel Waiting: /cancel_waiting\n"
+            "📊 Liquidity Report: /liquidity_report\n"
         )
         await event.respond(message)
 
@@ -326,3 +328,12 @@ def register_command_handlers():
             await event.respond(report)
         except Exception as e:
             await event.respond(f"❌ Error generating capital report: {e}")
+
+    # ---------- /liquidity_report ----------
+    @telClient.on(events.NewMessage(pattern=r"^/liquidity_report$"))
+    async def liquidity_report_handler(event):
+        try:
+            report = get_liquidity_report()
+            await event.respond(report)
+        except Exception as e:
+            await event.respond(f"❌ Error generating liquidity report: {e}")
