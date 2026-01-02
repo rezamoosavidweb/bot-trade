@@ -9,9 +9,11 @@ from config import (
     position_entry_times,
     position_tp_prices,
     TARGET_CHANNEL,
+    FIXED_MARGIN_USDT,
 )
 from clients import telClient
 from api import get_positions, set_trading_stop
+from capital_tracker import track_position_closed, track_rejected_order
 
 
 # ---------------- ENUMS ---------------- #
@@ -719,6 +721,8 @@ async def handle_ws_message(item: dict):
         open_positions.discard(symbol)
         position_entry_times.pop(symbol, None)
         position_tp_prices.pop(symbol, None)
+        # Track position closed for capital tracking
+        track_position_closed(symbol)
         text = await format_position_closed(data, closed_pnl)
         await telClient.send_message(TARGET_CHANNEL, text)
 
@@ -736,6 +740,8 @@ async def handle_ws_message(item: dict):
                 open_positions.discard(symbol)
                 position_entry_times.pop(symbol, None)
                 position_tp_prices.pop(symbol, None)
+                # Track position closed for capital tracking
+                track_position_closed(symbol)
 
         # If TP1 or TP2 (PartialTakeProfit) triggered, set SL2 or SL3
         stop_order_type = data.get("stopOrderType", "")
@@ -774,8 +780,12 @@ async def handle_ws_message(item: dict):
 
     elif ws_type == "rejected" or order_status == "Rejected":
         symbol = data.get("symbol", "—")
-        reject_reason = format_reject_reason(data.get("rejectReason", "EC_Others"))
+        reject_reason_str = data.get("rejectReason", "EC_Others")
+        reject_reason = format_reject_reason(reject_reason_str)
         order_id = data.get("orderId", "—")
+
+        # Track rejected order if it's due to insufficient balance
+        track_rejected_order(symbol, reject_reason_str, FIXED_MARGIN_USDT)
 
         text = (
             f"❌ **Order Rejected**\n\n"
@@ -793,6 +803,10 @@ async def handle_ws_message(item: dict):
             if data.get("reduceOnly"):
                 # Position closed by market order
                 open_positions.discard(symbol)
+                position_entry_times.pop(symbol, None)
+                position_tp_prices.pop(symbol, None)
+                # Track position closed for capital tracking
+                track_position_closed(symbol)
                 text = await format_position_closed(data, closed_pnl)
                 await telClient.send_message(TARGET_CHANNEL, text)
             else:

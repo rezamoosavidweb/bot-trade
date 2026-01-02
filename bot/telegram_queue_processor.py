@@ -20,6 +20,8 @@ from errors import send_error_to_telegram
 from api import set_leverage_safe, place_market_order, set_trading_stop
 from clients import telClient
 from ws_message_formatter import handle_ws_message
+from capital_tracker import track_position_opened
+from config import FIXED_MARGIN_USDT
 
 # ---------------- TELEGRAM QUEUE ---------------- #
 telegram_queue = asyncio.Queue()
@@ -78,14 +80,28 @@ async def handle_telegram_signal(item):
             raise e
 
     # Place market order
-    place_market_order(
-        symbol=symbol,
-        side=signal["side"],
-        qty=str(qty),
-        sl=signal["sl"],
-    )
+    try:
+        place_market_order(
+            symbol=symbol,
+            side=signal["side"],
+            qty=str(qty),
+            sl=signal["sl"],
+        )
+        # If order succeeded, track position opened
+        open_positions.add(symbol)
+        # Track position opened for capital tracking
+        track_position_opened(symbol, FIXED_MARGIN_USDT, margin=trade.get("margin"))
+    except Exception as e:
+        # Track rejected order if it's due to insufficient balance
+        error_str = str(e).lower()
+        if any(
+            keyword in error_str
+            for keyword in ["insufficient", "balance", "margin", "not enough", "funds"]
+        ):
+            from capital_tracker import track_rejected_order
 
-    open_positions.add(symbol)
+            track_rejected_order(symbol, str(e), FIXED_MARGIN_USDT)
+        raise e
 
     # Store entry time to check 30-minute rule
     position_entry_times[symbol] = datetime.now()

@@ -14,6 +14,7 @@ from api import (
 )
 from config import open_positions
 from cache import refresh_transaction_log
+from capital_tracker import get_capital_report
 
 # Global flag to cancel transaction sending
 cancel_transaction_sending = False
@@ -315,3 +316,12 @@ def register_command_handlers():
         await event.respond(
             "🛑 Cancellation requested. Transaction sending will stop after current message."
         )
+
+    # ---------- /capital_report ----------
+    @telClient.on(events.NewMessage(pattern=r"^/capital_report$"))
+    async def capital_report_handler(event):
+        try:
+            report = get_capital_report()
+            await event.respond(report)
+        except Exception as e:
+            await event.respond(f"❌ Error generating capital report: {e}")
