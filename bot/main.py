@@ -13,6 +13,9 @@ from config import (
     SELECTED_API_KEY,
     SELECTED_API_SECRET,
     SELECTED_SOURCE_CHANNEL,
+    FIXED_MARGIN_USDT,
+    MAX_LOSS_USDT,
+    TARGET_PROFIT_USDT,
 )
 from pybit.unified_trading import WebSocket
 from errors import send_error_to_telegram
@@ -27,6 +30,9 @@ async def main():
         f"SELECTED_API_KEY:{SELECTED_API_KEY}\n",
         f"SELECTED_API_SECRET:{SELECTED_API_SECRET}\n",
         f"SELECTED_SOURCE_CHANNEL:{SELECTED_SOURCE_CHANNEL}\n",
+        f"FIXED_MARGIN_USDT:{FIXED_MARGIN_USDT}\n",
+        f"MAX_LOSS_USDT:{MAX_LOSS_USDT}\n",
+        f"TARGET_PROFIT_USDT:{TARGET_PROFIT_USDT}\n",
         f"=================================",
     )
     loop = asyncio.get_running_loop()
