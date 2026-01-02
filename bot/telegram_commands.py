@@ -32,6 +32,7 @@ def register_command_handlers():
             "💰 Wallet Balance: /wallet\n"
             "🛑 Cancel Orders: /cancel\n"
             "❌ Close Positions: /close_positions\n"
+            "📄 Capital Report: /capital_report\n"
             "📄 Transactions: /transactions\n"
             "🛑 Cancel Waiting: /cancel_waiting\n"
         )
