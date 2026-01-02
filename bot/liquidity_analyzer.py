@@ -58,9 +58,9 @@ def get_order_book_depth(symbol: str, limit: int = 25) -> Optional[Dict]:
         Dict with 'bids' and 'asks' lists, or None if error
     """
     try:
-        from clients import bybitClient
+        from clients import bybitClientLive
 
-        response = bybitClient.get_orderbook(
+        response = bybitClientLive.get_orderbook(
             category="linear", symbol=symbol, limit=limit
         )
 
@@ -88,9 +88,9 @@ def get_24h_ticker(symbol: str) -> Optional[Dict]:
         Dict with volume and price data, or None if error
     """
     try:
-        from clients import bybitClient
+        from clients import bybitClientLive
 
-        response = bybitClient.get_tickers(category="linear", symbol=symbol)
+        response = bybitClientLive.get_tickers(category="linear", symbol=symbol)
 
         if response.get("retCode") == 0:
             result = response.get("result", {}).get("list", [])
