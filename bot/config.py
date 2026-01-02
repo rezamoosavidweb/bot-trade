@@ -47,8 +47,8 @@ SETTLE_COIN = "USDT"
 
 # MAX_POSITION_USDT = 2000
 FIXED_MARGIN_USDT = 100
-MAX_LOSS_USDT = 20
-TARGET_PROFIT_USDT = 10
+MAX_LOSS_USDT = 10
+TARGET_PROFIT_USDT = 5
 
 # ---------------- GLOBALS ---------------- #
 symbol_cache = {}
