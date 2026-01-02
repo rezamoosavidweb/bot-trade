@@ -1,0 +1,35 @@
+{
+  "order_executions": [
+    {
+      "symbol": "POLUSDT",
+      "side": "Buy",
+      "qty": 15957.0,
+      "order_id": "009f08fe-b934-41b4-967f-0cde48e773e2",
+      "order_type": "Market",
+      "placed_at": "2026-01-02T15:27:32.265992+03:30",
+      "filled_at": "2026-01-02T15:27:32.869538+03:30",
+      "fill_percentage": 100.0,
+      "execution_price": 0.10859,
+      "slippage": null,
+      "liquidity_metrics": {
+        "available": true,
+        "symbol": "POLUSDT",
+        "side": "Buy",
+        "order_qty": 15957.0,
+        "current_price": 0.10859,
+        "avg_execution_price": 0.1085994466378392,
+        "fill_percentage": 100.0,
+        "price_levels_needed": 3,
+        "max_slippage_percent": 0.018417902200932174,
+        "volume_24h": 77310042.0,
+        "order_to_volume_ratio": 0.020640268181460825,
+        "liquidity_score": 99.99380791954556,
+        "estimated_fill_time_seconds": 0.30000000000000004,
+        "timestamp": "2026-01-02T15:27:32.096455+03:30"
+      },
+      "is_demo": true
+    }
+  ],
+  "symbol_liquidity": {},
+  "daily_stats": {}
+}
