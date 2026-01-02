@@ -1,5 +1,6 @@
 import asyncio
 from telethon import events
+from telethon.errors import FloodWaitError
 from clients import telClient
 from api import (
     get_wallet_balance,
@@ -13,6 +14,9 @@ from api import (
 )
 from config import open_positions
 from cache import refresh_transaction_log
+
+# Global flag to cancel transaction sending
+cancel_transaction_sending = False
 
 
 def register_command_handlers():
@@ -28,6 +32,7 @@ def register_command_handlers():
             "🛑 Cancel Orders: /cancel\n"
             "❌ Close Positions: /close_positions\n"
             "📄 Transactions: /transactions\n"
+            "🛑 Cancel Waiting: /cancel_waiting\n"
         )
         await event.respond(message)
 
@@ -185,8 +190,14 @@ def register_command_handlers():
 
     @telClient.on(events.NewMessage(pattern=r"^/transactions$"))
     async def transactions_handler(event):
+        global cancel_transaction_sending
+        cancel_transaction_sending = False  # Reset cancel flag
+
         try:
-            res = get_transaction_log(limit=30)
+            # Send initial message
+            await event.respond("📄 Fetching transactions...")
+
+            res = get_transaction_log(limit=50)
             if isinstance(res, dict):
                 results = res.get("result", {}).get("list", [])
             else:
@@ -195,11 +206,25 @@ def register_command_handlers():
                 await event.respond("📌 No transactions found.")
                 return
 
+            total_count = len(results)
+            await event.respond(f"📊 Found {total_count} transactions. Sending...")
+
             # Sort by transaction time (newest first)
             results.sort(key=lambda x: int(x.get("transactionTime", 0)), reverse=True)
 
-            # Send transactions one by one to avoid message length limits
+            # Send transactions one by one with proper error handling
+            sent_count = 0
             for idx, tx in enumerate(results, start=1):
+                # Check if cancellation was requested
+                if cancel_transaction_sending:
+                    await event.respond(
+                        f"🛑 Sending cancelled by user.\n"
+                        f"📊 Sent {sent_count}/{total_count} transactions before cancellation."
+                    )
+                    cancel_transaction_sending = False  # Reset flag
+                    return
+
+                # Prepare message content first
                 cash_flow = float(tx.get("cashFlow", 0))
                 funding = float(tx.get("funding", 0))
                 fee = float(tx.get("fee", 0))
@@ -212,7 +237,7 @@ def register_command_handlers():
                 change_emoji = "🟢" if change > 0 else "🔴" if change < 0 else "⚪"
 
                 tx_msg = (
-                    f"📄 **Transaction #{idx}**\n\n"
+                    f"📄 **Transaction #{idx}/{total_count}**\n\n"
                     "```\n"
                     f"Symbol: {tx.get('symbol')}\n"
                     f"Type: {tx.get('type')}\n"
@@ -230,9 +255,63 @@ def register_command_handlers():
                     "```"
                 )
 
-                await event.respond(tx_msg)
-                # Small delay to avoid flood limits
-                await asyncio.sleep(0.2)
+                # Try to send with retry logic
+                max_retries = 3
+                retry_count = 0
+                sent = False
+
+                while retry_count < max_retries and not sent:
+                    try:
+                        await event.respond(tx_msg)
+                        sent_count += 1
+                        sent = True
+
+                        # Increased delay to avoid flood limits (2.5 seconds between messages)
+                        await asyncio.sleep(2.5)
+
+                    except FloodWaitError as e:
+                        # If we hit a flood wait, wait for the required time + buffer
+                        wait_time = e.seconds + 2
+                        print(
+                            f"[WARN] Flood wait detected for transaction {idx}. Waiting {wait_time} seconds..."
+                        )
+                        if retry_count == 0:
+                            await event.respond(
+                                f"⏳ Rate limit reached. Waiting {wait_time} seconds before continuing..."
+                            )
+                        await asyncio.sleep(wait_time)
+                        retry_count += 1
+
+                    except Exception as tx_error:
+                        print(
+                            f"[ERROR] Error sending transaction {idx} (attempt {retry_count + 1}): {tx_error}"
+                        )
+                        retry_count += 1
+                        if retry_count < max_retries:
+                            await asyncio.sleep(2.5)
+                        else:
+                            await event.respond(
+                                f"⚠️ Failed to send transaction #{idx} after {max_retries} attempts. Skipping..."
+                            )
+                            await asyncio.sleep(2.5)
+                            break
+
+            # Send completion message
+            if not cancel_transaction_sending:
+                await event.respond(
+                    f"✅ Completed! Sent {sent_count}/{total_count} transactions."
+                )
+            cancel_transaction_sending = False  # Reset flag
 
         except Exception as e:
             await event.respond(f"❌ Error getting transactions: {e}")
+            cancel_transaction_sending = False  # Reset flag on error
+
+    # ---------- /cancel_waiting ----------
+    @telClient.on(events.NewMessage(pattern=r"^/cancel_waiting$"))
+    async def cancel_waiting_handler(event):
+        global cancel_transaction_sending
+        cancel_transaction_sending = True
+        await event.respond(
+            "🛑 Cancellation requested. Transaction sending will stop after current message."
+        )
