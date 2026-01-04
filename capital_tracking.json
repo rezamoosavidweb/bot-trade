@@ -1,0 +1,39 @@
+{
+  "positions": [
+    {
+      "symbol": "POLUSDT",
+      "capital_used": 299.76,
+      "opened_at": "2026-01-02T15:27:32.268049+03:30",
+      "closed_at": "2026-01-02T16:08:39.373249+03:30",
+      "duration_seconds": 2467.1052
+    }
+  ],
+  "rejected_orders": [],
+  "daily_stats": {
+    "2026-01-02": {
+      "total_positions": 1,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 299.76,
+      "avg_concurrent_capital": 16.653333333333332,
+      "total_capital_hours": 205.42762632
+    }
+  },
+  "weekly_stats": {
+    "2026-W01": {
+      "total_positions": 1,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 299.76,
+      "avg_concurrent_capital": 2.6294736842105264,
+      "total_capital_hours": 205.42762632
+    }
+  },
+  "monthly_stats": {
+    "2026-01": {
+      "total_positions": 1,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 299.76,
+      "avg_concurrent_capital": 7.137142857142857,
+      "total_capital_hours": 205.42762632
+    }
+  }
+}

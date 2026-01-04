@@ -17,7 +17,7 @@ IS_DEMO = True
 # ---------------- API KEYS ---------------- #
 TELEGRAM_API_ID = os.getenv("TELEGRAM_API_ID")
 TELEGRAM_API_HASH = os.getenv("TELEGRAM_API_HASH")
-SOURCE_CHANNEL = os.getenv("SOURCE_CHANNEL")
+SOURCE_CHANNEL = int(os.getenv("SOURCE_CHANNEL"))
 # SOURCE_CHANNEL = int(os.getenv("TARGET_CHANNEL"))
 TARGET_CHANNEL = int(os.getenv("TARGET_CHANNEL"))
 
