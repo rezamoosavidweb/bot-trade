@@ -1,4 +1,6 @@
 import asyncio
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from telethon import events
 from telethon.errors import FloodWaitError
 from clients import telClient
@@ -240,6 +242,22 @@ def register_command_handlers():
                 )
                 change_emoji = "🟢" if change > 0 else "🔴" if change < 0 else "⚪"
 
+                # Convert transactionTime to Iran timezone (UTC+3:30)
+                transaction_time_str = tx.get("transactionTime", "")
+                formatted_time = transaction_time_str
+                if transaction_time_str:
+                    try:
+                        # transactionTime is in milliseconds
+                        timestamp_ms = int(transaction_time_str)
+                        timestamp_s = timestamp_ms / 1000.0
+                        dt_utc = datetime.fromtimestamp(timestamp_s, tz=ZoneInfo("UTC"))
+                        dt_iran = dt_utc.astimezone(ZoneInfo("Asia/Tehran"))
+                        formatted_time = dt_iran.strftime("%Y-%m-%d %H:%M:%S (UTC+3:30)")
+                    except (ValueError, TypeError, OSError) as e:
+                        # If conversion fails, use original value
+                        formatted_time = transaction_time_str
+                        print(f"[WARN] Failed to convert transactionTime: {e}")
+
                 tx_msg = (
                     f"📄 **Transaction #{idx}/{total_count}**\n\n"
                     "```\n"
@@ -255,7 +273,7 @@ def register_command_handlers():
                     f"Balance After: {tx.get('cashBalance')}\n"
                     f"Order ID: {tx.get('orderId')}\n"
                     f"Trade ID: {tx.get('tradeId')}\n"
-                    f"Time: {tx.get('transactionTime')}\n"
+                    f"Time: {formatted_time}\n"
                     "```"
                 )
 
