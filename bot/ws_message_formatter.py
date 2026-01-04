@@ -14,7 +14,7 @@ from config import (
 from clients import telClient
 from api import get_positions, set_trading_stop
 from capital_tracker import track_position_closed, track_rejected_order
-from liquidity_analyzer import update_order_fill
+from liquidity_analyzer import update_order_fill, get_24h_ticker
 
 
 # ---------------- ENUMS ---------------- #
@@ -511,9 +511,11 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
 async def set_sl2_after_tp1(symbol: str, tp_data: dict):
     """
     Set SL2 for remaining position after TP1 is triggered.
-    SL2 is only set if 30 minutes have passed since entry time.
-    SL2 = entry_price * (1 + 0.0011) for Buy
-    SL2 = entry_price * (1 - 0.0011) for Sell
+    Only sets SL2 if 30 minutes have passed since entry time.
+    
+    Logic:
+    - If current price > TP1 + 0.25%: SL2 = TP1 + 0.11%
+    - Otherwise: SL2 = TP1
     """
     try:
         # Check if 30 minutes have passed since entry time
@@ -522,7 +524,6 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             print(
                 f"[WARN] Entry time not found for {symbol}, cannot verify 30-minute rule"
             )
-            # If entry time not found, don't set SL2
             return
 
         time_elapsed = datetime.now() - entry_time
@@ -535,7 +536,7 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
                 f"⏰ **SL2 Skipped**\n\n"
                 f"```\n"
                 f"Symbol: {symbol}\n"
-                f"Reason: Price reached TP1 too quickly\n"
+                f"Reason: Less than 30 minutes since entry\n"
                 f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
                 f"Required: 30 minutes\n"
                 f"```",
@@ -548,18 +549,52 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             return
 
         position = positions[0]
-        entry_price = float(position.get("avgPrice", 0))
         side = position.get("side", "")
         size = float(position.get("size", 0))
 
-        if entry_price == 0 or size == 0:
+        if size == 0:
             print(f"[WARN] Invalid position data for {symbol}, cannot set SL2")
             return
 
+        # Get TP1 price from stored data
+        tp_info = position_tp_prices.get(symbol)
+        if not tp_info:
+            print(f"[WARN] TP info not found for {symbol}, cannot set SL2")
+            return
+
+        tp1_price = tp_info.get("tp1", 0)
+        if tp1_price == 0:
+            print(f"[WARN] TP1 price not found for {symbol}, cannot set SL2")
+            return
+
+        # Get current market price
+        ticker = get_24h_ticker(symbol)
+        if not ticker:
+            print(f"[WARN] Failed to get current price for {symbol}, cannot set SL2")
+            return
+
+        current_price = ticker.get("lastPrice", 0)
+        if current_price == 0:
+            print(f"[WARN] Invalid current price for {symbol}, cannot set SL2")
+            return
+
+        # Calculate TP1 + 0.25% threshold
         if side == "Buy":
-            sl2_price = entry_price * (1 + 0.0011)
+            tp1_threshold = tp1_price * (1 + 0.0025)  # TP1 + 0.25%
+            # If current price > TP1 + 0.25%, set SL = TP1 + 0.11%
+            # Otherwise, set SL = TP1
+            if current_price > tp1_threshold:
+                sl2_price = tp1_price * (1 + 0.0011)  # TP1 + 0.11%
+            else:
+                sl2_price = tp1_price  # TP1
         else:  # Sell
-            sl2_price = entry_price * (1 - 0.0011)
+            tp1_threshold = tp1_price * (1 - 0.0025)  # TP1 - 0.25%
+            # If current price < TP1 - 0.25%, set SL = TP1 - 0.11%
+            # Otherwise, set SL = TP1
+            if current_price < tp1_threshold:
+                sl2_price = tp1_price * (1 - 0.0011)  # TP1 - 0.11%
+            else:
+                sl2_price = tp1_price  # TP1
 
         set_trading_stop(
             symbol=symbol,
@@ -570,7 +605,7 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
         )
 
         print(
-            f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (entry: {entry_price:.4f}, side: {side}, size: {size})"
+            f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
         )
 
         # Notify Telegram
@@ -580,7 +615,8 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             f"```\n"
             f"Symbol: {symbol}\n"
             f"Side: {side}\n"
-            f"Entry Price: {entry_price:,.4f}\n"
+            f"TP1 Price: {tp1_price:,.4f}\n"
+            f"Current Price: {current_price:,.4f}\n"
             f"SL2 Price: {sl2_price:,.4f}\n"
             f"Remaining Size: {size:,.4f}\n"
             f"Time elapsed: {time_elapsed.total_seconds()/60:.1f} minutes\n"
@@ -589,6 +625,8 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
 
     except Exception as e:
         print(f"[ERROR] Failed to set SL2 for {symbol}: {e}")
+        import traceback
+        traceback.print_exc()
         await telClient.send_message(
             TARGET_CHANNEL,
             f"⚠️ **Error Setting SL2**\n\n" f"Symbol: {symbol}\n" f"Error: {str(e)}",
@@ -763,31 +801,17 @@ async def handle_ws_message(item: dict):
         # If TP1 or TP2 (PartialTakeProfit) triggered, set SL2 or SL3
         stop_order_type = data.get("stopOrderType", "")
         if stop_order_type == "PartialTakeProfit":
-            # Identify which TP was triggered
-            # To do this, we need to check the number of triggered TPs
-            # or use triggerPrice
-            # Currently assume first PartialTakeProfit = TP1 and second = TP2
-            # We can identify this by checking position size or number of previous TPs
-
-            # A simple way: check if SL2 has been set before
-            # If SL2 not set, this is TP1
-            # If SL2 set, this is TP2
-            positions = get_positions(symbol=symbol)
-            if positions:
-                position = positions[0]
-                current_sl = position.get("stopLoss", "")
-
-                # If SL2 not set (or only initial SL), this is TP1
-                # Otherwise this is TP2
-                if not current_sl or float(current_sl) == 0:
-                    # This is probably TP1
-                    await set_sl2_after_tp1(symbol, data)
-                else:
-                    # This is probably TP2
-                    await set_sl3_after_tp2(symbol, data)
-            else:
-                # If position not found, assume TP1
+            # Identify which TP was triggered using trigger price
+            trigger_price = safe_float(data.get("triggerPrice", 0))
+            tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
+            
+            if tp_level == "TP1":
+                # TP1 triggered, set SL2
                 await set_sl2_after_tp1(symbol, data)
+            elif tp_level == "TP2":
+                # TP2 triggered, set SL3
+                await set_sl3_after_tp2(symbol, data)
+            # TP3 doesn't need SL update (position should be closed or near closing)
 
     elif ws_type == "sl_tp_created":
         # SL/TP created (Untriggered) - for information only
