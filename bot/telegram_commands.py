@@ -19,6 +19,30 @@ from cache import refresh_transaction_log
 from capital_tracker import get_capital_report
 from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
 
+
+def safe_float(value, default=0.0):
+    """Safely convert value to float, handling empty strings and None."""
+    if value is None or value == "" or value == "-":
+        return default
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return default
+
+
+def format_timestamp(timestamp_str):
+    """Format timestamp (milliseconds) to readable date/time."""
+    if not timestamp_str or timestamp_str == "" or timestamp_str == "-":
+        return "-"
+    try:
+        timestamp_ms = int(timestamp_str)
+        timestamp_s = timestamp_ms / 1000.0
+        dt_utc = datetime.fromtimestamp(timestamp_s, tz=ZoneInfo("UTC"))
+        dt_iran = dt_utc.astimezone(ZoneInfo("Asia/Tehran"))
+        return dt_iran.strftime("%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError, OSError):
+        return timestamp_str
+
 # Global flag to cancel transaction sending
 cancel_transaction_sending = False
 
@@ -53,13 +77,33 @@ def register_command_handlers():
                 msg += "No open positions.\n"
             else:
                 for p in positions:
+                    size = safe_float(p.get("size", 0))
+                    if size == 0:
+                        continue  # Skip empty positions
+                    
+                    symbol = p.get("symbol", "-")
+                    side = p.get("side", "-")
+                    avg_price = safe_float(p.get("avgPrice", 0))
+                    unrealised_pnl = safe_float(p.get("unrealisedPnl", 0))
+                    liq_price = p.get("liqPrice", "")
+                    created_time = p.get("createdTime", "")
+                    
+                    # Format timestamp
+                    created_time_str = format_timestamp(created_time)
+                    
+                    # Format liq price
+                    liq_price_str = safe_float(liq_price) if liq_price else "-"
+                    if isinstance(liq_price_str, float):
+                        liq_price_str = f"{liq_price_str:,.4f}"
+                    
                     msg += (
-                        f"Symbol: {p.get('symbol','-')}\n"
-                        f"Side: {p.get('side','-')}\n"
-                        f"Size: {p.get('size',0)}\n"
-                        f"Entry: {p.get('entry_price',0)}\n"
-                        f"PnL: {p.get('unrealized_pnl',0)}\n"
-                        f"Liq: {p.get('liq_price','-')}\n"
+                        f"Symbol: {symbol}\n"
+                        f"Side: {side}\n"
+                        f"Size: {size:,.4f}\n"
+                        f"Entry: {avg_price:,.4f}\n" if avg_price > 0 else "Entry: -\n"
+                        f"PnL: {unrealised_pnl:,.2f}\n" if unrealised_pnl != 0 else "PnL: 0\n"
+                        f"Liq: {liq_price_str}\n"
+                        f"Time: {created_time_str}\n"
                         "----------------------\n"
                     )
 
@@ -81,8 +125,12 @@ def register_command_handlers():
                 msg += "No closed PnL.\n"
             else:
                 for p in pnl[:10]:
-                    emoji = "🟢" if p.get("closed_pnl", 0) > 0 else "🔴"
-                    msg += f"{emoji} {p.get('symbol','-')} | {p.get('closed_pnl',0)}\n"
+                    closed_pnl = safe_float(p.get("closedPnl", 0))
+                    symbol = p.get("symbol", "-")
+                    if closed_pnl == 0:
+                        continue  # Skip zero PnL entries
+                    emoji = "🟢" if closed_pnl > 0 else "🔴"
+                    msg += f"{emoji} {symbol} | {closed_pnl:,.2f}\n"
 
             await event.respond(msg)
 

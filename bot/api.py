@@ -216,3 +216,99 @@ def set_trading_stop(
     payload = {k: v for k, v in payload.items() if v is not None}
 
     return bybitClient.set_trading_stop(**payload)
+
+
+# ---------------- AMEND ORDER (UPDATE TP/SL) ---------------- #
+def amend_order(
+    symbol: str,
+    orderId: str | None = None,
+    orderLinkId: str | None = None,
+    qty: float | None = None,
+    price: float | None = None,
+    triggerPrice: float | None = None,
+    takeProfit: float | None = None,
+    stopLoss: float | None = None,
+    tpTriggerBy: str | None = None,
+    slTriggerBy: str | None = None,
+    triggerBy: str | None = None,
+    tpslMode: str | None = None,
+    tpLimitPrice: float | None = None,
+    slLimitPrice: float | None = None,
+    orderIv: float | None = None,
+):
+    """
+    Amend an existing order (including TP/SL conditional orders).
+    Use this to update existing TP/SL orders instead of set_trading_stop.
+
+    :param symbol: Trading symbol (e.g., BTCUSDT)
+    :param orderId: Order ID (either orderId or orderLinkId required)
+    :param orderLinkId: Order Link ID (either orderId or orderLinkId required)
+    :param qty: Order quantity after modification
+    :param price: Order price after modification
+    :param triggerPrice: Trigger price after modification
+    :param takeProfit: Take profit price after modification (pass "0" to cancel)
+    :param stopLoss: Stop loss price after modification (pass "0" to cancel)
+    :param tpTriggerBy: Price type to trigger take profit
+    :param slTriggerBy: Price type to trigger stop loss
+    :param tpslMode: TP/SL mode (Full or Partial)
+    :param tpLimitPrice: Limit order price when TP is triggered
+    :param slLimitPrice: Limit order price when SL is triggered
+    """
+    if not orderId and not orderLinkId:
+        raise ValueError("Either orderId or orderLinkId must be provided")
+
+    payload = {
+        "category": "linear",
+        "symbol": symbol,
+        "orderId": orderId,
+        "orderLinkId": orderLinkId,
+        "qty": str(qty) if qty is not None else None,
+        "price": str(price) if price is not None else None,
+        "triggerPrice": str(triggerPrice) if triggerPrice is not None else None,
+        "takeProfit": str(takeProfit) if takeProfit is not None else None,
+        "stopLoss": str(stopLoss) if stopLoss is not None else None,
+        "tpTriggerBy": tpTriggerBy,
+        "slTriggerBy": slTriggerBy,
+        "triggerBy": triggerBy,
+        "tpslMode": tpslMode,
+        "tpLimitPrice": str(tpLimitPrice) if tpLimitPrice is not None else None,
+        "slLimitPrice": str(slLimitPrice) if slLimitPrice is not None else None,
+        "orderIv": str(orderIv) if orderIv is not None else None,
+    }
+
+    payload = {k: v for k, v in payload.items() if v is not None}
+
+    return bybitClient.amend_order(**payload)
+
+
+def get_sl_order_id(symbol: str, positionIdx: int = 0):
+    """
+    Get the order ID of the existing SL order for a position.
+    Returns orderId if found, None otherwise.
+    """
+    try:
+        res = bybitClient.get_open_orders(
+            category="linear",
+            symbol=symbol,
+            openOnly=0,
+            limit=50,
+        )
+        orders = res.get("result", {}).get("list", [])
+
+        for order in orders:
+            stop_order_type = order.get("stopOrderType", "")
+            order_status = order.get("orderStatus", "")
+            order_position_idx = order.get("positionIdx", 0)
+
+            # Find untriggered SL order for this position
+            if (
+                stop_order_type in ["StopLoss", "PartialStopLoss"]
+                and order_status == "Untriggered"
+                and order_position_idx == positionIdx
+            ):
+                return order.get("orderId")
+
+        return None
+    except Exception as e:
+        print(f"[WARN] Failed to get SL order ID for {symbol}: {e}")
+        return None

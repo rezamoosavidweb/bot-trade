@@ -12,7 +12,7 @@ from config import (
     FIXED_MARGIN_USDT,
 )
 from clients import telClient
-from api import get_positions, set_trading_stop
+from api import get_positions, set_trading_stop, amend_order, get_sl_order_id
 from capital_tracker import track_position_closed, track_rejected_order
 from liquidity_analyzer import update_order_fill, get_24h_ticker
 
@@ -512,7 +512,7 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
     """
     Set SL2 for remaining position after TP1 is triggered.
     Only sets SL2 if 30 minutes have passed since entry time.
-    
+
     Logic:
     - If current price > TP1 + 0.25%: SL2 = TP1 + 0.11%
     - Otherwise: SL2 = TP1
@@ -596,17 +596,48 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             else:
                 sl2_price = tp1_price  # TP1
 
-        set_trading_stop(
-            symbol=symbol,
-            positionIdx=0,
-            tpslMode="Partial",
-            sl=str(sl2_price),
-            slSize=str(size),
-        )
+        # Try to get existing SL order ID and amend it
+        sl_order_id = get_sl_order_id(symbol, positionIdx=0)
 
-        print(
-            f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
-        )
+        if sl_order_id:
+            # Update existing SL order using amend
+            try:
+                amend_order(
+                    symbol=symbol,
+                    orderId=sl_order_id,
+                    stopLoss=str(sl2_price),
+                    slTriggerBy="LastPrice",
+                )
+                print(
+                    f"[INFO] SL2 updated via amend for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
+                )
+            except Exception as e:
+                print(
+                    f"[WARN] Failed to amend SL order for {symbol}, trying set_trading_stop: {e}"
+                )
+                # Fallback to set_trading_stop if amend fails
+                set_trading_stop(
+                    symbol=symbol,
+                    positionIdx=0,
+                    tpslMode="Partial",
+                    sl=str(sl2_price),
+                    slSize=str(size),
+                )
+                print(
+                    f"[INFO] SL2 set via set_trading_stop for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
+                )
+        else:
+            # No existing SL order, use set_trading_stop to create new one
+            set_trading_stop(
+                symbol=symbol,
+                positionIdx=0,
+                tpslMode="Partial",
+                sl=str(sl2_price),
+                slSize=str(size),
+            )
+            print(
+                f"[INFO] SL2 set for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
+            )
 
         # Notify Telegram
         await telClient.send_message(
@@ -626,6 +657,7 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
     except Exception as e:
         print(f"[ERROR] Failed to set SL2 for {symbol}: {e}")
         import traceback
+
         traceback.print_exc()
         await telClient.send_message(
             TARGET_CHANNEL,
@@ -697,17 +729,48 @@ async def set_sl3_after_tp2(symbol: str, tp_data: dict):
         else:  # Sell
             sl3_price = tp2_price * (1 - 0.0011)
 
-        set_trading_stop(
-            symbol=symbol,
-            positionIdx=0,
-            tpslMode="Partial",
-            sl=str(sl3_price),
-            slSize=str(size),
-        )
+        # Try to get existing SL order ID and amend it
+        sl_order_id = get_sl_order_id(symbol, positionIdx=0)
 
-        print(
-            f"[INFO] SL3 set for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
-        )
+        if sl_order_id:
+            # Update existing SL order using amend
+            try:
+                amend_order(
+                    symbol=symbol,
+                    orderId=sl_order_id,
+                    stopLoss=str(sl3_price),
+                    slTriggerBy="LastPrice",
+                )
+                print(
+                    f"[INFO] SL3 updated via amend for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
+                )
+            except Exception as e:
+                print(
+                    f"[WARN] Failed to amend SL order for {symbol}, trying set_trading_stop: {e}"
+                )
+                # Fallback to set_trading_stop if amend fails
+                set_trading_stop(
+                    symbol=symbol,
+                    positionIdx=0,
+                    tpslMode="Partial",
+                    sl=str(sl3_price),
+                    slSize=str(size),
+                )
+                print(
+                    f"[INFO] SL3 set via set_trading_stop for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
+                )
+        else:
+            # No existing SL order, use set_trading_stop to create new one
+            set_trading_stop(
+                symbol=symbol,
+                positionIdx=0,
+                tpslMode="Partial",
+                sl=str(sl3_price),
+                slSize=str(size),
+            )
+            print(
+                f"[INFO] SL3 set for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
+            )
 
         # Notify Telegram
         await telClient.send_message(
@@ -804,7 +867,7 @@ async def handle_ws_message(item: dict):
             # Identify which TP was triggered using trigger price
             trigger_price = safe_float(data.get("triggerPrice", 0))
             tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
-            
+
             if tp_level == "TP1":
                 # TP1 triggered, set SL2
                 await set_sl2_after_tp1(symbol, data)
