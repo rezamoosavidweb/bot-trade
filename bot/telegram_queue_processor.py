@@ -141,8 +141,8 @@ async def handle_telegram_signal(item):
     symbol_info = await get_symbol_info(symbol)
     qty_step = symbol_info.get("qty_step", 1)
 
-    # Calculate TP1 (60%) and TP2 (40%)
-    tp1_qty = int(qty * 0.60)
+    # Calculate TP1 (40%) and TP2 (60%)
+    tp1_qty = int(qty * 0.40)
     tp2_qty = qty - tp1_qty  # Remaining 40%
 
     # Normalize qty values with step size
@@ -180,7 +180,7 @@ async def handle_telegram_signal(item):
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
         f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
         f"Leverage: {leverage}\n"
-        f"TP1 Qty: {tp1_qty} (60%)\nTP2 Qty: {tp2_qty} (40%)",
+        f"TP1 Qty: {tp1_qty} (40%)\nTP2 Qty: {tp2_qty} (60%)",
     )
 
     log_print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")

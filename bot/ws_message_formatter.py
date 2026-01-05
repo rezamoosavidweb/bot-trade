@@ -595,10 +595,17 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
 async def set_sl_after_tp1(symbol: str, tp_data: dict):
     """
     Set SL for remaining position after TP1 is triggered.
+    
     SL calculation:
-    - For Buy: entry * (1 + 0.0015)
-    - For Sell: entry * (1 - 0.0015)
-
+    - For Buy (Long): entry * (1 - 0.0015) - sets SL 0.15% below entry
+    - For Sell (Short): entry * (1 + 0.0015) - sets SL 0.15% above entry
+    
+    Validation:
+    - For signals with small entry-to-TP1 distance, validates that SL is:
+      * Below TP1 and below entry for Buy orders
+      * Above TP1 and above entry for Sell orders
+    - If validation fails, adjusts SL to be 0.1% below/above TP1 accordingly
+    
     Only sets SL if 30 minutes have passed since entry time.
     If not, schedules a job to check after 30 minutes.
     """
@@ -667,15 +674,65 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             f"[TP1_TRACK][{current_time}][{symbol}] TP info: entry={entry_price}, side={tp_info.get('side', 'N/A')}"
         )
 
-        # Calculate new SL price
+        # Get TP1 price for validation
+        tp1_price = float(tp_info.get("tp1", 0))
+
+        # Calculate new SL price based on entry price
+        # Note: This is a break-even or trailing stop strategy after TP1 is hit
         if side == "Buy":
-            new_sl_price = entry_price * (1 + 0.0015)  # entry * (1 + 0.0015)
+            # For Long positions: SL should be below entry price
+            # Using entry * (1 - 0.0015) to set SL 0.15% below entry
+            new_sl_price = entry_price * (1 - 0.0015)
         else:  # Sell
-            new_sl_price = entry_price * (1 - 0.0015)  # entry * (1 - 0.0015)
+            # For Short positions: SL should be above entry price
+            # Using entry * (1 + 0.0015) to set SL 0.15% above entry
+            new_sl_price = entry_price * (1 + 0.0015)
+
+        # Validate and adjust SL for signals with small entry-to-TP1 distance
+        # Problem: When entry and TP1 are very close (e.g., 0.00013 difference),
+        # the calculated SL might be above TP1 (for Buy) or below TP1 (for Sell),
+        # which is invalid and could cause immediate stop loss trigger
+        if tp1_price > 0:
+            if side == "Buy":
+                # For Buy: Ensure SL is below TP1 and below entry
+                if new_sl_price >= tp1_price:
+                    # If calculated SL is above or equal to TP1, adjust to be slightly below TP1
+                    # This prevents SL from being triggered immediately after TP1
+                    new_sl_price = tp1_price * (1 - 0.001)  # 0.1% below TP1
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above TP1 "
+                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% below TP1)"
+                    )
+                # Also ensure SL is below entry price (safety check)
+                if new_sl_price >= entry_price:
+                    # If somehow SL is above entry, set it slightly below entry
+                    new_sl_price = entry_price * (1 - 0.001)  # 0.1% below entry
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above entry "
+                        f"({entry_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% below entry)"
+                    )
+            else:  # Sell
+                # For Sell: Ensure SL is above TP1 and above entry
+                if new_sl_price <= tp1_price:
+                    # If calculated SL is below or equal to TP1, adjust to be slightly above TP1
+                    # This prevents SL from being triggered immediately after TP1
+                    new_sl_price = tp1_price * (1 + 0.001)  # 0.1% above TP1
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below TP1 "
+                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% above TP1)"
+                    )
+                # Also ensure SL is above entry price (safety check)
+                if new_sl_price <= entry_price:
+                    # If somehow SL is below entry, set it slightly above entry
+                    new_sl_price = entry_price * (1 + 0.001)  # 0.1% above entry
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below entry "
+                        f"({entry_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% above entry)"
+                    )
 
         log_print(
             f"[TP1_TRACK][{current_time}][{symbol}] Calculated new SL: {new_sl_price:.6f} "
-            f"(entry={entry_price:.6f}, side={side})"
+            f"(entry={entry_price:.6f}, tp1={tp1_price:.6f}, side={side})"
         )
 
         # Check if 30 minutes have passed
