@@ -194,7 +194,7 @@ async def identify_tp_sl_level(
         else:
             return "SL" if "Partial" not in stop_order_type else "Partial SL"
 
-    tp_info = position_tp_prices.get(symbol)
+    tp_info = await get_position_tp_prices(symbol)
     if not tp_info:
         # If TP info is not available, return general type
         if "TakeProfit" in stop_order_type:
@@ -593,12 +593,15 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             )
 
             # Store pending update
-            pending_sl_updates[symbol] = {
-                "entry_time": entry_time,
-                "new_sl_price": new_sl_price,
-                "entry_price": entry_price,
-                "side": side,
-            }
+            await set_pending_sl_update(
+                symbol,
+                {
+                    "entry_time": entry_time,
+                    "new_sl_price": new_sl_price,
+                    "entry_price": entry_price,
+                    "side": side,
+                },
+            )
 
             # Schedule async task to check after remaining time
             import asyncio
@@ -676,7 +679,8 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         log_print(f"[INFO] Delay completed, checking SL update for {symbol}")
 
         # Check if update is still pending
-        if symbol not in pending_sl_updates:
+        pending_update = await get_pending_sl_update(symbol)
+        if not pending_update:
             log_print(
                 f"[INFO] SL update for {symbol} was cancelled or already processed"
             )
@@ -690,7 +694,7 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         positions = get_positions(symbol=symbol)
         if not positions:
             log_print(f"[INFO] Position for {symbol} is closed, skipping SL update")
-            pending_sl_updates.pop(symbol, None)
+            await remove_pending_sl_update(symbol)
             return
 
         position = positions[0]
@@ -699,13 +703,13 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
             log_print(
                 f"[INFO] Position for {symbol} is closed (size=0), skipping SL update"
             )
-            pending_sl_updates.pop(symbol, None)
+            await remove_pending_sl_update(symbol)
             return
 
         log_print(f"[INFO] Position for {symbol} is still open with size {size}")
 
         # Get update info
-        update_info = pending_sl_updates.get(symbol)
+        update_info = await get_pending_sl_update(symbol)
         if not update_info:
             log_print(f"[WARN] Update info not found for {symbol}")
             return
@@ -719,7 +723,7 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         )
 
         # Check if 30 minutes have passed
-        entry_time = position_entry_times.get(symbol)
+        entry_time = await get_position_entry_time(symbol)
         if entry_time:
             time_elapsed = datetime.now() - entry_time
             time_elapsed_minutes = time_elapsed.total_seconds() / 60.0
@@ -1030,9 +1034,9 @@ async def handle_ws_message(item: dict):
 
                             # If position closed, remove from tracking
                             if order.get("closeOnTrigger") and order.get("reduceOnly"):
-                                open_positions.discard(symbol)
-                                position_entry_times.pop(symbol, None)
-                                position_tp_prices.pop(symbol, None)
+                                await remove_open_position(symbol)
+                                await remove_position_entry_time(symbol)
+                                await remove_position_tp_prices(symbol)
                                 await remove_pending_sl_update(symbol)
                                 track_position_closed(symbol)
                 except Exception as e:
@@ -1179,7 +1183,7 @@ async def handle_ws_message(item: dict):
                         await set_sl_after_tp1(symbol, data)
 
                 if data.get("closeOnTrigger") and data.get("reduceOnly"):
-                    open_positions.discard(symbol)
-                    position_entry_times.pop(symbol, None)
-                    position_tp_prices.pop(symbol, None)
+                    await remove_open_position(symbol)
+                    await remove_position_entry_time(symbol)
+                    await remove_position_tp_prices(symbol)
                     await remove_pending_sl_update(symbol)  # Remove pending update
