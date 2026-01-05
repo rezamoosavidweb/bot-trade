@@ -180,8 +180,8 @@ def register_command_handlers():
                         msg += "─────────────────────\n"
 
             pending = get_pending_orders(settleCoin="USDT")
-            msg += "\=============================\n"
-            msg += "\n⏳ **Pending Orders:**\n"
+            msg += "\n\=============================\n"
+            msg += "⏳ **Pending Orders:**\n"
             if not pending:
                 msg += "No pending orders.\n"
             else:
