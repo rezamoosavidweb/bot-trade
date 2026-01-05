@@ -300,6 +300,13 @@
       "opened_at": "2026-01-05T22:24:09.244895+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "XPLUSDT",
+      "capital_used": 299.66,
+      "opened_at": "2026-01-05T22:50:08.885323+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
