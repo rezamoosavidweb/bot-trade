@@ -279,6 +279,27 @@
       "opened_at": "2026-01-05T18:20:10.227760+03:30",
       "closed_at": "2026-01-05T18:50:45.438066+03:30",
       "duration_seconds": 1835.210306
+    },
+    {
+      "symbol": "UNIUSDT",
+      "capital_used": 299.88,
+      "opened_at": "2026-01-05T20:04:06.246369+03:30",
+      "closed_at": "2026-01-05T20:52:56.570028+03:30",
+      "duration_seconds": 2930.323659
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-05T21:19:06.861113+03:30",
+      "closed_at": "2026-01-05T21:28:08.561150+03:30",
+      "duration_seconds": 541.700037
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-05T22:24:09.244895+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
