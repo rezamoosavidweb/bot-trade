@@ -277,8 +277,8 @@
       "symbol": "ENSUSDT",
       "capital_used": 299.8,
       "opened_at": "2026-01-05T18:20:10.227760+03:30",
-      "closed_at": null,
-      "duration_seconds": null
+      "closed_at": "2026-01-05T18:50:45.438066+03:30",
+      "duration_seconds": 1835.210306
     }
   ],
   "rejected_orders": [],
