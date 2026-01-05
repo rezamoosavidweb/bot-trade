@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from telethon import events
 from telethon.errors import FloodWaitError
 from clients import telClient
-from logger import log_print
+from logger import log_print, LOGS_DATA_FILE
 
 
 from api import (
@@ -67,6 +67,7 @@ def register_command_handlers():
             "📄 Transactions: /transactions\n"
             "🛑 Cancel Waiting: /cancel_waiting\n"
             "📊 Liquidity Report: /liquidity_report\n"
+            "📋 Logs: /logs\n"
         )
         await event.respond(message)
 
@@ -74,59 +75,161 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/positions$"))
     async def positions_handler(event):
         try:
+            # Helper function to format prices with appropriate decimal places
+            def format_price(price_str, default="-"):
+                if (
+                    not price_str
+                    or price_str == ""
+                    or price_str == "0"
+                    or price_str == "0.00"
+                ):
+                    return default
+                try:
+                    price = float(price_str)
+                    if price == 0:
+                        return default
+                    # Determine decimal places based on price magnitude
+                    if price >= 1000:
+                        return f"{price:,.2f}"
+                    elif price >= 1:
+                        return f"{price:,.4f}"
+                    else:
+                        return f"{price:,.6f}"
+                except (ValueError, TypeError):
+                    return default
+
             msg = "📊 **Open Positions:**\n\n"
 
             positions = get_positions(settleCoin="USDT")
             if not positions:
                 msg += "No open positions.\n"
             else:
-                for p in positions:
-                    size = safe_float(p.get("size", 0))
-                    if size == 0:
-                        continue  # Skip empty positions
+                # Count valid positions first
+                valid_positions = [
+                    p for p in positions if safe_float(p.get("size", 0)) > 0
+                ]
+                position_count = 0
 
+                for p in valid_positions:
+                    position_count += 1
+
+                    size = safe_float(p.get("size", 0))
                     symbol = p.get("symbol", "-")
                     side = p.get("side", "-")
                     avg_price = safe_float(p.get("avgPrice", 0))
+                    mark_price = safe_float(p.get("markPrice", 0))
                     unrealised_pnl = safe_float(p.get("unrealisedPnl", 0))
+                    leverage = p.get("leverage", "-")
                     liq_price = p.get("liqPrice", "")
+                    take_profit = p.get("takeProfit", "")
+                    stop_loss = p.get("stopLoss", "")
                     created_time = p.get("createdTime", "")
+                    position_value = safe_float(p.get("positionValue", 0))
 
                     # Format timestamp
                     created_time_str = format_timestamp(created_time)
 
-                    # Format liq price
-                    liq_price_str = safe_float(liq_price) if liq_price else "-"
-                    if isinstance(liq_price_str, float):
-                        liq_price_str = f"{liq_price_str:,.4f}"
+                    # Format size
+                    size_str = f"{size:,.4f}" if size > 0 else "-"
 
-                    msg += (
-                        f"Symbol: {symbol}\n"
-                        f"Side: {side}\n"
-                        f"Size: {size:,.4f}\n"
-                        f"Entry: {avg_price:,.4f}\n"
-                        if avg_price > 0
-                        else (
-                            "Entry: -\n" f"PnL: {unrealised_pnl:,.2f}\n"
-                            if unrealised_pnl != 0
-                            else "PnL: 0\n"
-                            f"Liq: {liq_price_str}\n"
-                            f"Time: {created_time_str}\n"
-                            "----------------------\n"
-                        )
+                    # Format entry price
+                    entry_str = format_price(str(avg_price)) if avg_price > 0 else "-"
+
+                    # Format mark price
+                    mark_str = format_price(str(mark_price)) if mark_price > 0 else "-"
+
+                    # Format TP
+                    tp_str = format_price(take_profit) if take_profit else "-"
+
+                    # Format SL
+                    sl_str = format_price(stop_loss) if stop_loss else "-"
+
+                    # Format Liq price
+                    liq_str = format_price(liq_price) if liq_price else "-"
+
+                    # Format PnL
+                    pnl_emoji = (
+                        "🟢"
+                        if unrealised_pnl > 0
+                        else "🔴" if unrealised_pnl < 0 else "⚪"
                     )
+                    pnl_str = (
+                        f"{unrealised_pnl:,.2f}" if unrealised_pnl != 0 else "0.00"
+                    )
+
+                    # Format position value
+                    value_str = f"{position_value:,.2f}" if position_value > 0 else "-"
+
+                    # Build position message
+                    msg += (
+                        f"**{symbol}** ({side})\n"
+                        f"Size: {size_str}\n"
+                        f"Entry: {entry_str}\n"
+                        f"Mark: {mark_str}\n"
+                        f"TP: {tp_str}\n"
+                        f"SL: {sl_str}\n"
+                        f"Liq: {liq_str}\n"
+                        f"Leverage: {leverage}x\n"
+                        f"Value: {value_str} USDT\n"
+                        f"{pnl_emoji} PnL: {pnl_str} USDT\n"
+                        f"Time: {created_time_str}\n"
+                    )
+
+                    # Add separator between positions (except for the last one)
+                    if position_count < len(valid_positions):
+                        msg += "─────────────────────\n\n"
 
             pending = get_pending_orders(settleCoin="USDT")
             msg += "\n⏳ **Pending Orders:**\n\n"
             if not pending:
                 msg += "No pending orders.\n"
             else:
+                order_count = 0
                 for o in pending:
-                    msg += (
-                        f"{o.get('symbol','-')} | {o.get('side','-')} | {o.get('qty',0)}\n"
-                        f"Price: {o.get('price','-')} | Trigger: {o.get('trigger_price','-')}\n"
-                        "----------------------\n"
+                    order_count += 1
+                    symbol = o.get("symbol", "-")
+                    side = o.get("side", "-")
+                    qty = safe_float(o.get("qty", 0))
+                    price = o.get("price", "-")
+                    trigger_price = o.get("trigger_price", "-")
+                    order_type = o.get("orderType", "-")
+                    stop_order_type = o.get("stopOrderType", "-")
+
+                    # Format qty
+                    qty_str = f"{qty:,.4f}" if qty > 0 else "-"
+
+                    # Format price
+                    price_str = (
+                        format_price(price)
+                        if price and price != "-" and price != "0"
+                        else "-"
                     )
+
+                    # Format trigger price
+                    trigger_str = (
+                        format_price(trigger_price)
+                        if trigger_price and trigger_price != "-"
+                        else "-"
+                    )
+
+                    # Determine order type display
+                    order_type_display = (
+                        stop_order_type
+                        if stop_order_type and stop_order_type != "-"
+                        else order_type
+                    )
+
+                    msg += (
+                        f"**{symbol}** ({side})\n"
+                        f"Type: {order_type_display}\n"
+                        f"Qty: {qty_str}\n"
+                        f"Price: {price_str}\n"
+                        f"Trigger: {trigger_str}\n"
+                    )
+
+                    # Add separator between orders (except for the last one)
+                    if order_count < len(pending):
+                        msg += "─────────────────────\n\n"
 
             pnl = get_closed_pnl()
             msg += "\n✅ **Closed PnL:**\n\n"
@@ -251,29 +354,173 @@ def register_command_handlers():
         except Exception as e:
             await event.respond(f"❌ Error closing positions: {e}")
 
-    @telClient.on(events.NewMessage(pattern=r"^/transactions$"))
+    @telClient.on(events.NewMessage(pattern=r"^/transactions(?: (.+))?$"))
     async def transactions_handler(event):
         global cancel_transaction_sending
         cancel_transaction_sending = False  # Reset cancel flag
 
         try:
+            # Parse command arguments: /transactions [start_date] [end_date] [limit]
+            # Format: /transactions 2025-01-05 2025-01-06 100
+            # Or: /transactions 100 (just limit)
+            args = event.pattern_match.group(1)
+            start_date = None
+            end_date = None
+            limit = 50  # Default limit
+
+            if args:
+                parts = args.strip().split()
+                if len(parts) == 1:
+                    # Only limit provided
+                    try:
+                        limit = int(parts[0])
+                    except ValueError:
+                        await event.respond(
+                            "❌ Invalid format. Use:\n"
+                            "`/transactions` - Last 50 transactions\n"
+                            "`/transactions 100` - Last 100 transactions\n"
+                            "`/transactions 2025-01-05 2025-01-06` - Transactions in date range\n"
+                            "`/transactions 2025-01-05 2025-01-06 100` - Transactions in date range with limit"
+                        )
+                        return
+                elif len(parts) == 2:
+                    # Start and end date
+                    start_date = parts[0]
+                    end_date = parts[1]
+                elif len(parts) == 3:
+                    # Start date, end date, and limit
+                    start_date = parts[0]
+                    end_date = parts[1]
+                    try:
+                        limit = int(parts[2])
+                    except ValueError:
+                        await event.respond("❌ Invalid limit. Must be a number.")
+                        return
+                else:
+                    await event.respond(
+                        "❌ Invalid format. Use:\n"
+                        "`/transactions` - Last 50 transactions\n"
+                        "`/transactions 100` - Last 100 transactions\n"
+                        "`/transactions 2025-01-05 2025-01-06` - Transactions in date range\n"
+                        "`/transactions 2025-01-05 2025-01-06 100` - Transactions in date range with limit"
+                    )
+                    return
+
             # Send initial message
             await event.respond("📄 Fetching transactions...")
 
-            res = get_transaction_log(limit=50)
-            if isinstance(res, dict):
-                results = res.get("result", {}).get("list", [])
-            else:
-                results = []
-            if not results:
-                await event.respond("📌 No transactions found.")
+            # Prepare API parameters
+            start_time_ms = None
+            end_time_ms = None
+
+            # Parse date range if provided
+            if start_date and end_date:
+                try:
+                    # Parse dates (assuming format: YYYY-MM-DD)
+                    start_dt = datetime.strptime(start_date, "%Y-%m-%d").replace(
+                        hour=0, minute=0, second=0, tzinfo=ZoneInfo("Asia/Tehran")
+                    )
+                    end_dt = datetime.strptime(end_date, "%Y-%m-%d").replace(
+                        hour=23, minute=59, second=59, tzinfo=ZoneInfo("Asia/Tehran")
+                    )
+
+                    # Convert to UTC for API
+                    start_utc = start_dt.astimezone(ZoneInfo("UTC"))
+                    end_utc = end_dt.astimezone(ZoneInfo("UTC"))
+                    start_time_ms = int(start_utc.timestamp() * 1000)
+                    end_time_ms = int(end_utc.timestamp() * 1000)
+
+                    # Check API limit: endTime - startTime <= 7 days
+                    days_diff = (end_time_ms - start_time_ms) / (1000 * 60 * 60 * 24)
+                    if days_diff > 7:
+                        await event.respond(
+                            f"❌ Date range exceeds 7 days limit. Maximum allowed: 7 days.\n"
+                            f"Your range: {days_diff:.1f} days"
+                        )
+                        return
+                except ValueError as e:
+                    await event.respond(
+                        f"❌ Invalid date format. Use YYYY-MM-DD format.\nError: {e}"
+                    )
+                    return
+            elif start_date:
+                # Only start_date provided - API will return startTime to startTime+24 hours
+                try:
+                    start_dt = datetime.strptime(start_date, "%Y-%m-%d").replace(
+                        hour=0, minute=0, second=0, tzinfo=ZoneInfo("Asia/Tehran")
+                    )
+                    start_utc = start_dt.astimezone(ZoneInfo("UTC"))
+                    start_time_ms = int(start_utc.timestamp() * 1000)
+                except ValueError as e:
+                    await event.respond(
+                        f"❌ Invalid date format. Use YYYY-MM-DD format.\nError: {e}"
+                    )
+                    return
+            elif end_date:
+                # Only end_date provided - API will return endTime-24 hours to endTime
+                try:
+                    end_dt = datetime.strptime(end_date, "%Y-%m-%d").replace(
+                        hour=23, minute=59, second=59, tzinfo=ZoneInfo("Asia/Tehran")
+                    )
+                    end_utc = end_dt.astimezone(ZoneInfo("UTC"))
+                    end_time_ms = int(end_utc.timestamp() * 1000)
+                except ValueError as e:
+                    await event.respond(
+                        f"❌ Invalid date format. Use YYYY-MM-DD format.\nError: {e}"
+                    )
+                    return
+
+            # Ensure limit is within API range [1, 50]
+            api_limit = min(max(1, limit), 50)
+
+            # Fetch transactions with pagination if needed
+            all_results = []
+            cursor = None
+            max_pages = 10  # Limit pagination to prevent too many requests
+
+            for page in range(max_pages):
+                res = get_transaction_log(
+                    limit=api_limit,
+                    startTime=start_time_ms,
+                    endTime=end_time_ms,
+                    cursor=cursor,
+                )
+
+                if isinstance(res, dict):
+                    page_results = res.get("result", {}).get("list", [])
+                    all_results.extend(page_results)
+
+                    # Check if there are more pages
+                    next_cursor = res.get("result", {}).get("nextPageCursor")
+                    if not next_cursor or len(page_results) < api_limit:
+                        break
+                    cursor = next_cursor
+                else:
+                    break
+
+                # If we got fewer results than limit, we're done
+                if len(page_results) < api_limit:
+                    break
+
+            if not all_results:
+                await event.respond(
+                    "📌 No transactions found for the specified criteria."
+                )
                 return
 
-            total_count = len(results)
-            await event.respond(f"📊 Found {total_count} transactions. Sending...")
-
             # Sort by transaction time (newest first)
-            results.sort(key=lambda x: int(x.get("transactionTime", 0)), reverse=True)
+            all_results.sort(
+                key=lambda x: int(x.get("transactionTime", 0)), reverse=True
+            )
+
+            # Apply user's limit after fetching (in case they want fewer than what we fetched)
+            if limit and len(all_results) > limit:
+                results = all_results[:limit]
+            else:
+                results = all_results
+
+            total_count = len(results)
+            await event.respond(f"📊 Found {total_count} transaction(s). Sending...")
 
             # Send transactions one by one with proper error handling
             sent_count = 0
@@ -414,3 +661,183 @@ def register_command_handlers():
             await event.respond(report)
         except Exception as e:
             await event.respond(f"❌ Error generating liquidity report: {e}")
+
+    # ---------- /logs ----------
+    @telClient.on(events.NewMessage(pattern=r"^/logs(?: (.+))?$"))
+    async def logs_handler(event):
+        try:
+            import json
+            import os
+
+            # Parse command arguments: /logs [symbol] [start_date] [start_time] [end_date] [end_time]
+            # Format: /logs BTCUSDT 2025-01-05 08:00 2025-01-05 20:00
+            # Or: /logs BTCUSDT 2025-01-05 (all day)
+            args = event.pattern_match.group(1)
+
+            if not args:
+                await event.respond(
+                    "❌ Please provide symbol and date range.\n\n"
+                    "**Usage:**\n"
+                    "`/logs SYMBOL START_DATE [START_TIME] [END_DATE] [END_TIME]`\n\n"
+                    "**Examples:**\n"
+                    "`/logs BTCUSDT 2025-01-05` - All logs for BTCUSDT on 2025-01-05\n"
+                    "`/logs BTCUSDT 2025-01-05 08:00 20:00` - Logs from 08:00 to 20:00 on 2025-01-05\n"
+                    "`/logs BTCUSDT 2025-01-05 08:00 2025-01-06 20:00` - Logs from 2025-01-05 08:00 to 2025-01-06 20:00"
+                )
+                return
+
+            parts = args.strip().split()
+            if len(parts) < 2:
+                await event.respond(
+                    "❌ Invalid format. Please provide at least symbol and start date.\n\n"
+                    "**Usage:**\n"
+                    "`/logs SYMBOL START_DATE [START_TIME] [END_DATE] [END_TIME]`"
+                )
+                return
+
+            symbol = parts[0].upper()
+            start_date = parts[1]
+            start_time = parts[2] if len(parts) > 2 else "00:00"
+            end_date = parts[3] if len(parts) > 3 else start_date
+            end_time = parts[4] if len(parts) > 4 else "23:59"
+
+            # Parse dates and times
+            try:
+                start_dt = datetime.strptime(
+                    f"{start_date} {start_time}", "%Y-%m-%d %H:%M"
+                ).replace(tzinfo=ZoneInfo("Asia/Tehran"))
+                end_dt = datetime.strptime(
+                    f"{end_date} {end_time}", "%Y-%m-%d %H:%M"
+                ).replace(tzinfo=ZoneInfo("Asia/Tehran"))
+            except ValueError as e:
+                await event.respond(
+                    f"❌ Invalid date/time format. Use YYYY-MM-DD and HH:MM format.\nError: {e}"
+                )
+                return
+
+            if start_dt > end_dt:
+                await event.respond("❌ Start date/time must be before end date/time.")
+                return
+
+            # Read logs from file
+            if not os.path.exists(LOGS_DATA_FILE):
+                await event.respond("❌ Log file not found. No logs available yet.")
+                return
+
+            try:
+                with open(LOGS_DATA_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except (json.JSONDecodeError, IOError) as e:
+                await event.respond(f"❌ Error reading log file: {e}")
+                return
+
+            logs = data.get("logs", [])
+            if not logs:
+                await event.respond("📌 No logs found in file.")
+                return
+
+            # Filter logs by symbol and time range
+            filtered_logs = []
+            for log_entry in logs:
+                # Check if symbol is in message
+                message = log_entry.get("message", "").upper()
+                if symbol not in message:
+                    continue
+
+                # Check timestamp
+                timestamp_str = log_entry.get("timestamp", "")
+                if not timestamp_str:
+                    continue
+
+                try:
+                    log_dt = datetime.fromisoformat(timestamp_str)
+                    if log_dt.tzinfo is None:
+                        # Assume Asia/Tehran if no timezone
+                        log_dt = log_dt.replace(tzinfo=ZoneInfo("Asia/Tehran"))
+                    else:
+                        # Convert to Asia/Tehran
+                        log_dt = log_dt.astimezone(ZoneInfo("Asia/Tehran"))
+
+                    if start_dt <= log_dt <= end_dt:
+                        filtered_logs.append(log_entry)
+                except (ValueError, TypeError) as e:
+                    # Skip invalid timestamps
+                    continue
+
+            if not filtered_logs:
+                await event.respond(
+                    f"📌 No logs found for {symbol} between {start_date} {start_time} and {end_date} {end_time}."
+                )
+                return
+
+            # Sort by timestamp (oldest first)
+            filtered_logs.sort(key=lambda x: x.get("timestamp", ""))
+
+            total_count = len(filtered_logs)
+            await event.respond(
+                f"📋 Found {total_count} log entries for {symbol}.\n"
+                f"📅 Period: {start_date} {start_time} to {end_date} {end_time}\n"
+                f"Sending logs..."
+            )
+
+            # Send logs in batches (group by 10 to avoid too many messages)
+            batch_size = 10
+            sent_count = 0
+
+            for i in range(0, total_count, batch_size):
+                batch = filtered_logs[i : i + batch_size]
+                log_messages = []
+
+                for log_entry in batch:
+                    timestamp = log_entry.get("timestamp", "")
+                    level = log_entry.get("level", "INFO")
+                    message = log_entry.get("message", "")
+
+                    # Format timestamp for display
+                    try:
+                        log_dt = datetime.fromisoformat(timestamp)
+                        if log_dt.tzinfo is None:
+                            log_dt = log_dt.replace(tzinfo=ZoneInfo("Asia/Tehran"))
+                        else:
+                            log_dt = log_dt.astimezone(ZoneInfo("Asia/Tehran"))
+                        formatted_time = log_dt.strftime("%Y-%m-%d %H:%M:%S")
+                    except (ValueError, TypeError):
+                        formatted_time = timestamp
+
+                    # Level emoji
+                    level_emoji = {
+                        "ERROR": "🔴",
+                        "WARN": "⚠️",
+                        "INFO": "ℹ️",
+                        "DEBUG": "🔍",
+                    }.get(level, "ℹ️")
+
+                    log_messages.append(
+                        f"{level_emoji} [{formatted_time}] {level}\n{message}"
+                    )
+
+                log_text = "\n\n".join(log_messages)
+                log_text = f"📋 **Logs for {symbol}** ({i+1}-{min(i+batch_size, total_count)}/{total_count})\n\n```\n{log_text}\n```"
+
+                try:
+                    await event.respond(log_text)
+                    sent_count += len(batch)
+                    await asyncio.sleep(1)  # Small delay to avoid rate limits
+                except FloodWaitError as e:
+                    await asyncio.sleep(e.seconds + 2)
+                    await event.respond(log_text)
+                    sent_count += len(batch)
+                except Exception as e:
+                    log_print(f"[ERROR] Error sending log batch: {e}")
+                    continue
+
+            await event.respond(
+                f"✅ Completed! Sent {sent_count}/{total_count} log entries for {symbol}."
+            )
+
+        except Exception as e:
+            await event.respond(f"❌ Error retrieving logs: {e}")
+            log_print(f"[ERROR] Error in logs_handler: {e}")
+            import traceback
+
+            traceback.print_exc()

@@ -123,11 +123,50 @@ def get_closed_pnl(limit: int = 10):
     return []
 
 
-def get_transaction_log(limit: int = 50):
-    """Retrieve transaction log for linear category."""
-    return bybitClient.get_transaction_log(
-        accountType="UNIFIED", category="linear", limit=limit
-    )
+def get_transaction_log(
+    limit: int = 50,
+    startTime: int | None = None,
+    endTime: int | None = None,
+    currency: str | None = None,
+    baseCoin: str | None = None,
+    type: str | None = None,
+    cursor: str | None = None,
+):
+    """
+    Retrieve transaction log for linear category.
+    
+    :param limit: Limit for data size per page. [1, 50]. Default: 20
+    :param startTime: The start timestamp (ms)
+    :param endTime: The end timestamp (ms)
+        - startTime and endTime are not passed, return 24 hours by default
+        - Only startTime is passed, return range between startTime and startTime+24 hours
+        - Only endTime is passed, return range between endTime-24 hours and endTime
+        - If both are passed, the rule is endTime - startTime <= 7 days
+    :param currency: Currency, uppercase only
+    :param baseCoin: BaseCoin, uppercase only. e.g., BTC of BTCPERP
+    :param type: Types of transaction logs
+    :param cursor: Cursor. Use the nextPageCursor token from the response to retrieve the next page
+    """
+    params = {
+        "accountType": "UNIFIED",
+        "category": "linear",
+        "limit": limit,
+    }
+    
+    if startTime is not None:
+        params["startTime"] = startTime
+    if endTime is not None:
+        params["endTime"] = endTime
+    if currency is not None:
+        params["currency"] = currency
+    if baseCoin is not None:
+        params["baseCoin"] = baseCoin
+    if type is not None:
+        params["type"] = type
+    if cursor is not None:
+        params["cursor"] = cursor
+    
+    return bybitClient.get_transaction_log(**params)
 
 
 def cancel_all_orders(settleCoin="USDT"):
