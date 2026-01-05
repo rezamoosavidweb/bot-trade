@@ -1,0 +1,94 @@
+{
+  "logs": [
+    {
+      "timestamp": "2026-01-05T23:30:40.501287+03:30",
+      "level": "INFO",
+      "message": "================================\n",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:30:40.509261+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Redis connected",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:30:41.376086+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 639 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:30:41.577304+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:30:41.748604+03:30",
+      "level": "INFO",
+      "message": "[INFO] Telegram client started",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:34:34.281001+03:30",
+      "level": "INFO",
+      "message": "================================\n",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:34:34.287563+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Redis connected",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:34:35.144389+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 639 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:34:35.349699+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:34:35.779132+03:30",
+      "level": "INFO",
+      "message": "[INFO] Telegram client started",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:42:04.224685+03:30",
+      "level": "INFO",
+      "message": "================================\n",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:42:04.236830+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Redis connected",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:42:05.118140+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 639 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:42:05.321073+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:42:05.483226+03:30",
+      "level": "INFO",
+      "message": "[INFO] Telegram client started",
+      "context": ""
+    }
+  ]
+}
