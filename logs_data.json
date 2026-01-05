@@ -143,6 +143,114 @@
       "level": "INFO",
       "message": "[INFO] Non-signal message ignored / 2026-01-05 | 23:46:18",
       "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:50:43.115952+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-05 | 23:50:43",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.706592+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.707762+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 2 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.713289+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.715921+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.724000+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.725464+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 3 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.731735+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:54:14.734643+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.553772+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.555545+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 4 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.561065+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.562231+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.570296+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.571802+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 5 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.576601+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:55:48.588330+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:56:14.968930+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-05 | 23:56:14",
+      "context": ""
     }
   ]
 }
