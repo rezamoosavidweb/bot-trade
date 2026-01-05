@@ -21,6 +21,7 @@ from cache import remove_open_position
 from cache import refresh_transaction_log
 from capital_tracker import get_capital_report
 from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
+from ws_message_formatter import debug_redis_data
 
 
 def safe_float(value, default=0.0):
@@ -68,6 +69,7 @@ def register_command_handlers():
             "🛑 Cancel Waiting: /cancel_waiting\n"
             "📊 Liquidity Report: /liquidity_report\n"
             "📋 Logs: /logs\n"
+            "🔍 Redis Data: /debug_redis\n"
         )
         await event.respond(message)
 
@@ -839,6 +841,66 @@ def register_command_handlers():
         except Exception as e:
             await event.respond(f"❌ Error retrieving logs: {e}")
             log_print(f"[ERROR] Error in logs_handler: {e}")
+            import traceback
+
+            traceback.print_exc()
+
+    # ---------- /debug_redis ----------
+    @telClient.on(events.NewMessage(pattern=r"^/debug_redis$"))
+    async def debug_redis_handler(event):
+        """
+        نمایش تمام داده‌های مربوط به پوزیشن‌های باز و schedule های SL از Redis.
+        """
+        try:
+            await event.respond("⏳ Fetching Redis data...")
+
+            result = await debug_redis_data()
+
+            # Telegram has a message length limit (4096 characters)
+            # Split into chunks if needed
+            max_length = 4000  # Leave some margin
+
+            if len(result) <= max_length:
+                await event.respond(f"```\n{result}\n```")
+            else:
+                # Split into chunks
+                lines = result.split("\n")
+                current_chunk = []
+                current_length = 0
+                chunk_num = 1
+                total_chunks = (len(result) // max_length) + 1
+
+                for line in lines:
+                    line_length = len(line) + 1  # +1 for newline
+
+                    if current_length + line_length > max_length:
+                        # Send current chunk
+                        chunk_text = "\n".join(current_chunk)
+                        await event.respond(
+                            f"```\n{chunk_text}\n```\n"
+                            f"📄 Part {chunk_num}/{total_chunks}"
+                        )
+                        chunk_num += 1
+                        current_chunk = [line]
+                        current_length = line_length
+                    else:
+                        current_chunk.append(line)
+                        current_length += line_length
+
+                # Send remaining chunk
+                if current_chunk:
+                    chunk_text = "\n".join(current_chunk)
+                    await event.respond(
+                        f"```\n{chunk_text}\n```\n"
+                        f"📄 Part {chunk_num}/{total_chunks}"
+                    )
+
+            log_print("[INFO] Redis debug data sent successfully")
+
+        except Exception as e:
+            error_msg = f"❌ Error fetching Redis data: {e}"
+            await event.respond(error_msg)
+            log_print(f"[ERROR] Error in debug_redis_handler: {e}")
             import traceback
 
             traceback.print_exc()

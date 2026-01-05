@@ -27,6 +27,7 @@ from cache import (
     get_pending_sl_update,
     remove_pending_sl_update,
     get_pending_sl_updates,
+    get_position_entry_times,
 )
 
 
@@ -187,22 +188,51 @@ async def identify_tp_sl_level(
     :param trigger_price: Trigger price
     :return: TP/SL identifier (e.g., "TP1", "SL2", "SL", etc.)
     """
+    current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+
+    log_print(
+        f"[TP1_TRACK][{current_time}][{symbol}] identify_tp_sl_level called: "
+        f"stop_order_type={stop_order_type}, trigger_price={trigger_price}"
+    )
+
     if not trigger_price or trigger_price == 0:
         # If trigger price is not available, return general type
-        if "TakeProfit" in stop_order_type:
-            return "TP" if "Partial" not in stop_order_type else "Partial TP"
-        else:
-            return "SL" if "Partial" not in stop_order_type else "Partial SL"
+        result = (
+            "TP"
+            if "Partial" not in stop_order_type
+            else (
+                "Partial TP"
+                if "TakeProfit" in stop_order_type
+                else "SL" if "Partial" not in stop_order_type else "Partial SL"
+            )
+        )
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Trigger price is 0 or invalid, returning: {result}"
+        )
+        return result
 
     tp_info = await get_position_tp_prices(symbol)
     if not tp_info:
         # If TP info is not available, return general type
-        if "TakeProfit" in stop_order_type:
-            return "TP" if "Partial" not in stop_order_type else "Partial TP"
-        else:
-            return "SL" if "Partial" not in stop_order_type else "Partial SL"
+        result = (
+            "TP"
+            if "Partial" not in stop_order_type
+            else (
+                "Partial TP"
+                if "TakeProfit" in stop_order_type
+                else "SL" if "Partial" not in stop_order_type else "Partial SL"
+            )
+        )
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ TP info not found in cache, returning: {result}"
+        )
+        return result
 
     tolerance = 0.001  # 0.1% tolerance (increased to handle small price differences)
+
+    log_print(
+        f"[TP1_TRACK][{current_time}][{symbol}] TP info found: {tp_info}, tolerance={tolerance}"
+    )
 
     # For TakeProfit
     if "TakeProfit" in stop_order_type:
@@ -210,14 +240,51 @@ async def identify_tp_sl_level(
         tp2_price = tp_info.get("tp2", 0)
         tp3_price = tp_info.get("tp3")
 
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Comparing trigger_price={trigger_price} with "
+            f"tp1={tp1_price}, tp2={tp2_price}, tp3={tp3_price}"
+        )
+
         if tp1_price and abs(trigger_price - tp1_price) / tp1_price < tolerance:
+            diff_pct = abs(trigger_price - tp1_price) / tp1_price * 100
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ MATCHED TP1! "
+                f"trigger={trigger_price}, tp1={tp1_price}, diff={diff_pct:.4f}%"
+            )
             return "TP1"
         elif tp2_price and abs(trigger_price - tp2_price) / tp2_price < tolerance:
+            diff_pct = abs(trigger_price - tp2_price) / tp2_price * 100
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ MATCHED TP2! "
+                f"trigger={trigger_price}, tp2={tp2_price}, diff={diff_pct:.4f}%"
+            )
             return "TP2"
         elif tp3_price and abs(trigger_price - tp3_price) / tp3_price < tolerance:
+            diff_pct = abs(trigger_price - tp3_price) / tp3_price * 100
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ MATCHED TP3! "
+                f"trigger={trigger_price}, tp3={tp3_price}, diff={diff_pct:.4f}%"
+            )
             return "TP3"
         else:
-            return "TP" if "Partial" not in stop_order_type else "Partial TP"
+            # Calculate differences for logging
+            diffs = []
+            if tp1_price:
+                diff_pct = abs(trigger_price - tp1_price) / tp1_price * 100
+                diffs.append(f"tp1_diff={diff_pct:.4f}%")
+            if tp2_price:
+                diff_pct = abs(trigger_price - tp2_price) / tp2_price * 100
+                diffs.append(f"tp2_diff={diff_pct:.4f}%")
+            if tp3_price:
+                diff_pct = abs(trigger_price - tp3_price) / tp3_price * 100
+                diffs.append(f"tp3_diff={diff_pct:.4f}%")
+
+            result = "TP" if "Partial" not in stop_order_type else "Partial TP"
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ NO MATCH! trigger={trigger_price}, "
+                f"{', '.join(diffs)}, tolerance={tolerance*100:.2f}%, returning: {result}"
+            )
+            return result
 
     # For StopLoss
     if "StopLoss" in stop_order_type:
@@ -535,42 +602,70 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
     Only sets SL if 30 minutes have passed since entry time.
     If not, schedules a job to check after 30 minutes.
     """
+    current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+    log_print(
+        f"[TP1_TRACK][{current_time}][{symbol}] 🚀 set_sl_after_tp1 called with tp_data: "
+        f"orderId={tp_data.get('orderId', 'N/A')}, orderStatus={tp_data.get('orderStatus', 'N/A')}, "
+        f"closeOnTrigger={tp_data.get('closeOnTrigger', False)}, reduceOnly={tp_data.get('reduceOnly', False)}"
+    )
+
     try:
         # Check if 30 minutes have passed since entry time
         entry_time = await get_position_entry_time(symbol)
         if not entry_time:
             log_print(
-                f"[WARN] Entry time not found for {symbol}, cannot verify 30-minute rule"
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Entry time not found, cannot verify 30-minute rule"
             )
             return
 
-        time_elapsed = datetime.now() - entry_time
+        time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
         time_elapsed_minutes = time_elapsed.total_seconds() / 60.0
+
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Entry time: {entry_time.strftime('%Y-%m-%d %H:%M:%S')}, "
+            f"Time elapsed: {time_elapsed_minutes:.2f} minutes"
+        )
 
         # Get position info
         positions = get_positions(symbol=symbol)
         if not positions:
-            log_print(f"[WARN] Position not found for {symbol}, cannot set SL")
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Position not found via API, cannot set SL"
+            )
             return
 
         position = positions[0]
         side = position.get("side", "")
         size = float(position.get("size", 0))
 
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Position found: side={side}, size={size}"
+        )
+
         if size == 0:
-            log_print(f"[WARN] Position already closed for {symbol}, cannot set SL")
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Position already closed (size=0), cannot set SL"
+            )
             return
 
         # Get entry price from stored data
         tp_info = await get_position_tp_prices(symbol)
         if not tp_info:
-            log_print(f"[WARN] TP info not found for {symbol}, cannot set SL")
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ TP info not found in cache, cannot set SL"
+            )
             return
 
         entry_price = float(tp_info.get("entry", 0))
         if entry_price == 0:
-            log_print(f"[WARN] Entry price not found for {symbol}, cannot set SL")
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Entry price is 0, cannot set SL"
+            )
             return
+
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] TP info: entry={entry_price}, side={tp_info.get('side', 'N/A')}"
+        )
 
         # Calculate new SL price
         if side == "Buy":
@@ -578,9 +673,18 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
         else:  # Sell
             new_sl_price = entry_price * (1 - 0.0015)  # entry * (1 - 0.0015)
 
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Calculated new SL: {new_sl_price:.6f} "
+            f"(entry={entry_price:.6f}, side={side})"
+        )
+
         # Check if 30 minutes have passed
         if time_elapsed_minutes >= 30:
             # 30 minutes have passed, update SL immediately
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ 30 minutes passed ({time_elapsed_minutes:.2f} min), "
+                f"updating SL immediately to {new_sl_price:.6f}"
+            )
             await update_sl_price(
                 symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
             )
@@ -588,8 +692,8 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             # 30 minutes have not passed, schedule a job
             remaining_minutes = 30 - time_elapsed_minutes
             log_print(
-                f"[INFO] TP1 triggered for {symbol} but only {time_elapsed_minutes:.1f} minutes elapsed. "
-                f"Scheduling SL update in {remaining_minutes:.1f} minutes"
+                f"[TP1_TRACK][{current_time}][{symbol}] ⏰ Only {time_elapsed_minutes:.2f} minutes elapsed "
+                f"(need 30 min), scheduling SL update in {remaining_minutes:.2f} minutes"
             )
 
             # Store pending update
@@ -648,7 +752,10 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             )
 
     except Exception as e:
-        log_print(f"[ERROR] Failed to set SL for {symbol}: {e}")
+        error_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+        log_print(
+            f"[TP1_TRACK][{error_time}][{symbol}] ❌ ERROR in set_sl_after_tp1: {e}"
+        )
         import traceback
 
         traceback.print_exc()
@@ -663,37 +770,46 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
     Schedule SL update after a delay.
     Checks if position is still open before updating.
     """
-    try:
-        log_print(
-            f"[INFO] Scheduling SL update for {symbol} after {delay_minutes:.1f} minutes"
-        )
+    start_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+    log_print(
+        f"[TP1_TRACK][{start_time}][{symbol}] ⏰ schedule_sl_update_after_delay started: "
+        f"delay={delay_minutes:.2f} minutes"
+    )
 
+    try:
         # Convert minutes to seconds
         delay_seconds = delay_minutes * 60
         import asyncio
 
         log_print(
-            f"[INFO] Waiting {delay_seconds:.0f} seconds before checking SL update for {symbol}"
+            f"[TP1_TRACK][{start_time}][{symbol}] Waiting {delay_seconds:.0f} seconds "
+            f"({delay_minutes:.2f} minutes) before checking SL update"
         )
         await asyncio.sleep(delay_seconds)
-        log_print(f"[INFO] Delay completed, checking SL update for {symbol}")
+
+        check_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+        log_print(
+            f"[TP1_TRACK][{check_time}][{symbol}] ✅ Delay completed, checking SL update"
+        )
 
         # Check if update is still pending
         pending_update = await get_pending_sl_update(symbol)
         if not pending_update:
             log_print(
-                f"[INFO] SL update for {symbol} was cancelled or already processed"
+                f"[TP1_TRACK][{check_time}][{symbol}] ⚠️ SL update was cancelled or already processed"
             )
             return
 
         log_print(
-            f"[INFO] Pending SL update found for {symbol}, checking position status"
+            f"[TP1_TRACK][{check_time}][{symbol}] Pending SL update found: {pending_update}"
         )
 
         # Check if position is still open
         positions = get_positions(symbol=symbol)
         if not positions:
-            log_print(f"[INFO] Position for {symbol} is closed, skipping SL update")
+            log_print(
+                f"[TP1_TRACK][{check_time}][{symbol}] ❌ Position not found via API, skipping SL update"
+            )
             await remove_pending_sl_update(symbol)
             return
 
@@ -701,17 +817,20 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         size = float(position.get("size", 0))
         if size == 0:
             log_print(
-                f"[INFO] Position for {symbol} is closed (size=0), skipping SL update"
+                f"[TP1_TRACK][{check_time}][{symbol}] ❌ Position closed (size=0), skipping SL update"
             )
             await remove_pending_sl_update(symbol)
             return
 
-        log_print(f"[INFO] Position for {symbol} is still open with size {size}")
+        log_print(
+            f"[TP1_TRACK][{check_time}][{symbol}] ✅ Position still open: size={size}, "
+            f"side={position.get('side', 'N/A')}"
+        )
 
         # Get update info
         update_info = await get_pending_sl_update(symbol)
         if not update_info:
-            log_print(f"[WARN] Update info not found for {symbol}")
+            log_print(f"[TP1_TRACK][{check_time}][{symbol}] ❌ Update info not found")
             return
 
         new_sl_price = update_info["new_sl_price"]
@@ -719,38 +838,49 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         side = update_info["side"]
 
         log_print(
-            f"[INFO] Update info for {symbol}: new_sl={new_sl_price:.4f}, entry={entry_price:.4f}, side={side}"
+            f"[TP1_TRACK][{check_time}][{symbol}] Update info: new_sl={new_sl_price:.6f}, "
+            f"entry={entry_price:.6f}, side={side}"
         )
 
         # Check if 30 minutes have passed
         entry_time = await get_position_entry_time(symbol)
         if entry_time:
-            time_elapsed = datetime.now() - entry_time
+            time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
             time_elapsed_minutes = time_elapsed.total_seconds() / 60.0
 
             log_print(
-                f"[INFO] Time elapsed for {symbol}: {time_elapsed_minutes:.1f} minutes"
+                f"[TP1_TRACK][{check_time}][{symbol}] Entry time: {entry_time.strftime('%Y-%m-%d %H:%M:%S')}, "
+                f"Time elapsed: {time_elapsed_minutes:.2f} minutes"
             )
 
             if time_elapsed_minutes >= 30:
                 # Update SL
                 log_print(
-                    f"[INFO] 30 minutes have passed for {symbol}, updating SL now"
+                    f"[TP1_TRACK][{check_time}][{symbol}] ✅ 30 minutes passed, updating SL now"
                 )
                 await update_sl_price(
                     symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
                 )
                 await remove_pending_sl_update(symbol)
+                log_print(
+                    f"[TP1_TRACK][{check_time}][{symbol}] ✅ SL update completed and pending update removed"
+                )
             else:
                 log_print(
-                    f"[WARN] Still less than 30 minutes for {symbol} ({time_elapsed_minutes:.1f} minutes), skipping SL update"
+                    f"[TP1_TRACK][{check_time}][{symbol}] ⚠️ Still less than 30 minutes "
+                    f"({time_elapsed_minutes:.2f} min), skipping SL update"
                 )
         else:
-            log_print(f"[WARN] Entry time not found for {symbol}, skipping SL update")
+            log_print(
+                f"[TP1_TRACK][{check_time}][{symbol}] ❌ Entry time not found, skipping SL update"
+            )
             await remove_pending_sl_update(symbol)
 
     except Exception as e:
-        log_print(f"[ERROR] Failed to schedule SL update for {symbol}: {e}")
+        error_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+        log_print(
+            f"[TP1_TRACK][{error_time}][{symbol}] ❌ ERROR in schedule_sl_update_after_delay: {e}"
+        )
         import traceback
 
         traceback.print_exc()
@@ -768,16 +898,33 @@ async def update_sl_price(
     """
     Update SL price using amend_order.
     """
+    current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+    log_print(
+        f"[TP1_TRACK][{current_time}][{symbol}] 🔄 update_sl_price called: "
+        f"new_sl={new_sl_price:.6f}, entry={entry_price:.6f}, side={side}, "
+        f"size={size}, elapsed={time_elapsed_minutes:.2f} min"
+    )
+
     try:
         # Add small delay to ensure SL order is available in open orders list
         import asyncio
 
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Waiting 1 second for SL order to be available..."
+        )
         await asyncio.sleep(1.0)  # Wait 1 second for order to be available
 
         # Try to get existing SL order ID and amend it
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Getting SL order ID (retry_count=3)..."
+        )
         sl_order_id = get_sl_order_id(symbol, positionIdx=0, retry_count=3)
 
         if sl_order_id:
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL order found: orderId={sl_order_id}, "
+                f"attempting to amend..."
+            )
             # Update existing SL order using amend
             # For conditional orders (TP/SL), we need to update triggerPrice
             try:
@@ -788,11 +935,14 @@ async def update_sl_price(
                     slTriggerBy="LastPrice",  # Required: Price type to trigger stop loss
                 )
                 log_print(
-                    f"[INFO] SL updated via amend for {symbol}: {new_sl_price:.4f} (Entry: {entry_price:.4f}, side: {side}, size: {size}, orderId: {sl_order_id})"
+                    f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL updated via amend: "
+                    f"new_sl={new_sl_price:.6f}, entry={entry_price:.6f}, side={side}, "
+                    f"size={size}, orderId={sl_order_id}"
                 )
             except Exception as e:
                 log_print(
-                    f"[WARN] Failed to amend SL order {sl_order_id} for {symbol}, trying set_trading_stop: {e}"
+                    f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Failed to amend SL order {sl_order_id}, "
+                    f"trying set_trading_stop fallback: {e}"
                 )
                 import traceback
 
@@ -806,11 +956,13 @@ async def update_sl_price(
                     slSize=str(size),
                 )
                 log_print(
-                    f"[INFO] SL set via set_trading_stop for {symbol}: {new_sl_price:.4f} (Entry: {entry_price:.4f}, side: {side}, size: {size})"
+                    f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL set via set_trading_stop fallback: "
+                    f"new_sl={new_sl_price:.6f}, entry={entry_price:.6f}, side={side}, size={size}"
                 )
         else:
             log_print(
-                f"[WARN] Could not find SL order ID for {symbol}, using set_trading_stop to create new SL"
+                f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ SL order ID not found, "
+                f"using set_trading_stop to create new SL"
             )
             # No existing SL order, use set_trading_stop to create new one
             set_trading_stop(
@@ -821,7 +973,8 @@ async def update_sl_price(
                 slSize=str(size),
             )
             log_print(
-                f"[INFO] SL set for {symbol}: {new_sl_price:.4f} (Entry: {entry_price:.4f}, side: {side}, size: {size})"
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL created via set_trading_stop: "
+                f"new_sl={new_sl_price:.6f}, entry={entry_price:.6f}, side={side}, size={size}"
             )
 
         # Notify Telegram
@@ -994,6 +1147,12 @@ async def handle_ws_message(item: dict):
     Handle WebSocket messages from Bybit.
     Formats and sends appropriate messages to Telegram.
     """
+    entry_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+    msg_type = item.get("msg_type", "unknown")
+    log_print(
+        f"[TP1_TRACK][{entry_time}] ========== handle_ws_message called: msg_type={msg_type} =========="
+    )
+
     # Check if this is a full message with all orders
     if item.get("msg_type") == "ws_message":
         # Format and send complete message with all orders
@@ -1013,36 +1172,87 @@ async def handle_ws_message(item: dict):
 
             # Check if any TP1 was triggered and update SL if needed
             # Use try-except to prevent errors from blocking message sending
-            for order in orders:
+            current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            log_print(
+                f"[TP1_TRACK][{current_time}] Processing {len(orders)} order(s) for TP1 check"
+            )
+
+            for idx, order in enumerate(orders):
                 try:
                     order_status = order.get("orderStatus", "")
                     stop_order_type = order.get("stopOrderType", "")
                     symbol = order.get("symbol", "")
+                    order_id = order.get("orderId", "N/A")
+
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] Order #{idx+1}/{len(orders)}: "
+                        f"orderId={order_id}, orderStatus={order_status}, "
+                        f"stopOrderType={stop_order_type}"
+                    )
 
                     if order_status in ["Filled", "Triggered"] and stop_order_type in [
                         "TakeProfit",
                         "PartialTakeProfit",
                     ]:
                         trigger_price = safe_float(order.get("triggerPrice", 0))
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] ✅ TP order detected: "
+                            f"status={order_status}, type={stop_order_type}, triggerPrice={trigger_price}"
+                        )
+
                         tp_level = await identify_tp_sl_level(
                             symbol, stop_order_type, trigger_price
                         )
 
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] TP level identified: {tp_level}"
+                        )
+
                         if tp_level == "TP1":
+                            log_print(
+                                f"[TP1_TRACK][{current_time}][{symbol}] 🎯 TP1 CONFIRMED! "
+                                f"Calling set_sl_after_tp1..."
+                            )
                             # TP1 triggered, set SL after 30 minutes
                             await set_sl_after_tp1(symbol, order)
 
                             # If position closed, remove from tracking
                             if order.get("closeOnTrigger") and order.get("reduceOnly"):
+                                log_print(
+                                    f"[TP1_TRACK][{current_time}][{symbol}] Position closed "
+                                    f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
+                                )
                                 await remove_open_position(symbol)
                                 await remove_position_entry_time(symbol)
                                 await remove_position_tp_prices(symbol)
                                 await remove_pending_sl_update(symbol)
                                 track_position_closed(symbol)
+                        else:
+                            log_print(
+                                f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Not TP1 (got {tp_level}), "
+                                f"skipping SL update"
+                            )
+                    else:
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] ⏭️ Skipped: "
+                            f"orderStatus={order_status}, stopOrderType={stop_order_type} "
+                            f"(not a filled/triggered TP order)"
+                        )
                 except Exception as e:
                     # Log error but don't block message sending
+                    current_time_err = datetime.now(ZoneInfo("Asia/Tehran")).strftime(
+                        "%Y-%m-%d %H:%M:%S"
+                    )
+                    symbol_err = (
+                        order.get("symbol", "UNKNOWN")
+                        if "order" in locals()
+                        else "UNKNOWN"
+                    )
                     log_print(
-                        f"[ERROR] Error processing TP1 check for order {order.get('orderId', 'unknown')}: {e}"
+                        f"[TP1_TRACK][{current_time_err}][{symbol_err}] ❌ ERROR processing TP1 check "
+                        f"for order {order.get('orderId', 'unknown')}: {e}"
                     )
                     import traceback
 
@@ -1050,18 +1260,33 @@ async def handle_ws_message(item: dict):
         return
 
     # Legacy handling for individual orders (backward compatibility)
+    legacy_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
     ws_type = item.get("msg_type")
     data = item.get("data", {})
     symbol = item.get("symbol", "")
     closed_pnl = item.get("closed_pnl", 0.0)
 
+    log_print(
+        f"[TP1_TRACK][{legacy_time}] ========== Legacy handler branch ========== "
+        f"ws_type={ws_type}, symbol={symbol}"
+    )
+
     order_status = data.get("orderStatus", "")
     stop_order_type = data.get("stopOrderType", "")
     create_type = data.get("createType", "")
 
+    log_print(
+        f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler data: "
+        f"orderStatus={order_status}, stopOrderType={stop_order_type}, "
+        f"createType={create_type}, closedPnl={closed_pnl}"
+    )
+
     # Show message for SL/TP orders that have been created (Untriggered)
     # Only for createType related to SL/TP created by the system
     if order_status == "Untriggered" and stop_order_type:
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Untriggered order detected, checking createType..."
+        )
         # Show message for SL/TP that have been created
         sl_tp_create_types = [
             "CreateByPartialTakeProfit",
@@ -1081,10 +1306,20 @@ async def handle_ws_message(item: dict):
 
     # Handle different message types based on ws_type
     if ws_type == "new_order":
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: new_order type"
+        )
         text = await format_new_order_filled(data)
         await telClient.send_message(TARGET_CHANNEL, text)
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: new_order message sent"
+        )
 
     elif ws_type == "close_position":
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: close_position type, "
+            f"removing from tracking..."
+        )
         # Remove symbol from open_positions and related data
         await remove_open_position(symbol)
         await remove_position_entry_time(symbol)
@@ -1093,31 +1328,73 @@ async def handle_ws_message(item: dict):
         track_position_closed(symbol)
         text = await format_position_closed(data, closed_pnl)
         await telClient.send_message(TARGET_CHANNEL, text)
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: close_position processed, "
+            f"removed from cache, closedPnl={closed_pnl}"
+        )
 
     elif ws_type == "cancel_order":
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: cancel_order type"
+        )
         text = await format_order_cancelled(data)
         await telClient.send_message(TARGET_CHANNEL, text)
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: cancel_order message sent"
+        )
 
     elif ws_type == "sl_tp_triggered":
         # SL/TP triggered
+        current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+        log_print(
+            f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler: sl_tp_triggered detected"
+        )
+
         text = await format_sl_tp_triggered(data)
         if text:
             await telClient.send_message(TARGET_CHANNEL, text)
 
             # Check if TP1 was triggered and update SL if needed
             stop_order_type = data.get("stopOrderType", "")
+            order_status = data.get("orderStatus", "")
+            trigger_price = safe_float(data.get("triggerPrice", 0))
+
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler TP check: "
+                f"stopOrderType={stop_order_type}, orderStatus={order_status}, "
+                f"triggerPrice={trigger_price}"
+            )
+
             if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
-                trigger_price = safe_float(data.get("triggerPrice", 0))
                 tp_level = await identify_tp_sl_level(
                     symbol, stop_order_type, trigger_price
                 )
 
+                log_print(
+                    f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler TP level: {tp_level}"
+                )
+
                 if tp_level == "TP1":
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] 🎯 Legacy handler: TP1 CONFIRMED! "
+                        f"Calling set_sl_after_tp1..."
+                    )
                     # TP1 triggered, set SL after 30 minutes
                     await set_sl_after_tp1(symbol, data)
+                else:
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler: Not TP1 "
+                        f"(got {tp_level}), skipping SL update"
+                    )
 
             # If position closed, remove from open_positions and related data
             if data.get("closeOnTrigger") and data.get("reduceOnly"):
+                log_print(
+                    f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler: Position closed "
+                    f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
+                )
                 await remove_open_position(symbol)
                 await remove_position_entry_time(symbol)
                 await remove_position_tp_prices(symbol)
@@ -1126,10 +1403,16 @@ async def handle_ws_message(item: dict):
                 track_position_closed(symbol)
 
     elif ws_type == "sl_tp_created":
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: sl_tp_created type"
+        )
         # SL/TP created (Untriggered) - for information only
         text = await format_sl_tp_created(data)
         if text:
             await telClient.send_message(TARGET_CHANNEL, text)
+            log_print(
+                f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: sl_tp_created message sent"
+            )
 
     elif ws_type == "rejected" or order_status == "Rejected":
         symbol = data.get("symbol", "—")
@@ -1152,8 +1435,16 @@ async def handle_ws_message(item: dict):
 
     # Fallback: handle by order_status if ws_type is "other"
     elif ws_type == "other":
+        log_print(
+            f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler: other type, "
+            f"orderStatus={order_status}"
+        )
         if order_status == "Filled":
             if data.get("reduceOnly"):
+                log_print(
+                    f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler (other): "
+                    f"Filled with reduceOnly=True, position closed by market order"
+                )
                 # Position closed by market order
                 await remove_open_position(symbol)
                 await remove_position_entry_time(symbol)
@@ -1162,11 +1453,31 @@ async def handle_ws_message(item: dict):
                 track_position_closed(symbol)
                 text = await format_position_closed(data, closed_pnl)
                 await telClient.send_message(TARGET_CHANNEL, text)
+                log_print(
+                    f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler (other): "
+                    f"Position closed message sent, closedPnl={closed_pnl}"
+                )
             else:
+                log_print(
+                    f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler (other): "
+                    f"Filled without reduceOnly, new order filled"
+                )
                 # New order filled
                 text = await format_new_order_filled(data)
                 await telClient.send_message(TARGET_CHANNEL, text)
+                log_print(
+                    f"[TP1_TRACK][{legacy_time}][{symbol}] Legacy handler (other): "
+                    f"New order filled message sent"
+                )
         elif stop_order_type and order_status in ["Filled", "Triggered"]:
+            current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            log_print(
+                f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other): "
+                f"stopOrderType={stop_order_type}, orderStatus={order_status}"
+            )
+
             text = await format_sl_tp_triggered(data)
             if text:
                 await telClient.send_message(TARGET_CHANNEL, text)
@@ -1174,16 +1485,182 @@ async def handle_ws_message(item: dict):
                 # Check if TP1 was triggered and update SL if needed
                 if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                     trigger_price = safe_float(data.get("triggerPrice", 0))
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other) TP check: "
+                        f"triggerPrice={trigger_price}"
+                    )
+
                     tp_level = await identify_tp_sl_level(
                         symbol, stop_order_type, trigger_price
                     )
 
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other) TP level: {tp_level}"
+                    )
+
                     if tp_level == "TP1":
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] 🎯 Legacy handler (other): TP1 CONFIRMED! "
+                            f"Calling set_sl_after_tp1..."
+                        )
                         # TP1 triggered, set SL after 30 minutes
                         await set_sl_after_tp1(symbol, data)
+                    else:
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler (other): Not TP1 "
+                            f"(got {tp_level}), skipping SL update"
+                        )
 
                 if data.get("closeOnTrigger") and data.get("reduceOnly"):
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other): Position closed "
+                        f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
+                    )
                     await remove_open_position(symbol)
                     await remove_position_entry_time(symbol)
                     await remove_position_tp_prices(symbol)
                     await remove_pending_sl_update(symbol)  # Remove pending update
+
+
+# ---------------- DEBUG FUNCTION ---------------- #
+# برای اجرای این تابع و مشاهده داده‌های Redis، می‌توانید آن را در یک command handler یا
+# به صورت مستقیم در کد فراخوانی کنید:
+#
+# مثال استفاده:
+#   from ws_message_formatter import debug_redis_data
+#   await debug_redis_data()
+#
+# یا در یک telegram command:
+#   @telClient.on(events.NewMessage(pattern=r"^/debug_redis$"))
+#   async def debug_redis_handler(event):
+#       result = await debug_redis_data()
+#       await event.respond(result)
+async def debug_redis_data() -> str:
+    """
+    نمایش تمام داده‌های مربوط به پوزیشن‌های باز و schedule های SL از Redis.
+
+    Returns:
+        str: متن فرمت شده با تمام اطلاعات Redis
+    """
+    current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
+    log_print(
+        f"[DEBUG_REDIS][{current_time}] ========== Fetching Redis data =========="
+    )
+
+    result_lines = []
+    result_lines.append("=" * 60)
+    result_lines.append(f"📊 Redis Data Report - {current_time}")
+    result_lines.append("=" * 60)
+    result_lines.append("")
+
+    try:
+        # 1. Open Positions
+        result_lines.append("🔵 OPEN POSITIONS:")
+        result_lines.append("-" * 60)
+        open_positions = await get_open_positions()
+        if open_positions:
+            for symbol in sorted(open_positions):
+                result_lines.append(f"  ✅ {symbol}")
+        else:
+            result_lines.append("  (empty)")
+        result_lines.append("")
+
+        # 2. Position Entry Times
+        result_lines.append("⏰ POSITION ENTRY TIMES:")
+        result_lines.append("-" * 60)
+        entry_times = await get_position_entry_times()
+        if entry_times:
+            for symbol, entry_time_str in sorted(entry_times.items()):
+                try:
+                    # Parse ISO string to datetime
+                    entry_time = datetime.fromisoformat(entry_time_str).replace(
+                        tzinfo=ZoneInfo("Asia/Tehran")
+                    )
+                    time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
+                    elapsed_minutes = time_elapsed.total_seconds() / 60.0
+                    result_lines.append(
+                        f"  {symbol}: {entry_time.strftime('%Y-%m-%d %H:%M:%S')} "
+                        f"(elapsed: {elapsed_minutes:.1f} min)"
+                    )
+                except Exception as e:
+                    result_lines.append(
+                        f"  {symbol}: {entry_time_str} (parse error: {e})"
+                    )
+        else:
+            result_lines.append("  (empty)")
+        result_lines.append("")
+
+        # 3. TP Prices
+        result_lines.append("🎯 TP PRICES:")
+        result_lines.append("-" * 60)
+        tp_prices_all = await get_position_tp_prices()
+        if tp_prices_all:
+            for symbol, tp_info in sorted(tp_prices_all.items()):
+                result_lines.append(f"  {symbol}:")
+                result_lines.append(f"    Entry: {tp_info.get('entry', 'N/A')}")
+                result_lines.append(f"    TP1: {tp_info.get('tp1', 'N/A')}")
+                result_lines.append(f"    TP2: {tp_info.get('tp2', 'N/A')}")
+                if tp_info.get("tp3"):
+                    result_lines.append(f"    TP3: {tp_info.get('tp3', 'N/A')}")
+                result_lines.append(f"    SL: {tp_info.get('sl', 'N/A')}")
+                result_lines.append(f"    Side: {tp_info.get('side', 'N/A')}")
+        else:
+            result_lines.append("  (empty)")
+        result_lines.append("")
+
+        # 4. Pending SL Updates (Scheduled)
+        result_lines.append("⏳ PENDING SL UPDATES (Scheduled):")
+        result_lines.append("-" * 60)
+        pending_updates = await get_pending_sl_updates()
+        if pending_updates:
+            for symbol, update_info in sorted(pending_updates.items()):
+                result_lines.append(f"  {symbol}:")
+                entry_time_str = update_info.get("entry_time", "")
+                try:
+                    if isinstance(entry_time_str, str):
+                        entry_time = datetime.fromisoformat(entry_time_str).replace(
+                            tzinfo=ZoneInfo("Asia/Tehran")
+                        )
+                    else:
+                        entry_time = entry_time_str
+
+                    time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
+                    elapsed_minutes = time_elapsed.total_seconds() / 60.0
+                    remaining_minutes = max(0, 30 - elapsed_minutes)
+
+                    result_lines.append(
+                        f"    Entry Time: {entry_time.strftime('%Y-%m-%d %H:%M:%S')}"
+                    )
+                    result_lines.append(f"    Elapsed: {elapsed_minutes:.1f} minutes")
+                    result_lines.append(
+                        f"    Remaining: {remaining_minutes:.1f} minutes"
+                    )
+                except Exception as e:
+                    result_lines.append(
+                        f"    Entry Time: {entry_time_str} (parse error: {e})"
+                    )
+
+                result_lines.append(
+                    f"    New SL Price: {update_info.get('new_sl_price', 'N/A')}"
+                )
+                result_lines.append(
+                    f"    Entry Price: {update_info.get('entry_price', 'N/A')}"
+                )
+                result_lines.append(f"    Side: {update_info.get('side', 'N/A')}")
+        else:
+            result_lines.append("  (empty)")
+        result_lines.append("")
+
+        result_lines.append("=" * 60)
+
+        result_text = "\n".join(result_lines)
+        log_print(f"[DEBUG_REDIS][{current_time}] Redis data fetched successfully")
+        return result_text
+
+    except Exception as e:
+        error_msg = f"❌ Error fetching Redis data: {e}"
+        log_print(f"[DEBUG_REDIS][{current_time}] {error_msg}")
+        import traceback
+
+        traceback.print_exc()
+        return error_msg
