@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo
 from threading import Lock
 from collections import defaultdict
 from config import FIXED_MARGIN_USDT, MAX_LOSS_USDT, TARGET_PROFIT_USDT
+from logger import log_print
+
 
 # Lock for thread-safe file operations
 _capital_file_lock = Lock()
@@ -28,7 +30,7 @@ def load_capital_data():
                 with open(CAPITAL_DATA_FILE, "r", encoding="utf-8") as f:
                     return json.load(f)
     except Exception as e:
-        print(f"[CAPITAL_TRACKER][ERROR] Failed to load data: {e}")
+        log_print(f"[CAPITAL_TRACKER][ERROR] Failed to load data: {e}")
 
     # Return default structure
     return {
@@ -47,7 +49,7 @@ def save_capital_data(data):
             with open(CAPITAL_DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
     except Exception as e:
-        print(f"[CAPITAL_TRACKER][ERROR] Failed to save data: {e}")
+        log_print(f"[CAPITAL_TRACKER][ERROR] Failed to save data: {e}")
 
 
 def get_date_key(dt: datetime) -> str:
@@ -91,7 +93,7 @@ def track_position_opened(symbol: str, capital_used: float, margin: float = None
     data["positions"].append(position_event)
     save_capital_data(data)
 
-    print(
+    log_print(
         f"[CAPITAL_TRACKER] Position opened: {symbol}, Capital: ${actual_capital:.2f}"
     )
 
@@ -111,7 +113,7 @@ def track_position_closed(symbol: str):
             print(f"[CAPITAL_TRACKER] Position closed: {symbol}")
             return
 
-    print(f"[CAPITAL_TRACKER][WARN] No open position found for {symbol}")
+    log_print(f"[CAPITAL_TRACKER][WARN] No open position found for {symbol}")
 
 
 def track_rejected_order(symbol: str, reason: str, capital_needed: float):

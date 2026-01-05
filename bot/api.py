@@ -1,5 +1,6 @@
 from pybit.exceptions import InvalidRequestError
 from clients import bybitClient
+from logger import log_print
 
 
 # ---------------- WALLET & ACCOUNT ---------------- #
@@ -65,7 +66,7 @@ def close_all_positions(settleCoin="USDT"):
     positions_list = res.get("result", {}).get("list", [])
 
     if not positions_list:
-        print("[INFO] No open positions to close.")
+        log_print("[INFO] No open positions to close.")
         return []
 
     closed_positions = []
@@ -93,9 +94,9 @@ def close_all_positions(settleCoin="USDT"):
             closed_positions.append(
                 {"symbol": symbol, "side": side, "size": size, "orderResult": order}
             )
-            print(f"[SUCCESS] Closed position {symbol} | {side} | size: {size}")
+            log_print(f"[SUCCESS] Closed position {symbol} | {side} | size: {size}")
         except Exception as e:
-            print(f"[ERROR] Failed to close position {symbol}: {e}")
+            log_print(f"[ERROR] Failed to close position {symbol}: {e}")
             closed_positions.append(
                 {"symbol": symbol, "side": side, "size": size, "error": str(e)}
             )
@@ -334,7 +335,7 @@ def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
                 ):
                     order_id = order.get("orderId")
                     if order_id:
-                        print(
+                        log_print(
                             f"[INFO] Found SL order ID for {symbol}: {order_id} (attempt {attempt + 1})"
                         )
                         return order_id
@@ -347,12 +348,12 @@ def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
                 )
                 time.sleep(wait_time)
             else:
-                print(
+                log_print(
                     f"[WARN] SL order not found for {symbol} after {retry_count} attempts"
                 )
 
         except Exception as e:
-            print(
+            log_print(
                 f"[WARN] Failed to get SL order ID for {symbol} (attempt {attempt + 1}): {e}"
             )
             if attempt < retry_count - 1:

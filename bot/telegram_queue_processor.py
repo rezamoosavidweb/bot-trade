@@ -2,12 +2,16 @@ import asyncio
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from telethon import events
+from logger import log_print
 
 from config import (
     TARGET_CHANNEL,
-    open_positions,
-    position_entry_times,
-    position_tp_prices,
+)
+from cache import (
+    add_open_position,
+    is_position_open as is_position_open_redis,
+    set_position_entry_time,
+    set_position_tp_prices,
 )
 from bybit_client import (
     calculate_fixed_trade,
@@ -40,15 +44,17 @@ async def handle_telegram_signal(item):
     text = item["text"]
     signal = parse_signal(text)
     if not signal:
-        print("[WARN] Invalid signal")
+        log_print("[WARN] Invalid signal")
         return
 
     symbol = signal["symbol"]
 
     # Check if position is already open
-    if symbol in open_positions or await is_position_open(symbol):
-        open_positions.add(symbol)
-        print(f"[INFO] Already in position: {symbol}")
+    is_open_redis = await is_position_open_redis(symbol)
+    is_open_bybit = await is_position_open(symbol)
+    if is_open_redis or is_open_bybit:
+        await add_open_position(symbol)
+        log_print(f"[INFO] Already in position: {symbol}")
         await telClient.send_message(
             TARGET_CHANNEL,
             f"ℹ️ Ignore Signal. Already have an open position for {symbol}",
@@ -58,7 +64,7 @@ async def handle_telegram_signal(item):
     # Calculate trade size and leverage
     trade = await calculate_fixed_trade(symbol, signal["entry"], signal["sl"])
     if not trade:
-        print("[WARN] Trade calculation failed")
+        log_print("[WARN] Trade calculation failed")
         return
 
     qty, leverage = trade["qty"], trade["leverage"]
@@ -66,7 +72,7 @@ async def handle_telegram_signal(item):
     tp_info = f"tp1:{signal['targets'][0]} / tp2:{signal['targets'][1]}"
     if len(signal["targets"]) >= 3:
         tp_info += f" / tp3:{signal['targets'][2]}"
-    print(
+    log_print(
         f"[INFO] Detected signal / {symbol} / qty:{qty} / entry:{signal['entry']} "
         f"/ {tp_info} / sl:{signal['sl']} / leverage:{leverage}"
     )
@@ -76,7 +82,7 @@ async def handle_telegram_signal(item):
         set_leverage_safe(symbol=symbol, leverage=str(leverage))
     except Exception as e:
         if "leverage not modified" in str(e):
-            print(f"[INFO] Leverage already set for {symbol}, skipping...")
+            log_print(f"[INFO] Leverage already set for {symbol}, skipping...")
         else:
             await telClient.send_message(
                 TARGET_CHANNEL,
@@ -101,7 +107,7 @@ async def handle_telegram_signal(item):
             ) or order_result.get("result", {}).get("orderLinkId")
 
         # If order succeeded, track position opened
-        open_positions.add(symbol)
+        await add_open_position(symbol)
         # Track position opened for capital tracking
         track_position_opened(symbol, FIXED_MARGIN_USDT, margin=trade.get("margin"))
     except Exception as e:
@@ -117,9 +123,9 @@ async def handle_telegram_signal(item):
         raise e
 
     # Store entry time to check 30-minute rule
-    position_entry_times[symbol] = datetime.now()
+    await set_position_entry_time(symbol, datetime.now(ZoneInfo("Asia/Tehran")))
     # Store TP prices and entry to identify which TP/SL was triggered
-    position_tp_prices[symbol] = {
+    tp_prices = {
         "entry": signal["entry"],
         "tp1": signal["targets"][0],
         "tp2": signal["targets"][1],
@@ -127,7 +133,8 @@ async def handle_telegram_signal(item):
         "side": signal["side"],
     }
     if len(signal["targets"]) >= 3:
-        position_tp_prices[symbol]["tp3"] = signal["targets"][2]
+        tp_prices["tp3"] = signal["targets"][2]
+    await set_position_tp_prices(symbol, tp_prices)
 
     # Set TP1 and TP2 with distribution 60% and 40%
     # Get qty_step for normalization
@@ -176,7 +183,7 @@ async def handle_telegram_signal(item):
         f"TP1 Qty: {tp1_qty} (60%)\nTP2 Qty: {tp2_qty} (40%)",
     )
 
-    print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
+    log_print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
 
 
 # handle_ws_message moved to ws_message_formatter.py
@@ -214,7 +221,7 @@ def register_telegram_handlers(source_channel):
         formatted_time = msg_time.strftime("%Y-%m-%d | %H:%M:%S")
 
         if is_signal_message(message_text):
-            print(f"[INFO] Signal detected / {formatted_time}")
+            log_print(f"[INFO] Signal detected / {formatted_time}")
             await telegram_queue.put(
                 {
                     "type": "tg",
@@ -224,4 +231,4 @@ def register_telegram_handlers(source_channel):
                 }
             )
         else:
-            print(f"[INFO] Non-signal message ignored / {formatted_time}")
+            log_print(f"[INFO] Non-signal message ignored / {formatted_time}")

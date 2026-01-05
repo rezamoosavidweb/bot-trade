@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo
 from threading import Lock
 from typing import Dict, List, Optional, Tuple
 from config import IS_DEMO
+from logger import log_print
+
 
 # Lock for thread-safe file operations
 _liquidity_file_lock = Lock()
@@ -26,7 +28,7 @@ def load_liquidity_data():
                 with open(LIQUIDITY_DATA_FILE, "r", encoding="utf-8") as f:
                     return json.load(f)
     except Exception as e:
-        print(f"[LIQUIDITY_ANALYZER][ERROR] Failed to load data: {e}")
+        log_print(f"[LIQUIDITY_ANALYZER][ERROR] Failed to load data: {e}")
 
     # Return default structure
     return {
@@ -43,7 +45,7 @@ def save_liquidity_data(data):
             with open(LIQUIDITY_DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
     except Exception as e:
-        print(f"[LIQUIDITY_ANALYZER][ERROR] Failed to save data: {e}")
+        log_print(f"[LIQUIDITY_ANALYZER][ERROR] Failed to save data: {e}")
 
 
 def get_order_book_depth(symbol: str, limit: int = 25) -> Optional[Dict]:
@@ -72,7 +74,9 @@ def get_order_book_depth(symbol: str, limit: int = 25) -> Optional[Dict]:
                 "timestamp": result.get("ts", 0),
             }
     except Exception as e:
-        print(f"[LIQUIDITY_ANALYZER][ERROR] Failed to get order book for {symbol}: {e}")
+        log_print(
+            f"[LIQUIDITY_ANALYZER][ERROR] Failed to get order book for {symbol}: {e}"
+        )
 
     return None
 
@@ -242,7 +246,9 @@ def track_order_execution(
     data["order_executions"].append(execution_record)
     save_liquidity_data(data)
 
-    print(f"[LIQUIDITY_ANALYZER] Order tracked: {symbol} {side} {qty} (ID: {order_id})")
+    log_print(
+        f"[LIQUIDITY_ANALYZER] Order tracked: {symbol} {side} {qty} (ID: {order_id})"
+    )
 
 
 def update_order_fill(
@@ -271,7 +277,7 @@ def update_order_fill(
             execution["execution_price"] = execution_price
             execution["slippage"] = slippage
             save_liquidity_data(data)
-            print(
+            log_print(
                 f"[LIQUIDITY_ANALYZER] Order filled: {order_id} ({fill_percentage:.1f}% @ ${execution_price:.2f})"
             )
             return

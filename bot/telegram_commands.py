@@ -4,6 +4,9 @@ from zoneinfo import ZoneInfo
 from telethon import events
 from telethon.errors import FloodWaitError
 from clients import telClient
+from logger import log_print
+
+
 from api import (
     get_wallet_balance,
     cancel_all_orders,
@@ -14,7 +17,7 @@ from api import (
     get_account_info,
     get_transaction_log,
 )
-from config import open_positions
+from cache import remove_open_position
 from cache import refresh_transaction_log
 from capital_tracker import get_capital_report
 from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
@@ -42,6 +45,7 @@ def format_timestamp(timestamp_str):
         return dt_iran.strftime("%Y-%m-%d %H:%M:%S")
     except (ValueError, TypeError, OSError):
         return timestamp_str
+
 
 # Global flag to cancel transaction sending
 cancel_transaction_sending = False
@@ -80,31 +84,36 @@ def register_command_handlers():
                     size = safe_float(p.get("size", 0))
                     if size == 0:
                         continue  # Skip empty positions
-                    
+
                     symbol = p.get("symbol", "-")
                     side = p.get("side", "-")
                     avg_price = safe_float(p.get("avgPrice", 0))
                     unrealised_pnl = safe_float(p.get("unrealisedPnl", 0))
                     liq_price = p.get("liqPrice", "")
                     created_time = p.get("createdTime", "")
-                    
+
                     # Format timestamp
                     created_time_str = format_timestamp(created_time)
-                    
+
                     # Format liq price
                     liq_price_str = safe_float(liq_price) if liq_price else "-"
                     if isinstance(liq_price_str, float):
                         liq_price_str = f"{liq_price_str:,.4f}"
-                    
+
                     msg += (
                         f"Symbol: {symbol}\n"
                         f"Side: {side}\n"
                         f"Size: {size:,.4f}\n"
-                        f"Entry: {avg_price:,.4f}\n" if avg_price > 0 else "Entry: -\n"
-                        f"PnL: {unrealised_pnl:,.2f}\n" if unrealised_pnl != 0 else "PnL: 0\n"
-                        f"Liq: {liq_price_str}\n"
-                        f"Time: {created_time_str}\n"
-                        "----------------------\n"
+                        f"Entry: {avg_price:,.4f}\n"
+                        if avg_price > 0
+                        else (
+                            "Entry: -\n" f"PnL: {unrealised_pnl:,.2f}\n"
+                            if unrealised_pnl != 0
+                            else "PnL: 0\n"
+                            f"Liq: {liq_price_str}\n"
+                            f"Time: {created_time_str}\n"
+                            "----------------------\n"
+                        )
                     )
 
             pending = get_pending_orders(settleCoin="USDT")
@@ -223,7 +232,7 @@ def register_command_handlers():
             # Remove closed positions from open_positions
             closed_symbols = [r["symbol"] for r in results]
             for symbol in closed_symbols:
-                open_positions.discard(symbol)
+                await remove_open_position(symbol)
 
             # Update transaction log cache
             try:
@@ -300,11 +309,13 @@ def register_command_handlers():
                         timestamp_s = timestamp_ms / 1000.0
                         dt_utc = datetime.fromtimestamp(timestamp_s, tz=ZoneInfo("UTC"))
                         dt_iran = dt_utc.astimezone(ZoneInfo("Asia/Tehran"))
-                        formatted_time = dt_iran.strftime("%Y-%m-%d %H:%M:%S (UTC+3:30)")
+                        formatted_time = dt_iran.strftime(
+                            "%Y-%m-%d %H:%M:%S (UTC+3:30)"
+                        )
                     except (ValueError, TypeError, OSError) as e:
                         # If conversion fails, use original value
                         formatted_time = transaction_time_str
-                        print(f"[WARN] Failed to convert transactionTime: {e}")
+                        log_print(f"[WARN] Failed to convert transactionTime: {e}")
 
                 tx_msg = (
                     f"📄 **Transaction #{idx}/{total_count}**\n\n"
@@ -342,7 +353,7 @@ def register_command_handlers():
                     except FloodWaitError as e:
                         # If we hit a flood wait, wait for the required time + buffer
                         wait_time = e.seconds + 2
-                        print(
+                        log_print(
                             f"[WARN] Flood wait detected for transaction {idx}. Waiting {wait_time} seconds..."
                         )
                         if retry_count == 0:
@@ -353,7 +364,7 @@ def register_command_handlers():
                         retry_count += 1
 
                     except Exception as tx_error:
-                        print(
+                        log_print(
                             f"[ERROR] Error sending transaction {idx} (attempt {retry_count + 1}): {tx_error}"
                         )
                         retry_count += 1

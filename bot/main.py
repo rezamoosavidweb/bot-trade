@@ -1,5 +1,8 @@
 import asyncio
 from clients import telClient
+from logger import log_print
+
+
 from telegram_queue_processor import (
     process_telegram_queue,
     register_telegram_handlers,
@@ -24,7 +27,7 @@ from telegram_commands import register_command_handlers
 
 
 async def main():
-    print(
+    log_print(
         f"================================\n",
         f"IS_DEMO:{IS_DEMO}\n",
         f"SELECTED_API_KEY:{SELECTED_API_KEY}\n",
@@ -43,7 +46,7 @@ async def main():
 
     # Start Telegram Client
     await telClient.start()
-    print("[INFO] Telegram client started")
+    log_print("[INFO] Telegram client started")
 
     # Register Telegram message handler
     register_telegram_handlers(source_channel=SELECTED_SOURCE_CHANNEL)

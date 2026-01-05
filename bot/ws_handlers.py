@@ -5,6 +5,8 @@ import traceback
 from datetime import datetime
 from threading import Lock
 from errors import send_error_to_telegram
+from logger import log_print
+
 
 # Lock for thread-safe file operations
 _ws_file_lock = Lock()
@@ -18,7 +20,7 @@ def save_ws_message_to_json(msg_data: dict):
     Each new message is added to the messages array.
     """
     try:
-        print(f"[WS][DEBUG] Attempting to save WS message to {WS_DATA_FILE}")
+        log_print(f"[WS][DEBUG] Attempting to save WS message to {WS_DATA_FILE}")
 
         with _ws_file_lock:
             # Read existing data
@@ -26,12 +28,12 @@ def save_ws_message_to_json(msg_data: dict):
                 try:
                     with open(WS_DATA_FILE, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                    print(
+                    log_print(
                         f"[WS][DEBUG] Loaded existing file with {len(data.get('messages', []))} messages"
                     )
                 except (json.JSONDecodeError, IOError) as e:
                     # If file is corrupted or has errors, start fresh
-                    print(
+                    log_print(
                         f"[WS][WARN] Error reading existing file, starting fresh: {e}"
                     )
                     data = {"messages": []}
@@ -53,13 +55,13 @@ def save_ws_message_to_json(msg_data: dict):
             with open(WS_DATA_FILE, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
 
-            print(f"[WS][SUCCESS] Saved WS message to {WS_DATA_FILE}")
+            log_print(f"[WS][SUCCESS] Saved WS message to {WS_DATA_FILE}")
 
     except Exception as e:
         # On error, print full traceback
         error_trace = traceback.format_exc()
-        print(f"[WS][ERROR] Failed to save WS message to JSON: {e}")
-        print(f"[WS][ERROR] Traceback: {error_trace}")
+        log_print(f"[WS][ERROR] Failed to save WS message to JSON: {e}")
+        log_print(f"[WS][ERROR] Traceback: {error_trace}")
 
 
 def order_callback_ws(loop, telegram_queue):
@@ -89,14 +91,16 @@ def order_callback_ws(loop, telegram_queue):
                 orders = message_data.get("data", [])
                 raw_message = message_data  # Use the inner data dict as raw_message
             else:
-                print(f"[WS][WARN] Invalid message format: {type(msg.get('data'))}")
+                log_print(f"[WS][WARN] Invalid message format: {type(msg.get('data'))}")
                 return
 
             if not orders:
                 print("[WS][WARN] No orders in message")
                 return
 
-            print(f"[WS][INFO] Processing {len(orders)} order(s) in WebSocket message")
+            log_print(
+                f"[WS][INFO] Processing {len(orders)} order(s) in WebSocket message"
+            )
 
             # Send entire message with all orders data to queue
             # This will be processed as a single message in handle_ws_message

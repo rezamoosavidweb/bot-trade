@@ -10,6 +10,7 @@ from config import (
 from cache import get_symbol_info as get_cached_symbol_info
 from api import get_wallet_balance, get_positions
 import asyncio
+from logger import log_print
 
 
 # ---------------- SYMBOL INFO ---------------- #
@@ -43,7 +44,7 @@ async def is_position_open(symbol: str) -> bool:
             return False
         return float(positions[0]["size"]) != 0
     except Exception as e:
-        print(f"[WARN] position check failed: {e}")
+        log_print(f"[WARN] position check failed: {e}")
         return False
 
 
