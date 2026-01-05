@@ -190,7 +190,7 @@ def identify_tp_sl_level(
         else:
             return "SL" if "Partial" not in stop_order_type else "Partial SL"
 
-    tolerance = 0.0001  # 0.01% tolerance
+    tolerance = 0.001  # 0.1% tolerance (increased to handle small price differences)
 
     # For TakeProfit
     if "TakeProfit" in stop_order_type:
@@ -625,16 +625,26 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
     Checks if position is still open before updating.
     """
     try:
+        print(
+            f"[INFO] Scheduling SL update for {symbol} after {delay_minutes:.1f} minutes"
+        )
+
         # Convert minutes to seconds
         delay_seconds = delay_minutes * 60
         import asyncio
 
+        print(
+            f"[INFO] Waiting {delay_seconds:.0f} seconds before checking SL update for {symbol}"
+        )
         await asyncio.sleep(delay_seconds)
+        print(f"[INFO] Delay completed, checking SL update for {symbol}")
 
         # Check if update is still pending
         if symbol not in pending_sl_updates:
             print(f"[INFO] SL update for {symbol} was cancelled or already processed")
             return
+
+        print(f"[INFO] Pending SL update found for {symbol}, checking position status")
 
         # Check if position is still open
         positions = get_positions(symbol=symbol)
@@ -646,9 +656,13 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         position = positions[0]
         size = float(position.get("size", 0))
         if size == 0:
-            print(f"[INFO] Position for {symbol} is closed, skipping SL update")
+            print(
+                f"[INFO] Position for {symbol} is closed (size=0), skipping SL update"
+            )
             pending_sl_updates.pop(symbol, None)
             return
+
+        print(f"[INFO] Position for {symbol} is still open with size {size}")
 
         # Get update info
         update_info = pending_sl_updates.get(symbol)
@@ -660,21 +674,30 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         entry_price = update_info["entry_price"]
         side = update_info["side"]
 
+        print(
+            f"[INFO] Update info for {symbol}: new_sl={new_sl_price:.4f}, entry={entry_price:.4f}, side={side}"
+        )
+
         # Check if 30 minutes have passed
         entry_time = position_entry_times.get(symbol)
         if entry_time:
             time_elapsed = datetime.now() - entry_time
             time_elapsed_minutes = time_elapsed.total_seconds() / 60.0
 
+            print(
+                f"[INFO] Time elapsed for {symbol}: {time_elapsed_minutes:.1f} minutes"
+            )
+
             if time_elapsed_minutes >= 30:
                 # Update SL
+                print(f"[INFO] 30 minutes have passed for {symbol}, updating SL now")
                 await update_sl_price(
                     symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
                 )
                 pending_sl_updates.pop(symbol, None)
             else:
                 print(
-                    f"[WARN] Still less than 30 minutes for {symbol}, skipping SL update"
+                    f"[WARN] Still less than 30 minutes for {symbol} ({time_elapsed_minutes:.1f} minutes), skipping SL update"
                 )
         else:
             print(f"[WARN] Entry time not found for {symbol}, skipping SL update")
