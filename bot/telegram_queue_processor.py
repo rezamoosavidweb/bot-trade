@@ -91,7 +91,6 @@ async def handle_telegram_signal(item):
             side=signal["side"],
             qty=str(qty),
             sl=signal["sl"],
-            tp=signal["targets"][0],
         )
 
         # Extract order ID from result
@@ -130,8 +129,43 @@ async def handle_telegram_signal(item):
     if len(signal["targets"]) >= 3:
         position_tp_prices[symbol]["tp3"] = signal["targets"][2]
 
+    # Set TP1 and TP2 with distribution 60% and 40%
+    # Get qty_step for normalization
+    symbol_info = await get_symbol_info(symbol)
+    qty_step = symbol_info.get("qty_step", 1)
 
-    tp_message = f"TP1: {signal['targets'][0]}"
+    # Calculate TP1 (60%) and TP2 (40%)
+    tp1_qty = int(qty * 0.60)
+    tp2_qty = qty - tp1_qty  # Remaining 40%
+
+    # Normalize qty values with step size
+    tp1_qty = normalize_qty(tp1_qty, qty_step)
+    tp2_qty = normalize_qty(tp2_qty, qty_step)
+
+    # Ensure that tp1_qty + tp2_qty = qty
+    if tp1_qty + tp2_qty != qty:
+        # If normalization caused changes, adjust tp2_qty
+        tp2_qty = normalize_qty(qty - tp1_qty, qty_step)
+
+    # Set TP1 with 60% of quantity
+    set_trading_stop(
+        symbol=symbol,
+        tpslMode="Partial",
+        positionIdx=0,
+        tp=signal["targets"][0],
+        tpSize=str(tp1_qty),
+    )
+
+    # Set TP2 with 40% of quantity
+    set_trading_stop(
+        symbol=symbol,
+        tpslMode="Partial",
+        positionIdx=0,
+        tp=signal["targets"][1],
+        tpSize=str(tp2_qty),
+    )
+
+    tp_message = f"TP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}"
 
     await telClient.send_message(
         TARGET_CHANNEL,
@@ -139,9 +173,8 @@ async def handle_telegram_signal(item):
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
         f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
         f"Leverage: {leverage}\n"
-        f"TP1 Qty: {qty} (100%)",
+        f"TP1 Qty: {tp1_qty} (60%)\nTP2 Qty: {tp2_qty} (40%)",
     )
-    # f"TP1 Qty: {tp1_qty} (~30%)\nTP2 Qty: {tp2_qty} (~45%)\nTP3 Qty: {tp3_qty} (~25%)",
 
     print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
 
