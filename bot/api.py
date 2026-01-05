@@ -281,34 +281,52 @@ def amend_order(
     return bybitClient.amend_order(**payload)
 
 
-def get_sl_order_id(symbol: str, positionIdx: int = 0):
+def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
     """
     Get the order ID of the existing SL order for a position.
     Returns orderId if found, None otherwise.
+    Retries up to retry_count times with delay to handle timing issues.
     """
-    try:
-        res = bybitClient.get_open_orders(
-            category="linear",
-            symbol=symbol,
-            openOnly=0,
-            limit=50,
-        )
-        orders = res.get("result", {}).get("list", [])
-
-        for order in orders:
-            stop_order_type = order.get("stopOrderType", "")
-            order_status = order.get("orderStatus", "")
-            order_position_idx = order.get("positionIdx", 0)
-
-            # Find untriggered SL order for this position
-            if (
-                stop_order_type in ["StopLoss", "PartialStopLoss"]
-                and order_status == "Untriggered"
-                and order_position_idx == positionIdx
-            ):
-                return order.get("orderId")
-
-        return None
-    except Exception as e:
-        print(f"[WARN] Failed to get SL order ID for {symbol}: {e}")
-        return None
+    import time
+    
+    for attempt in range(retry_count):
+        try:
+            res = bybitClient.get_open_orders(
+                category="linear",
+                symbol=symbol,
+                openOnly=0,
+                limit=50,
+            )
+            orders = res.get("result", {}).get("list", [])
+            
+            for order in orders:
+                stop_order_type = order.get("stopOrderType", "")
+                order_status = order.get("orderStatus", "")
+                order_position_idx = order.get("positionIdx", 0)
+                
+                # Find untriggered SL order for this position
+                # Accept both StopLoss (Full mode) and PartialStopLoss (Partial mode)
+                if (
+                    stop_order_type in ["StopLoss", "PartialStopLoss"]
+                    and order_status == "Untriggered"
+                    and order_position_idx == positionIdx
+                ):
+                    order_id = order.get("orderId")
+                    if order_id:
+                        print(f"[INFO] Found SL order ID for {symbol}: {order_id} (attempt {attempt + 1})")
+                        return order_id
+            
+            # If not found and not last attempt, wait and retry
+            if attempt < retry_count - 1:
+                wait_time = (attempt + 1) * 0.5  # 0.5s, 1s, 1.5s
+                print(f"[INFO] SL order not found for {symbol}, retrying in {wait_time}s (attempt {attempt + 1}/{retry_count})")
+                time.sleep(wait_time)
+            else:
+                print(f"[WARN] SL order not found for {symbol} after {retry_count} attempts")
+        
+        except Exception as e:
+            print(f"[WARN] Failed to get SL order ID for {symbol} (attempt {attempt + 1}): {e}")
+            if attempt < retry_count - 1:
+                time.sleep((attempt + 1) * 0.5)
+    
+    return None

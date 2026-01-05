@@ -596,25 +596,33 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
             else:
                 sl2_price = tp1_price  # TP1
 
+        # Add small delay to ensure SL order is available in open orders list
+        import asyncio
+        await asyncio.sleep(1.0)  # Wait 1 second for order to be available
+        
         # Try to get existing SL order ID and amend it
-        sl_order_id = get_sl_order_id(symbol, positionIdx=0)
+        sl_order_id = get_sl_order_id(symbol, positionIdx=0, retry_count=3)
 
         if sl_order_id:
             # Update existing SL order using amend
+            # For conditional orders (TP/SL), we need to update triggerPrice
+            # triggerPrice is the price that triggers the conditional order
             try:
                 amend_order(
                     symbol=symbol,
                     orderId=sl_order_id,
-                    stopLoss=str(sl2_price),
+                    triggerPrice=str(sl2_price),  # Update trigger price for conditional SL order
                     slTriggerBy="LastPrice",
                 )
                 print(
-                    f"[INFO] SL2 updated via amend for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
+                    f"[INFO] SL2 updated via amend for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size}, orderId: {sl_order_id})"
                 )
             except Exception as e:
                 print(
-                    f"[WARN] Failed to amend SL order for {symbol}, trying set_trading_stop: {e}"
+                    f"[WARN] Failed to amend SL order {sl_order_id} for {symbol}, trying set_trading_stop: {e}"
                 )
+                import traceback
+                traceback.print_exc()
                 # Fallback to set_trading_stop if amend fails
                 set_trading_stop(
                     symbol=symbol,
@@ -627,6 +635,9 @@ async def set_sl2_after_tp1(symbol: str, tp_data: dict):
                     f"[INFO] SL2 set via set_trading_stop for {symbol}: {sl2_price:.4f} (TP1: {tp1_price:.4f}, current: {current_price:.4f}, side: {side}, size: {size})"
                 )
         else:
+            print(
+                f"[WARN] Could not find SL order ID for {symbol}, using set_trading_stop to create new SL2"
+            )
             # No existing SL order, use set_trading_stop to create new one
             set_trading_stop(
                 symbol=symbol,
@@ -729,25 +740,33 @@ async def set_sl3_after_tp2(symbol: str, tp_data: dict):
         else:  # Sell
             sl3_price = tp2_price * (1 - 0.0011)
 
+        # Add small delay to ensure SL order is available in open orders list
+        import asyncio
+        await asyncio.sleep(1.0)  # Wait 1 second for order to be available
+        
         # Try to get existing SL order ID and amend it
-        sl_order_id = get_sl_order_id(symbol, positionIdx=0)
+        sl_order_id = get_sl_order_id(symbol, positionIdx=0, retry_count=3)
 
         if sl_order_id:
             # Update existing SL order using amend
+            # For conditional orders (TP/SL), we need to update triggerPrice
+            # triggerPrice is the price that triggers the conditional order
             try:
                 amend_order(
                     symbol=symbol,
                     orderId=sl_order_id,
-                    stopLoss=str(sl3_price),
+                    triggerPrice=str(sl3_price),  # Update trigger price for conditional SL order
                     slTriggerBy="LastPrice",
                 )
                 print(
-                    f"[INFO] SL3 updated via amend for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
+                    f"[INFO] SL3 updated via amend for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size}, orderId: {sl_order_id})"
                 )
             except Exception as e:
                 print(
-                    f"[WARN] Failed to amend SL order for {symbol}, trying set_trading_stop: {e}"
+                    f"[WARN] Failed to amend SL order {sl_order_id} for {symbol}, trying set_trading_stop: {e}"
                 )
+                import traceback
+                traceback.print_exc()
                 # Fallback to set_trading_stop if amend fails
                 set_trading_stop(
                     symbol=symbol,
@@ -760,6 +779,9 @@ async def set_sl3_after_tp2(symbol: str, tp_data: dict):
                     f"[INFO] SL3 set via set_trading_stop for {symbol}: {sl3_price:.4f} (TP2: {tp2_price:.4f}, side: {side}, size: {size})"
                 )
         else:
+            print(
+                f"[WARN] Could not find SL order ID for {symbol}, using set_trading_stop to create new SL3"
+            )
             # No existing SL order, use set_trading_stop to create new one
             set_trading_stop(
                 symbol=symbol,
