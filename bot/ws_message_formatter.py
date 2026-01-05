@@ -955,35 +955,48 @@ async def handle_ws_message(item: dict):
         orders = item.get("orders", [])
 
         if orders:
-            text = await format_full_ws_message(raw_message, orders)
-            await telClient.send_message(TARGET_CHANNEL, text)
+            try:
+                text = await format_full_ws_message(raw_message, orders)
+                await telClient.send_message(TARGET_CHANNEL, text)
+            except Exception as e:
+                # Log error but continue processing
+                print(f"[ERROR] Error formatting/sending WebSocket message: {e}")
+                import traceback
+                traceback.print_exc()
 
             # Check if any TP1 was triggered and update SL if needed
+            # Use try-except to prevent errors from blocking message sending
             for order in orders:
-                order_status = order.get("orderStatus", "")
-                stop_order_type = order.get("stopOrderType", "")
-                symbol = order.get("symbol", "")
+                try:
+                    order_status = order.get("orderStatus", "")
+                    stop_order_type = order.get("stopOrderType", "")
+                    symbol = order.get("symbol", "")
 
-                if order_status in ["Filled", "Triggered"] and stop_order_type in [
-                    "TakeProfit",
-                    "PartialTakeProfit",
-                ]:
-                    trigger_price = safe_float(order.get("triggerPrice", 0))
-                    tp_level = identify_tp_sl_level(
-                        symbol, stop_order_type, trigger_price
-                    )
+                    if order_status in ["Filled", "Triggered"] and stop_order_type in [
+                        "TakeProfit",
+                        "PartialTakeProfit",
+                    ]:
+                        trigger_price = safe_float(order.get("triggerPrice", 0))
+                        tp_level = identify_tp_sl_level(
+                            symbol, stop_order_type, trigger_price
+                        )
 
-                    if tp_level == "TP1":
-                        # TP1 triggered, set SL after 30 minutes
-                        await set_sl_after_tp1(symbol, order)
+                        if tp_level == "TP1":
+                            # TP1 triggered, set SL after 30 minutes
+                            await set_sl_after_tp1(symbol, order)
 
-                        # If position closed, remove from tracking
-                        if order.get("closeOnTrigger") and order.get("reduceOnly"):
-                            open_positions.discard(symbol)
-                            position_entry_times.pop(symbol, None)
-                            position_tp_prices.pop(symbol, None)
-                            pending_sl_updates.pop(symbol, None)
-                            track_position_closed(symbol)
+                            # If position closed, remove from tracking
+                            if order.get("closeOnTrigger") and order.get("reduceOnly"):
+                                open_positions.discard(symbol)
+                                position_entry_times.pop(symbol, None)
+                                position_tp_prices.pop(symbol, None)
+                                pending_sl_updates.pop(symbol, None)
+                                track_position_closed(symbol)
+                except Exception as e:
+                    # Log error but don't block message sending
+                    print(f"[ERROR] Error processing TP1 check for order {order.get('orderId', 'unknown')}: {e}")
+                    import traceback
+                    traceback.print_exc()
         return
 
     # Legacy handling for individual orders (backward compatibility)
