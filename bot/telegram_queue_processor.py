@@ -84,25 +84,6 @@ async def handle_telegram_signal(item):
             )
             raise e
 
-    # Analyze liquidity before placing order
-    liquidity_analysis = analyze_symbol_liquidity(symbol, qty)
-    liquidity_metrics = calculate_liquidity_metrics(symbol, qty, signal["side"])
-
-    # Warn if liquidity is low
-    if liquidity_analysis.get("risk_level") in ["HIGH", "MEDIUM"]:
-        recommendations = liquidity_analysis.get("recommendations", [])
-        warning_msg = (
-            f"⚠️ **Liquidity Warning for {symbol}**\n\n"
-            f"Risk Level: {liquidity_analysis.get('risk_level')}\n"
-            f"Fill Percentage: {liquidity_metrics.get('fill_percentage', 0):.1f}%\n"
-            f"Max Slippage: {liquidity_metrics.get('max_slippage_percent', 0):.2f}%\n\n"
-        )
-        if recommendations:
-            warning_msg += "\n".join(
-                recommendations[:3]
-            )  # Show first 3 recommendations
-        await telClient.send_message(TARGET_CHANNEL, warning_msg)
-
     # Place market order
     try:
         order_result = place_market_order(
@@ -110,6 +91,7 @@ async def handle_telegram_signal(item):
             side=signal["side"],
             qty=str(qty),
             sl=signal["sl"],
+            tp=signal["targets"][0],
         )
 
         # Extract order ID from result
@@ -118,17 +100,6 @@ async def handle_telegram_signal(item):
             order_id = order_result.get("result", {}).get(
                 "orderId"
             ) or order_result.get("result", {}).get("orderLinkId")
-
-        # Track order execution for liquidity analysis
-        if order_id:
-            track_order_execution(
-                symbol=symbol,
-                side=signal["side"],
-                qty=qty,
-                order_id=str(order_id),
-                order_type="Market",
-                liquidity_metrics=liquidity_metrics,
-            )
 
         # If order succeeded, track position opened
         open_positions.add(symbol)
@@ -159,59 +130,8 @@ async def handle_telegram_signal(item):
     if len(signal["targets"]) >= 3:
         position_tp_prices[symbol]["tp3"] = signal["targets"][2]
 
-    # Calculate TP1, TP2, TP3 with distribution 30%, 45%, 30%
-    # Get qty_step for normalization
-    symbol_info = await get_symbol_info(symbol)
-    qty_step = symbol_info.get("qty_step", 1)
 
-    # Calculate quantities: 30% TP1, 45% TP2, 30% TP3
-    tp1_qty = int(qty * 0.30)
-    tp2_qty = int(qty * 0.45)
-    tp3_qty = qty - tp1_qty - tp2_qty  # Remaining for TP3
-
-    # Normalize qty values with step size
-    tp1_qty = normalize_qty(tp1_qty, qty_step)
-    tp2_qty = normalize_qty(tp2_qty, qty_step)
-    tp3_qty = normalize_qty(tp3_qty, qty_step)
-
-    # Ensure that tp1_qty + tp2_qty + tp3_qty = qty
-    if tp1_qty + tp2_qty + tp3_qty != qty:
-        # If normalization caused changes, adjust tp3_qty
-        tp3_qty = normalize_qty(qty - tp1_qty - tp2_qty, qty_step)
-
-    # Set TP1
-    set_trading_stop(
-        symbol=symbol,
-        tpslMode="Partial",
-        positionIdx=0,
-        tp=signal["targets"][0],
-        slSize=str(tp1_qty),
-        tpSize=str(tp1_qty),
-    )
-
-    # Set TP2
-    set_trading_stop(
-        symbol=symbol,
-        tpslMode="Partial",
-        positionIdx=0,
-        tp=signal["targets"][1],
-        tpSize=str(tp2_qty),
-    )
-
-    # Set TP3 (if exists)
-    if len(signal["targets"]) >= 3:
-        set_trading_stop(
-            symbol=symbol,
-            tpslMode="Partial",
-            positionIdx=0,
-            tp=signal["targets"][2],
-            tpSize=str(tp3_qty),
-        )
-
-    # Notify Telegram channel
-    tp_message = f"TP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}"
-    if len(signal["targets"]) >= 3:
-        tp_message += f"\nTP3: {signal['targets'][2]}"
+    tp_message = f"TP1: {signal['targets'][0]}"
 
     await telClient.send_message(
         TARGET_CHANNEL,
@@ -219,8 +139,9 @@ async def handle_telegram_signal(item):
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
         f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
         f"Leverage: {leverage}\n"
-        f"TP1 Qty: {tp1_qty} (~30%)\nTP2 Qty: {tp2_qty} (~45%)\nTP3 Qty: {tp3_qty} (~25%)",
+        f"TP1 Qty: {qty} (100%)",
     )
+    # f"TP1 Qty: {tp1_qty} (~30%)\nTP2 Qty: {tp2_qty} (~45%)\nTP3 Qty: {tp3_qty} (~25%)",
 
     print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
 
