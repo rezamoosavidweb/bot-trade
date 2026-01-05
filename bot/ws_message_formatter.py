@@ -519,7 +519,7 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
     SL calculation:
     - For Buy: entry * (1 + 0.0015)
     - For Sell: entry * (1 - 0.0015)
-    
+
     Only sets SL if 30 minutes have passed since entry time.
     If not, schedules a job to check after 30 minutes.
     """
@@ -569,7 +569,9 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
         # Check if 30 minutes have passed
         if time_elapsed_minutes >= 30:
             # 30 minutes have passed, update SL immediately
-            await update_sl_price(symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes)
+            await update_sl_price(
+                symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
+            )
         else:
             # 30 minutes have not passed, schedule a job
             remaining_minutes = 30 - time_elapsed_minutes
@@ -577,7 +579,7 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
                 f"[INFO] TP1 triggered for {symbol} but only {time_elapsed_minutes:.1f} minutes elapsed. "
                 f"Scheduling SL update in {remaining_minutes:.1f} minutes"
             )
-            
+
             # Store pending update
             pending_sl_updates[symbol] = {
                 "entry_time": entry_time,
@@ -585,13 +587,14 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
                 "entry_price": entry_price,
                 "side": side,
             }
-            
+
             # Schedule async task to check after remaining time
             import asyncio
+
             asyncio.create_task(
                 schedule_sl_update_after_delay(symbol, remaining_minutes)
             )
-            
+
             await telClient.send_message(
                 TARGET_CHANNEL,
                 f"⏰ **SL Update Scheduled**\n\n"
@@ -608,6 +611,7 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
     except Exception as e:
         print(f"[ERROR] Failed to set SL for {symbol}: {e}")
         import traceback
+
         traceback.print_exc()
         await telClient.send_message(
             TARGET_CHANNEL,
@@ -624,69 +628,83 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
         # Convert minutes to seconds
         delay_seconds = delay_minutes * 60
         import asyncio
+
         await asyncio.sleep(delay_seconds)
-        
+
         # Check if update is still pending
         if symbol not in pending_sl_updates:
             print(f"[INFO] SL update for {symbol} was cancelled or already processed")
             return
-        
+
         # Check if position is still open
         positions = get_positions(symbol=symbol)
         if not positions:
             print(f"[INFO] Position for {symbol} is closed, skipping SL update")
             pending_sl_updates.pop(symbol, None)
             return
-        
+
         position = positions[0]
         size = float(position.get("size", 0))
         if size == 0:
             print(f"[INFO] Position for {symbol} is closed, skipping SL update")
             pending_sl_updates.pop(symbol, None)
             return
-        
+
         # Get update info
         update_info = pending_sl_updates.get(symbol)
         if not update_info:
             print(f"[WARN] Update info not found for {symbol}")
             return
-        
+
         new_sl_price = update_info["new_sl_price"]
         entry_price = update_info["entry_price"]
         side = update_info["side"]
-        
+
         # Check if 30 minutes have passed
         entry_time = position_entry_times.get(symbol)
         if entry_time:
             time_elapsed = datetime.now() - entry_time
             time_elapsed_minutes = time_elapsed.total_seconds() / 60.0
-            
+
             if time_elapsed_minutes >= 30:
                 # Update SL
-                await update_sl_price(symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes)
+                await update_sl_price(
+                    symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
+                )
                 pending_sl_updates.pop(symbol, None)
             else:
-                print(f"[WARN] Still less than 30 minutes for {symbol}, skipping SL update")
+                print(
+                    f"[WARN] Still less than 30 minutes for {symbol}, skipping SL update"
+                )
         else:
             print(f"[WARN] Entry time not found for {symbol}, skipping SL update")
             pending_sl_updates.pop(symbol, None)
-            
+
     except Exception as e:
         print(f"[ERROR] Failed to schedule SL update for {symbol}: {e}")
         import traceback
+
         traceback.print_exc()
         pending_sl_updates.pop(symbol, None)
 
 
-async def update_sl_price(symbol: str, new_sl_price: float, entry_price: float, side: str, size: float, time_elapsed_minutes: float):
+async def update_sl_price(
+    symbol: str,
+    new_sl_price: float,
+    entry_price: float,
+    side: str,
+    size: float,
+    time_elapsed_minutes: float,
+):
     """
     Update SL price using amend_order.
     """
     try:
         # Add small delay to ensure SL order is available in open orders list
         import asyncio
+
         await asyncio.sleep(1.0)  # Wait 1 second for order to be available
-        
+
         # Try to get existing SL order ID and amend it
         sl_order_id = get_sl_order_id(symbol, positionIdx=0, retry_count=3)
 
@@ -697,8 +715,8 @@ async def update_sl_price(symbol: str, new_sl_price: float, entry_price: float, 
                 amend_order(
                     symbol=symbol,
                     orderId=sl_order_id,
-                    triggerPrice=str(new_sl_price),  # Update trigger price for conditional SL order
-                    slTriggerBy="LastPrice",
+                    triggerPrice=new_sl_price,  # Update trigger price for conditional SL order (will be converted to string in amend_order)
+                    slTriggerBy="LastPrice",  # Required: Price type to trigger stop loss
                 )
                 print(
                     f"[INFO] SL updated via amend for {symbol}: {new_sl_price:.4f} (Entry: {entry_price:.4f}, side: {side}, size: {size}, orderId: {sl_order_id})"
@@ -708,6 +726,7 @@ async def update_sl_price(symbol: str, new_sl_price: float, entry_price: float, 
                     f"[WARN] Failed to amend SL order {sl_order_id} for {symbol}, trying set_trading_stop: {e}"
                 )
                 import traceback
+
                 traceback.print_exc()
                 # Fallback to set_trading_stop if amend fails
                 set_trading_stop(
@@ -753,6 +772,7 @@ async def update_sl_price(symbol: str, new_sl_price: float, entry_price: float, 
     except Exception as e:
         print(f"[ERROR] Failed to update SL price for {symbol}: {e}")
         import traceback
+
         traceback.print_exc()
         await telClient.send_message(
             TARGET_CHANNEL,
@@ -914,21 +934,26 @@ async def handle_ws_message(item: dict):
         if orders:
             text = await format_full_ws_message(raw_message, orders)
             await telClient.send_message(TARGET_CHANNEL, text)
-            
+
             # Check if any TP1 was triggered and update SL if needed
             for order in orders:
                 order_status = order.get("orderStatus", "")
                 stop_order_type = order.get("stopOrderType", "")
                 symbol = order.get("symbol", "")
-                
-                if order_status in ["Filled", "Triggered"] and stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
+
+                if order_status in ["Filled", "Triggered"] and stop_order_type in [
+                    "TakeProfit",
+                    "PartialTakeProfit",
+                ]:
                     trigger_price = safe_float(order.get("triggerPrice", 0))
-                    tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
-                    
+                    tp_level = identify_tp_sl_level(
+                        symbol, stop_order_type, trigger_price
+                    )
+
                     if tp_level == "TP1":
                         # TP1 triggered, set SL after 30 minutes
                         await set_sl_after_tp1(symbol, order)
-                        
+
                         # If position closed, remove from tracking
                         if order.get("closeOnTrigger") and order.get("reduceOnly"):
                             open_positions.discard(symbol)
@@ -992,17 +1017,17 @@ async def handle_ws_message(item: dict):
         text = await format_sl_tp_triggered(data)
         if text:
             await telClient.send_message(TARGET_CHANNEL, text)
-            
+
             # Check if TP1 was triggered and update SL if needed
             stop_order_type = data.get("stopOrderType", "")
             if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                 trigger_price = safe_float(data.get("triggerPrice", 0))
                 tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
-                
+
                 if tp_level == "TP1":
                     # TP1 triggered, set SL after 30 minutes
                     await set_sl_after_tp1(symbol, data)
-            
+
             # If position closed, remove from open_positions and related data
             if data.get("closeOnTrigger") and data.get("reduceOnly"):
                 open_positions.discard(symbol)
@@ -1057,16 +1082,18 @@ async def handle_ws_message(item: dict):
             text = await format_sl_tp_triggered(data)
             if text:
                 await telClient.send_message(TARGET_CHANNEL, text)
-                
+
                 # Check if TP1 was triggered and update SL if needed
                 if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                     trigger_price = safe_float(data.get("triggerPrice", 0))
-                    tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
-                    
+                    tp_level = identify_tp_sl_level(
+                        symbol, stop_order_type, trigger_price
+                    )
+
                     if tp_level == "TP1":
                         # TP1 triggered, set SL after 30 minutes
                         await set_sl_after_tp1(symbol, data)
-                
+
                 if data.get("closeOnTrigger") and data.get("reduceOnly"):
                     open_positions.discard(symbol)
                     position_entry_times.pop(symbol, None)

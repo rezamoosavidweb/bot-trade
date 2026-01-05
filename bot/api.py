@@ -257,26 +257,47 @@ def amend_order(
     if not orderId and not orderLinkId:
         raise ValueError("Either orderId or orderLinkId must be provided")
 
+    # Build payload according to Bybit API documentation
+    # All numeric values must be strings
+    # Only include parameters that are not None
     payload = {
-        "category": "linear",
-        "symbol": symbol,
-        "orderId": orderId,
-        "orderLinkId": orderLinkId,
-        "qty": str(qty) if qty is not None else None,
-        "price": str(price) if price is not None else None,
-        "triggerPrice": str(triggerPrice) if triggerPrice is not None else None,
-        "takeProfit": str(takeProfit) if takeProfit is not None else None,
-        "stopLoss": str(stopLoss) if stopLoss is not None else None,
-        "tpTriggerBy": tpTriggerBy,
-        "slTriggerBy": slTriggerBy,
-        "triggerBy": triggerBy,
-        "tpslMode": tpslMode,
-        "tpLimitPrice": str(tpLimitPrice) if tpLimitPrice is not None else None,
-        "slLimitPrice": str(slLimitPrice) if slLimitPrice is not None else None,
-        "orderIv": str(orderIv) if orderIv is not None else None,
+        "category": "linear",  # Required: Product type
+        "symbol": symbol,  # Required: Symbol name
     }
 
-    payload = {k: v for k, v in payload.items() if v is not None}
+    # Either orderId or orderLinkId is required
+    if orderId:
+        payload["orderId"] = orderId
+    elif orderLinkId:
+        payload["orderLinkId"] = orderLinkId
+
+    # Optional parameters - only add if not None
+    if qty is not None:
+        payload["qty"] = str(qty)
+    if price is not None:
+        payload["price"] = str(price)
+    if triggerPrice is not None:
+        payload["triggerPrice"] = str(triggerPrice)
+    if takeProfit is not None:
+        # Pass "0" to cancel existing TP, otherwise pass the price as string
+        payload["takeProfit"] = "0" if takeProfit == 0 else str(takeProfit)
+    if stopLoss is not None:
+        # Pass "0" to cancel existing SL, otherwise pass the price as string
+        payload["stopLoss"] = "0" if stopLoss == 0 else str(stopLoss)
+    if tpTriggerBy is not None:
+        payload["tpTriggerBy"] = tpTriggerBy
+    if slTriggerBy is not None:
+        payload["slTriggerBy"] = slTriggerBy
+    if triggerBy is not None:
+        payload["triggerBy"] = triggerBy
+    if tpslMode is not None:
+        payload["tpslMode"] = tpslMode
+    if tpLimitPrice is not None:
+        payload["tpLimitPrice"] = str(tpLimitPrice)
+    if slLimitPrice is not None:
+        payload["slLimitPrice"] = str(slLimitPrice)
+    if orderIv is not None:
+        payload["orderIv"] = str(orderIv)
 
     return bybitClient.amend_order(**payload)
 
@@ -288,7 +309,7 @@ def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
     Retries up to retry_count times with delay to handle timing issues.
     """
     import time
-    
+
     for attempt in range(retry_count):
         try:
             res = bybitClient.get_open_orders(
@@ -298,12 +319,12 @@ def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
                 limit=50,
             )
             orders = res.get("result", {}).get("list", [])
-            
+
             for order in orders:
                 stop_order_type = order.get("stopOrderType", "")
                 order_status = order.get("orderStatus", "")
                 order_position_idx = order.get("positionIdx", 0)
-                
+
                 # Find untriggered SL order for this position
                 # Accept both StopLoss (Full mode) and PartialStopLoss (Partial mode)
                 if (
@@ -313,20 +334,28 @@ def get_sl_order_id(symbol: str, positionIdx: int = 0, retry_count: int = 3):
                 ):
                     order_id = order.get("orderId")
                     if order_id:
-                        print(f"[INFO] Found SL order ID for {symbol}: {order_id} (attempt {attempt + 1})")
+                        print(
+                            f"[INFO] Found SL order ID for {symbol}: {order_id} (attempt {attempt + 1})"
+                        )
                         return order_id
-            
+
             # If not found and not last attempt, wait and retry
             if attempt < retry_count - 1:
                 wait_time = (attempt + 1) * 0.5  # 0.5s, 1s, 1.5s
-                print(f"[INFO] SL order not found for {symbol}, retrying in {wait_time}s (attempt {attempt + 1}/{retry_count})")
+                print(
+                    f"[INFO] SL order not found for {symbol}, retrying in {wait_time}s (attempt {attempt + 1}/{retry_count})"
+                )
                 time.sleep(wait_time)
             else:
-                print(f"[WARN] SL order not found for {symbol} after {retry_count} attempts")
-        
+                print(
+                    f"[WARN] SL order not found for {symbol} after {retry_count} attempts"
+                )
+
         except Exception as e:
-            print(f"[WARN] Failed to get SL order ID for {symbol} (attempt {attempt + 1}): {e}")
+            print(
+                f"[WARN] Failed to get SL order ID for {symbol} (attempt {attempt + 1}): {e}"
+            )
             if attempt < retry_count - 1:
                 time.sleep((attempt + 1) * 0.5)
-    
+
     return None
