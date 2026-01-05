@@ -75,77 +75,42 @@ def order_callback_ws(loop, telegram_queue):
             # Save entire WebSocket message to JSON file
             save_ws_message_to_json(msg)
 
-            # Process all orders in message (not just first order)
-            orders = msg.get("data", [])
+            # Extract the actual message data
+            # WebSocket message from Bybit has structure: { "topic": "...", "data": [...], "id": "...", "creationTime": ... }
+            # When saved to JSON, it's wrapped: { "timestamp": "...", "data": { "topic": "...", "data": [...] } }
+            # So we need to handle both cases
+            if "data" in msg and isinstance(msg.get("data"), list):
+                # Direct WebSocket message format from Bybit
+                orders = msg.get("data", [])
+                raw_message = msg
+            elif "data" in msg and isinstance(msg.get("data"), dict):
+                # JSON file format (wrapped with timestamp)
+                message_data = msg.get("data", {})
+                orders = message_data.get("data", [])
+                raw_message = message_data  # Use the inner data dict as raw_message
+            else:
+                print(f"[WS][WARN] Invalid message format: {type(msg.get('data'))}")
+                return
+
             if not orders:
                 print("[WS][WARN] No orders in message")
                 return
 
-            # Process each order separately
-            for data in orders:
-                # Main values
-                symbol_ws = data.get("symbol")
-                size = float(data.get("qty", 0))
-                closed_pnl = float(data.get("closedPnl", 0))
-                takeProfit = float(data.get("takeProfit") or 0)
-                stopLoss = float(data.get("stopLoss") or 0)
-                reduceOnly = data.get("reduceOnly") in [True, "True"]
-                closeOnTrigger = data.get("closeOnTrigger") in [True, "True"]
-                createType = data.get("createType", "")
-                orderStatus = data.get("orderStatus", "")
-                stopOrderType = data.get("stopOrderType", "")
+            print(f"[WS][INFO] Processing {len(orders)} order(s) in WebSocket message")
 
-                # Determine message type with more precision
-                if orderStatus in ["Cancelled", "Deactivated"]:
-                    msg_type = "cancel_order"
-                elif orderStatus == "Filled":
-                    # If reduceOnly, position is closed (whether closeOnTrigger or not)
-                    if reduceOnly:
-                        if stopOrderType in [
-                            "TakeProfit",
-                            "StopLoss",
-                            "PartialTakeProfit",
-                            "PartialStopLoss",
-                        ]:
-                            # SL/TP triggered
-                            msg_type = "sl_tp_triggered"
-                        else:
-                            # Position closed by market order
-                            msg_type = "close_position"
-                    elif stopOrderType in [
-                        "TakeProfit",
-                        "StopLoss",
-                        "PartialTakeProfit",
-                        "PartialStopLoss",
-                    ]:
-                        # SL/TP triggered (rare case)
-                        msg_type = "sl_tp_triggered"
-                    else:
-                        # New order filled
-                        msg_type = "new_order"
-                elif orderStatus == "Untriggered" and stopOrderType:
-                    # SL/TP created but not triggered yet
-                    msg_type = "sl_tp_created"
-                elif orderStatus == "Rejected":
-                    msg_type = "rejected"
-                else:
-                    msg_type = "other"
-
-                asyncio.run_coroutine_threadsafe(
-                    telegram_queue.put(
-                        {
-                            "type": "ws",
-                            "msg_type": msg_type,
-                            "symbol": symbol_ws,
-                            "size": size,
-                            "closed_pnl": closed_pnl,
-                            "takeProfit": takeProfit,
-                            "stopLoss": stopLoss,
-                            "data": data,
-                        }
-                    ),
-                    loop,
-                )
+            # Send entire message with all orders data to queue
+            # This will be processed as a single message in handle_ws_message
+            asyncio.run_coroutine_threadsafe(
+                telegram_queue.put(
+                    {
+                        "type": "ws",
+                        "msg_type": "ws_message",  # Generic type for full message
+                        "raw_message": raw_message,  # Full WebSocket message
+                        "orders": orders,  # All orders in the message
+                    }
+                ),
+                loop,
+            )
 
         except Exception as e:
             asyncio.run_coroutine_threadsafe(

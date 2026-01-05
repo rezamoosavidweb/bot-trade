@@ -4,6 +4,7 @@ Handles formatting and processing of Bybit WebSocket order messages.
 """
 
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 from config import (
     open_positions,
     position_entry_times,
@@ -507,12 +508,163 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
     return text
 
 
+# ---------------- FORMAT FULL WS MESSAGE ---------------- #
+async def format_full_ws_message(raw_message: dict, orders: list) -> str:
+    """
+    Format complete WebSocket message with all orders data.
+    Returns a single formatted message string.
+    """
+    topic = raw_message.get("topic", "order")
+    creation_time = raw_message.get("creationTime", "")
+    msg_id = raw_message.get("id", "")
+
+    # Format creation time
+    creation_time_str = "-"
+    if creation_time:
+        try:
+            timestamp_ms = int(creation_time)
+            timestamp_s = timestamp_ms / 1000.0
+            dt_utc = datetime.fromtimestamp(timestamp_s, tz=ZoneInfo("UTC"))
+            dt_iran = dt_utc.astimezone(ZoneInfo("Asia/Tehran"))
+            creation_time_str = dt_iran.strftime("%Y-%m-%d %H:%M:%S")
+        except (ValueError, TypeError, OSError):
+            creation_time_str = str(creation_time)
+
+    text = f"📡 **WebSocket Message**\n\n"
+    text += f"```\n"
+    text += f"Topic: {topic}\n"
+    text += f"ID: {msg_id}\n"
+    text += f"Time: {creation_time_str}\n"
+    text += f"Orders Count: {len(orders)}\n"
+    text += f"```\n\n"
+
+    # Format each order
+    for idx, order in enumerate(orders, 1):
+        symbol = order.get("symbol", "-")
+        side = order.get("side", "-")
+        order_status = order.get("orderStatus", "-")
+        order_id = order.get("orderId", "-")
+        order_type = order.get("orderType", "-")
+        stop_order_type = order.get("stopOrderType", "")
+        qty = safe_float(order.get("qty", 0))
+        price = safe_float(order.get("price", 0))
+        avg_price = safe_float(order.get("avgPrice", 0))
+        trigger_price = safe_float(order.get("triggerPrice", 0))
+        cum_exec_qty = safe_float(order.get("cumExecQty", 0))
+        cum_exec_value = safe_float(order.get("cumExecValue", 0))
+        cum_exec_fee = safe_float(order.get("cumExecFee", 0))
+        closed_pnl = safe_float(order.get("closedPnl", 0))
+        create_type = format_create_type(order.get("createType", "-"))
+        cancel_type = format_cancel_type(order.get("cancelType", "UNKNOWN"))
+        reject_reason = format_reject_reason(order.get("rejectReason", "EC_NoError"))
+        created_time = order.get("createdTime", "")
+        updated_time = order.get("updatedTime", "")
+
+        # Format timestamps
+        created_time_str = format_timestamp(created_time) if created_time else "-"
+        updated_time_str = format_timestamp(updated_time) if updated_time else "-"
+
+        # Determine emoji based on order type
+        if stop_order_type:
+            emoji = (
+                "🎯"
+                if "TakeProfit" in stop_order_type
+                else "🛑" if "StopLoss" in stop_order_type else "📋"
+            )
+        elif order_status == "Filled":
+            emoji = "✅"
+        elif order_status in ["Cancelled", "Deactivated"]:
+            emoji = "❌"
+        elif order_status == "Rejected":
+            emoji = "⚠️"
+        else:
+            emoji = "📋"
+
+        text += f"{emoji} **Order #{idx}:**\n"
+        text += f"```\n"
+        text += f"Symbol: {symbol}\n"
+        text += f"Side: {side}\n"
+        text += f"Order ID: {order_id}\n"
+        text += f"Status: {format_status(order_status)}\n"
+
+        if stop_order_type:
+            text += f"Stop Order Type: {stop_order_type}\n"
+
+        text += f"Order Type: {order_type}\n"
+        text += f"Quantity: {qty:,.4f}\n"
+
+        if price > 0:
+            text += f"Price: {price:,.4f}\n"
+        if avg_price > 0:
+            text += f"Avg Price: {avg_price:,.4f}\n"
+        if trigger_price > 0:
+            text += f"Trigger Price: {trigger_price:,.4f}\n"
+
+        if cum_exec_qty > 0:
+            text += f"Executed Qty: {cum_exec_qty:,.4f}\n"
+        if cum_exec_value > 0:
+            text += f"Executed Value: {cum_exec_value:,.2f}\n"
+        if cum_exec_fee > 0:
+            text += f"Fee: {cum_exec_fee:,.8f}\n"
+        if closed_pnl != 0:
+            pnl_emoji = "🟢" if closed_pnl > 0 else "🔴"
+            text += f"{pnl_emoji} Closed PnL: {closed_pnl:,.2f}\n"
+
+        # Additional fields
+        take_profit = safe_float(order.get("takeProfit", 0))
+        stop_loss = safe_float(order.get("stopLoss", 0))
+        if take_profit > 0:
+            text += f"Take Profit: {take_profit:,.4f}\n"
+        if stop_loss > 0:
+            text += f"Stop Loss: {stop_loss:,.4f}\n"
+
+        text += f"Created By: {create_type}\n"
+        if cancel_type != "UNKNOWN":
+            text += f"Cancel Type: {cancel_type}\n"
+        if reject_reason != "✅ No error":
+            text += f"Reject Reason: {reject_reason}\n"
+
+        text += f"Created Time: {created_time_str}\n"
+        if updated_time_str != created_time_str:
+            text += f"Updated Time: {updated_time_str}\n"
+
+        text += f"```\n\n"
+
+    return text
+
+
+def format_timestamp(timestamp_str):
+    """Format timestamp (milliseconds) to readable date/time."""
+    if not timestamp_str or timestamp_str == "" or timestamp_str == "-":
+        return "-"
+    try:
+        timestamp_ms = int(timestamp_str)
+        timestamp_s = timestamp_ms / 1000.0
+        dt_utc = datetime.fromtimestamp(timestamp_s, tz=ZoneInfo("UTC"))
+        dt_iran = dt_utc.astimezone(ZoneInfo("Asia/Tehran"))
+        return dt_iran.strftime("%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError, OSError):
+        return str(timestamp_str)
+
+
 # ---------------- MAIN HANDLER ---------------- #
 async def handle_ws_message(item: dict):
     """
     Handle WebSocket messages from Bybit.
     Formats and sends appropriate messages to Telegram.
     """
+    # Check if this is a full message with all orders
+    if item.get("msg_type") == "ws_message":
+        # Format and send complete message with all orders
+        raw_message = item.get("raw_message", {})
+        orders = item.get("orders", [])
+
+        if orders:
+            text = await format_full_ws_message(raw_message, orders)
+            await telClient.send_message(TARGET_CHANNEL, text)
+        return
+
+    # Legacy handling for individual orders (backward compatibility)
     ws_type = item.get("msg_type")
     data = item.get("data", {})
     symbol = item.get("symbol", "")
@@ -573,22 +725,6 @@ async def handle_ws_message(item: dict):
                 position_tp_prices.pop(symbol, None)
                 # Track position closed for capital tracking
                 track_position_closed(symbol)
-
-        # COMMENTED: All volume is traded at TP1, so SL2/SL3 are not needed
-        # # If TP1 or TP2 (PartialTakeProfit) triggered, set SL2 or SL3
-        # stop_order_type = data.get("stopOrderType", "")
-        # if stop_order_type == "PartialTakeProfit":
-        #     # Identify which TP was triggered using trigger price
-        #     trigger_price = safe_float(data.get("triggerPrice", 0))
-        #     tp_level = identify_tp_sl_level(symbol, stop_order_type, trigger_price)
-
-        #     if tp_level == "TP1":
-        #         # TP1 triggered, set SL2
-        #         await set_sl2_after_tp1(symbol, data)
-        #     elif tp_level == "TP2":
-        #         # TP2 triggered, set SL3
-        #         await set_sl3_after_tp2(symbol, data)
-        #     # TP3 doesn't need SL update (position should be closed or near closing)
 
     elif ws_type == "sl_tp_created":
         # SL/TP created (Untriggered) - for information only
