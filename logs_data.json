@@ -89,6 +89,60 @@
       "level": "INFO",
       "message": "[INFO] Telegram client started",
       "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.449955+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.451914+03:30",
+      "level": "WARN",
+      "message": "[WS][WARN] Error reading existing file, starting fresh: Expecting value: line 2 column 1 (char 1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.457003+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.459646+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.475635+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.477830+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 1 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.482669+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:15.484315+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-05T23:46:18.638733+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-05 | 23:46:18",
+      "context": ""
     }
   ]
 }
