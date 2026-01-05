@@ -177,10 +177,11 @@ def register_command_handlers():
 
                     # Add separator between positions (except for the last one)
                     if position_count < len(valid_positions):
-                        msg += "─────────────────────\n\n"
+                        msg += "─────────────────────\n"
 
             pending = get_pending_orders(settleCoin="USDT")
-            msg += "\n⏳ **Pending Orders:**\n\n"
+            msg += "\=============================\n"
+            msg += "\n⏳ **Pending Orders:**\n"
             if not pending:
                 msg += "No pending orders.\n"
             else:
