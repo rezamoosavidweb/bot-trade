@@ -6,6 +6,279 @@
       "opened_at": "2026-01-02T15:27:32.268049+03:30",
       "closed_at": "2026-01-02T16:08:39.373249+03:30",
       "duration_seconds": 2467.1052
+    },
+    {
+      "symbol": "APEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-03T04:14:07.942346+03:30",
+      "closed_at": "2026-01-03T04:26:48.759134+03:30",
+      "duration_seconds": 760.816788
+    },
+    {
+      "symbol": "APTUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-03T04:50:09.749660+03:30",
+      "closed_at": "2026-01-03T05:31:38.041575+03:30",
+      "duration_seconds": 2488.291915
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-03T10:50:10.161135+03:30",
+      "closed_at": "2026-01-04T06:42:23.996994+03:30",
+      "duration_seconds": 71533.835859
+    },
+    {
+      "symbol": "GRTUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-03T16:50:10.251298+03:30",
+      "closed_at": "2026-01-03T17:09:08.911795+03:30",
+      "duration_seconds": 1138.660497
+    },
+    {
+      "symbol": "SUIUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-03T17:30:09.232392+03:30",
+      "closed_at": "2026-01-04T03:35:39.320694+03:30",
+      "duration_seconds": 36330.088302
+    },
+    {
+      "symbol": "MOVEUSDT",
+      "capital_used": 299.84,
+      "opened_at": "2026-01-03T18:54:09.561979+03:30",
+      "closed_at": "2026-01-04T02:08:01.383201+03:30",
+      "duration_seconds": 26031.821222
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-03T19:40:20.279451+03:30",
+      "closed_at": "2026-01-03T19:49:18.534257+03:30",
+      "duration_seconds": 538.254806
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-03T21:46:15.293069+03:30",
+      "closed_at": "2026-01-04T01:02:07.813635+03:30",
+      "duration_seconds": 11752.520566
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.9,
+      "opened_at": "2026-01-04T04:15:10.016673+03:30",
+      "closed_at": "2026-01-04T06:37:30.338992+03:30",
+      "duration_seconds": 8540.322319
+    },
+    {
+      "symbol": "VETUSDT",
+      "capital_used": 299.77,
+      "opened_at": "2026-01-04T06:34:24.209187+03:30",
+      "closed_at": "2026-01-04T07:07:47.801262+03:30",
+      "duration_seconds": 2003.592075
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.46,
+      "opened_at": "2026-01-04T10:30:11.725864+03:30",
+      "closed_at": "2026-01-04T11:32:06.391895+03:30",
+      "duration_seconds": 3714.666031
+    },
+    {
+      "symbol": "MANAUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-04T13:03:42.273971+03:30",
+      "closed_at": "2026-01-04T13:21:51.993292+03:30",
+      "duration_seconds": 1089.719321
+    },
+    {
+      "symbol": "FILUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-04T13:10:12.554157+03:30",
+      "closed_at": "2026-01-05T05:04:22.553176+03:30",
+      "duration_seconds": 57249.999019
+    },
+    {
+      "symbol": "DASHUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-04T15:26:08.961530+03:30",
+      "closed_at": "2026-01-04T17:47:08.870403+03:30",
+      "duration_seconds": 8459.908873
+    },
+    {
+      "symbol": "SKYUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-04T15:54:37.971287+03:30",
+      "closed_at": "2026-01-04T16:02:06.364032+03:30",
+      "duration_seconds": 448.392745
+    },
+    {
+      "symbol": "SOLUSDT",
+      "capital_used": 299.58,
+      "opened_at": "2026-01-04T17:15:08.157812+03:30",
+      "closed_at": "2026-01-04T18:24:44.857506+03:30",
+      "duration_seconds": 4176.699694
+    },
+    {
+      "symbol": "UNIUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-04T17:38:08.926463+03:30",
+      "closed_at": "2026-01-04T18:32:15.647216+03:30",
+      "duration_seconds": 3246.720753
+    },
+    {
+      "symbol": "HBARUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-04T19:40:16.584022+03:30",
+      "closed_at": "2026-01-04T19:52:10.566232+03:30",
+      "duration_seconds": 713.98221
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-04T20:26:07.001539+03:30",
+      "closed_at": "2026-01-04T21:36:30.560290+03:30",
+      "duration_seconds": 4223.558751
+    },
+    {
+      "symbol": "ASTERUSDT",
+      "capital_used": 299.79,
+      "opened_at": "2026-01-04T22:21:08.601248+03:30",
+      "closed_at": "2026-01-05T04:17:41.257607+03:30",
+      "duration_seconds": 21392.656359
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "capital_used": 299.92,
+      "opened_at": "2026-01-04T22:44:08.321119+03:30",
+      "closed_at": "2026-01-05T05:04:56.997268+03:30",
+      "duration_seconds": 22848.676149
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-04T23:35:08.655779+03:30",
+      "closed_at": "2026-01-05T04:38:43.661306+03:30",
+      "duration_seconds": 18215.005527
+    },
+    {
+      "symbol": "SOLUSDT",
+      "capital_used": 298.78,
+      "opened_at": "2026-01-05T00:57:08.107627+03:30",
+      "closed_at": "2026-01-05T01:11:57.569509+03:30",
+      "duration_seconds": 889.461882
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-05T01:15:16.110558+03:30",
+      "closed_at": "2026-01-05T02:31:19.795659+03:30",
+      "duration_seconds": 4563.685101
+    },
+    {
+      "symbol": "HBARUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-05T01:31:08.526298+03:30",
+      "closed_at": "2026-01-05T02:10:59.935209+03:30",
+      "duration_seconds": 2391.408911
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "capital_used": 299.9,
+      "opened_at": "2026-01-05T01:44:07.571797+03:30",
+      "closed_at": "2026-01-05T03:54:16.030613+03:30",
+      "duration_seconds": 7808.458816
+    },
+    {
+      "symbol": "SEIUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-05T01:52:07.169062+03:30",
+      "closed_at": "2026-01-05T15:12:41.006266+03:30",
+      "duration_seconds": 48033.837204
+    },
+    {
+      "symbol": "MANAUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-05T05:06:10.103111+03:30",
+      "closed_at": "2026-01-05T06:00:02.744500+03:30",
+      "duration_seconds": 3232.641389
+    },
+    {
+      "symbol": "TAOUSDT",
+      "capital_used": 299.89,
+      "opened_at": "2026-01-05T05:08:06.671336+03:30",
+      "closed_at": "2026-01-05T08:01:07.126475+03:30",
+      "duration_seconds": 10380.455139
+    },
+    {
+      "symbol": "ASTERUSDT",
+      "capital_used": 299.75,
+      "opened_at": "2026-01-05T06:09:08.087822+03:30",
+      "closed_at": "2026-01-05T08:00:57.487653+03:30",
+      "duration_seconds": 6709.399831
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-05T06:34:08.831347+03:30",
+      "closed_at": "2026-01-05T07:56:02.269400+03:30",
+      "duration_seconds": 4913.438053
+    },
+    {
+      "symbol": "ORDIUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-05T08:20:15.658845+03:30",
+      "closed_at": "2026-01-05T10:59:48.840957+03:30",
+      "duration_seconds": 9573.182112
+    },
+    {
+      "symbol": "HBARUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-05T10:30:12.580073+03:30",
+      "closed_at": "2026-01-05T11:11:46.249593+03:30",
+      "duration_seconds": 2493.66952
+    },
+    {
+      "symbol": "SKYUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-05T11:33:12.884085+03:30",
+      "closed_at": "2026-01-05T15:03:13.431883+03:30",
+      "duration_seconds": 12600.547798
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-05T11:36:10.491270+03:30",
+      "closed_at": "2026-01-05T15:12:39.553326+03:30",
+      "duration_seconds": 12989.062056
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-05T11:54:17.796264+03:30",
+      "closed_at": "2026-01-05T15:12:38.991698+03:30",
+      "duration_seconds": 11901.195434
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.88,
+      "opened_at": "2026-01-05T12:16:08.208732+03:30",
+      "closed_at": "2026-01-05T12:27:14.748288+03:30",
+      "duration_seconds": 666.539556
+    },
+    {
+      "symbol": "UNIUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-05T16:20:08.959308+03:30",
+      "closed_at": "2026-01-05T17:02:00.577062+03:30",
+      "duration_seconds": 2511.617754
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.8,
+      "opened_at": "2026-01-05T18:20:10.227760+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
@@ -16,24 +289,38 @@
       "max_concurrent_capital": 299.76,
       "avg_concurrent_capital": 16.653333333333332,
       "total_capital_hours": 205.42762632
+    },
+    "2026-01-03": {
+      "total_positions": 7,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 899.8299999999999,
+      "avg_concurrent_capital": 242.83714285714285,
+      "total_capital_hours": 410.5005053477611
+    },
+    "2026-01-04": {
+      "total_positions": 3,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 299.9,
+      "avg_concurrent_capital": 99.91916666666667,
+      "total_capital_hours": 1187.2925970650306
     }
   },
   "weekly_stats": {
     "2026-W01": {
-      "total_positions": 1,
+      "total_positions": 12,
       "total_rejected_orders": 0,
-      "max_concurrent_capital": 299.76,
-      "avg_concurrent_capital": 2.6294736842105264,
-      "total_capital_hours": 205.42762632
+      "max_concurrent_capital": 1199.78,
+      "avg_concurrent_capital": 94.21224358974358,
+      "total_capital_hours": 13939.057320098787
     }
   },
   "monthly_stats": {
     "2026-01": {
-      "total_positions": 1,
+      "total_positions": 12,
       "total_rejected_orders": 0,
-      "max_concurrent_capital": 299.76,
-      "avg_concurrent_capital": 7.137142857142857,
-      "total_capital_hours": 205.42762632
+      "max_concurrent_capital": 1199.78,
+      "avg_concurrent_capital": 174.96559523809523,
+      "total_capital_hours": 13939.057320098787
     }
   }
 }
