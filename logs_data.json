@@ -203,6 +203,12 @@
       "level": "INFO",
       "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
       "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:48:08.321782+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-06 | 11:48:08",
+      "context": ""
     }
   ]
 }
