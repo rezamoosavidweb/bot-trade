@@ -992,7 +992,7 @@ async def update_sl_price(
                     symbol=symbol,
                     orderId=sl_order_id,
                     triggerPrice=new_sl_price,  # Update trigger price for conditional SL order (will be converted to string in amend_order)
-                    slTriggerBy="LastPrice",  # Required: Price type to trigger stop loss
+                    slTriggerBy="MarkPrice",  # Use MarkPrice to avoid micro-spikes in LastPrice
                 )
                 log_print(
                     f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL updated via amend: "

@@ -134,7 +134,7 @@ def get_transaction_log(
 ):
     """
     Retrieve transaction log for linear category.
-    
+
     :param limit: Limit for data size per page. [1, 50]. Default: 20
     :param startTime: The start timestamp (ms)
     :param endTime: The end timestamp (ms)
@@ -152,7 +152,7 @@ def get_transaction_log(
         "category": "linear",
         "limit": limit,
     }
-    
+
     if startTime is not None:
         params["startTime"] = startTime
     if endTime is not None:
@@ -165,7 +165,7 @@ def get_transaction_log(
         params["type"] = type
     if cursor is not None:
         params["cursor"] = cursor
-    
+
     return bybitClient.get_transaction_log(**params)
 
 
@@ -196,21 +196,42 @@ def set_leverage_safe(symbol: str, leverage: float):
 
 
 def place_market_order(
-    symbol: str, side: str, qty: float, sl: float | None = None, tp: float | None = None
+    symbol: str,
+    side: str,
+    qty: float,
+    sl: float | None = None,
+    tp: float | None = None,
+    slTriggerBy: str = "MarkPrice",
+    tpTriggerBy: str = "MarkPrice",
 ):
     """
     Place a market order with optional SL/TP.
     Compatible with legacy code.
+
+    By default, SL/TP triggers are based on MarkPrice to avoid
+    micro-spikes in LastPrice causing unexpected triggers.
     """
-    return bybitClient.place_order(
-        category="linear",
-        symbol=symbol,
-        side=side,
-        orderType="Market",
-        qty=str(qty),
-        stopLoss=str(sl) if sl else None,
-        takeProfit=str(tp) if tp else None,
-    )
+
+    payload = {
+        "category": "linear",
+        "symbol": symbol,
+        "side": side,
+        "orderType": "Market",
+        "qty": str(qty),
+        "stopLoss": str(sl) if sl else None,
+        "takeProfit": str(tp) if tp else None,
+    }
+
+    # Explicitly set trigger types to MarkPrice (can be overridden via args)
+    if sl is not None and slTriggerBy:
+        payload["slTriggerBy"] = slTriggerBy
+    if tp is not None and tpTriggerBy:
+        payload["tpTriggerBy"] = tpTriggerBy
+
+    # Remove None values before sending
+    payload = {k: v for k, v in payload.items() if v is not None}
+
+    return bybitClient.place_order(**payload)
 
 
 # ---------------- TRADING STOP (SL/TP) ---------------- #
@@ -224,6 +245,9 @@ def set_trading_stop(
     slSize: float | None = None,
     tpOrderType: str = "Market",
     slOrderType: str = "Market",
+    tpTriggerBy: str | None = "MarkPrice",
+    slTriggerBy: str | None = "MarkPrice",
+    triggerBy: str | None = None,
 ):
     """
     Set Take Profit / Stop Loss / Trailing Stop for a position.
@@ -238,6 +262,9 @@ def set_trading_stop(
     :param slSize: Quantity for partial SL
     :param tpOrderType: 'Market' or 'Limit' for TP
     :param slOrderType: 'Market' or 'Limit' for SL
+    :param tpTriggerBy: Price type to trigger TP ('MarkPrice', 'LastPrice', etc.)
+    :param slTriggerBy: Price type to trigger SL ('MarkPrice', 'LastPrice', etc.)
+    :param triggerBy: Price type to trigger both TP/SL if supported
     """
 
     payload = {
@@ -251,6 +278,10 @@ def set_trading_stop(
         "slSize": str(slSize) if slSize is not None else None,
         "tpOrderType": tpOrderType,
         "slOrderType": slOrderType,
+        # Trigger types (default MarkPrice, can be overridden or disabled with None)
+        "tpTriggerBy": tpTriggerBy,
+        "slTriggerBy": slTriggerBy,
+        "triggerBy": triggerBy,
     }
 
     payload = {k: v for k, v in payload.items() if v is not None}
