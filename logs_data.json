@@ -209,6 +209,84 @@
       "level": "INFO",
       "message": "[INFO] Non-signal message ignored / 2026-01-06 | 11:48:08",
       "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:51:27.071560+03:30",
+      "level": "INFO",
+      "message": "================================\n",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:51:27.079622+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Redis connected",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:51:27.905412+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 639 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:51:28.101106+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:51:28.491742+03:30",
+      "level": "INFO",
+      "message": "[INFO] Telegram client started",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:52:46.102136+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-06 11:52:46] ========== Fetching Redis data ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:52:46.107146+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-06 11:52:46] Redis data fetched successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:52:46.182993+03:30",
+      "level": "INFO",
+      "message": "[INFO] Redis debug data sent successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T12:09:21.138068+03:30",
+      "level": "INFO",
+      "message": "================================\n",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T12:09:21.145345+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Redis connected",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T12:09:21.984119+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 639 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T12:09:22.176422+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T12:09:22.273550+03:30",
+      "level": "INFO",
+      "message": "[INFO] Telegram client started",
+      "context": ""
     }
   ]
 }
