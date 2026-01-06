@@ -1,1 +1,208 @@
-
+{
+  "logs": [
+    {
+      "timestamp": "2026-01-06T11:08:47.499030+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-06 11:08:47] ========== Fetching Redis data ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:08:47.506283+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-06 11:08:47] Redis data fetched successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:08:47.575085+03:30",
+      "level": "INFO",
+      "message": "[INFO] Redis debug data sent successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:06.331001+03:30",
+      "level": "INFO",
+      "message": "[INFO] Signal detected / 2026-01-06 | 11:27:06",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:06.578511+03:30",
+      "level": "WARN",
+      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:06.583379+03:30",
+      "level": "INFO",
+      "message": "[INFO] Detected signal / CAKEUSDT / qty:1219.2 / entry:2.0594 / tp1:2.0471 / tp2:2.0348 / tp3:2.0225 / sl:2.084 / leverage:8.37",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.241815+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.242616+03:30",
+      "level": "WARN",
+      "message": "[WS][WARN] Error reading existing file, starting fresh: Expecting value: line 2 column 1 (char 1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.245526+03:30",
+      "level": "INFO",
+      "message": "[CAPITAL_TRACKER] Position opened: CAKEUSDT, Capital: $299.98",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.247633+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.250079+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.423682+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.424920+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 1 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.427977+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.429643+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.592750+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.594038+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 2 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.597543+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.598411+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.667939+03:30",
+      "level": "INFO",
+      "message": "[SUCCESS] Order placed and SL/TP configured for CAKEUSDT",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.669114+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.770774+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.772025+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] Order #1/2: orderId=e7873aef-10fc-4cdb-a7cb-866c766d29c2, orderStatus=Filled, stopOrderType=",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.774978+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.777312+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] Order #2/2: orderId=c20d8c5e-f16d-4882-b78e-7fa450c88aaa, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.779246+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.781457+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.883016+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.883950+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] Order #1/1: orderId=bd89a467-c360-4079-b7d3-e073449f98dc, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.886513+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.888668+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.968662+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.969926+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] Order #1/1: orderId=55561bb7-7845-42b1-a7b2-46e5ef455f24, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-06T11:27:07.972486+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-06 11:27:07][CAKEUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    }
+  ]
+}

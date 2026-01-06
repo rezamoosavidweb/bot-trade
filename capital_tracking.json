@@ -321,6 +321,13 @@
       "opened_at": "2026-01-06T07:38:07.995067+03:30",
       "closed_at": "2026-01-06T08:23:03.444288+03:30",
       "duration_seconds": 2695.449221
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-06T11:27:07.243572+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
