@@ -50,6 +50,11 @@ FIXED_MARGIN_USDT = 300
 MAX_LOSS_USDT = 30
 TARGET_PROFIT_USDT = 15
 
+# ---------------- SL UPDATE AFTER TP1 ---------------- #
+# Minimum time (in minutes) that must pass after entry before SL can be updated after TP1
+# This prevents premature SL updates and allows the position to develop
+SL_UPDATE_DELAY_MINUTES = 45
+
 # ---------------- GLOBALS ---------------- #
 symbol_cache = {}
 stats = {"total": 0, "win": 0, "loss": 0, "pnl": 0.0}

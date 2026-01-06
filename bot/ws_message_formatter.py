@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 from config import (
     TARGET_CHANNEL,
     FIXED_MARGIN_USDT,
+    SL_UPDATE_DELAY_MINUTES,
 )
 from clients import telClient
 from api import get_positions, set_trading_stop, amend_order, get_sl_order_id
@@ -606,8 +607,8 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
       * Above TP1 and above entry for Sell orders
     - If validation fails, adjusts SL to be 0.1% below/above TP1 accordingly
 
-    Only sets SL if 30 minutes have passed since entry time.
-    If not, schedules a job to check after 30 minutes.
+    Only sets SL if SL_UPDATE_DELAY_MINUTES have passed since entry time.
+    If not, schedules a job to check after the remaining time.
     """
     current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime("%Y-%m-%d %H:%M:%S")
     log_print(
@@ -617,11 +618,11 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
     )
 
     try:
-        # Check if 30 minutes have passed since entry time
+        # Check if SL_UPDATE_DELAY_MINUTES have passed since entry time
         entry_time = await get_position_entry_time(symbol)
         if not entry_time:
             log_print(
-                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Entry time not found, cannot verify 30-minute rule"
+                f"[TP1_TRACK][{current_time}][{symbol}] ❌ Entry time not found, cannot verify {SL_UPDATE_DELAY_MINUTES}-minute rule"
             )
             return
 
@@ -677,56 +678,56 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
         # Get TP1 price for validation (we want SL between entry and TP1)
         tp1_price = float(tp_info.get("tp1", 0))
 
-        # Calculate new SL price based on entry price
-        # Note: This is a break-even or trailing stop strategy after TP1 is hit
-        # Goal:
-        #   - Buy: SL should be ABOVE entry (برای BUY بالاتر از entry برای پوشش کارمزد)
-        #   - Sell: SL should be BELOW entry (برای SELL پایین‌تر از entry برای پوشش کارمزد)
+        # Calculate new SL price for break-even (including fees)
+        # Fee structure: ~0.055% per trade = 0.11% round-trip
+        # Adding 0.05% safety margin to ensure break-even
+        # Total margin needed: 0.11% + 0.05% = 0.16%
+        fee_margin = 0.0016  # 0.16% to cover fees + safety margin
+
         if side == "Buy":
-            # For Long positions: SL should be above entry price
-            # Using entry * (1 + 0.0015) to set SL 0.15% above entry
-            new_sl_price = entry_price * (1 + 0.0015)
+            # For Long positions: SL should be BELOW entry for break-even
+            # When price goes down and hits SL, we close at entry - fee_margin
+            # This ensures break-even after fees when SL is hit
+            new_sl_price = entry_price * (1 - fee_margin)
         else:  # Sell
-            # For Short positions: SL should be below entry price
-            # Using entry * (1 - 0.0015) to set SL 0.15% below entry
-            new_sl_price = entry_price * (1 - 0.0015)
+            # For Short positions: SL should be ABOVE entry for break-even
+            # When price goes up and hits SL, we close at entry + fee_margin
+            # This ensures break-even after fees when SL is hit
+            new_sl_price = entry_price * (1 + fee_margin)
 
         # Validate and adjust SL for signals with small entry-to-TP1 distance
-        # Problem: When entry and TP1 are very close (e.g., 0.00013 difference),
-        # the calculated SL might go beyond TP1 or back to loss,
-        # which is invalid and could cause immediate stop loss trigger
+        # Problem: When entry and TP1 are very close, the calculated SL might
+        # go beyond TP1, which could cause immediate stop loss trigger
         if tp1_price > 0:
             if side == "Buy":
-                # For Buy: Ensure SL is BETWEEN entry and TP1
-                #  - Above entry (break-even + fee)
-                #  - Not beyond TP1 (تا جای ممکن نزدیک TP1 ولی قبل از آن)
-                if new_sl_price > tp1_price:
-                    # If calculated SL is above TP1, adjust to be slightly below TP1
-                    # This prevents SL from being triggered immediately after TP1
-                    new_sl_price = tp1_price * (1 - 0.0005)  # 0.1% below TP1
+                # For Buy: Ensure SL is BETWEEN TP1 and entry
+                #  - Below entry (break-even + fee)
+                #  - Not below TP1 (should be above TP1 but below entry)
+                if new_sl_price < tp1_price:
+                    # If calculated SL is below TP1, adjust to be slightly above TP1
+                    # This ensures we're still in profit zone after TP1
+                    new_sl_price = tp1_price * (1 + 0.0005)  # 0.05% above TP1
                     log_print(
-                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above TP1 "
-                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% below TP1)"
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below TP1 "
+                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.05% above TP1)"
                     )
-                # Else: SL already between entry and TP1 (نیازی به اصلاح نیست)
                 else:
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL in valid Buy range "
-                        f"(entry={entry_price:.6f} < SL={new_sl_price:.6f} < tp1={tp1_price:.6f})"
+                        f"(tp1={tp1_price:.6f} < SL={new_sl_price:.6f} < entry={entry_price:.6f})"
                     )
             else:  # Sell
-                # For Sell: Ensure SL is BETWEEN TP1 and entry
-                #  - Below entry (break-even + fee)
-                #  - Not below TP1 (تا جای ممکن نزدیک TP1 ولی بالاتر از آن)
-                if new_sl_price < tp1_price:
-                    # If calculated SL is below TP1, adjust to be slightly above TP1
-                    # This prevents SL from being triggered immediately after TP1
-                    new_sl_price = tp1_price * (1 + 0.0005)  # 0.1% above TP1
+                # For Sell: Ensure SL is BETWEEN entry and TP1
+                #  - Above entry (break-even + fee)
+                #  - Not above TP1 (should be below TP1 but above entry)
+                if new_sl_price > tp1_price:
+                    # If calculated SL is above TP1, adjust to be slightly below TP1
+                    # This ensures we're still in profit zone after TP1
+                    new_sl_price = tp1_price * (1 - 0.0005)  # 0.05% below TP1
                     log_print(
-                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below TP1 "
-                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% above TP1)"
+                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above TP1 "
+                        f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.05% below TP1)"
                     )
-                # Else: SL already between TP1 and entry (نیازی به اصلاح نیست)
                 else:
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL in valid Sell range "
@@ -738,22 +739,22 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             f"(entry={entry_price:.6f}, tp1={tp1_price:.6f}, side={side})"
         )
 
-        # Check if 30 minutes have passed
-        if time_elapsed_minutes >= 30:
-            # 30 minutes have passed, update SL immediately
+        # Check if SL_UPDATE_DELAY_MINUTES have passed
+        if time_elapsed_minutes >= SL_UPDATE_DELAY_MINUTES:
+            # Required time has passed, update SL immediately
             log_print(
-                f"[TP1_TRACK][{current_time}][{symbol}] ✅ 30 minutes passed ({time_elapsed_minutes:.2f} min), "
+                f"[TP1_TRACK][{current_time}][{symbol}] ✅ {SL_UPDATE_DELAY_MINUTES} minutes passed ({time_elapsed_minutes:.2f} min), "
                 f"updating SL immediately to {new_sl_price:.6f}"
             )
             await update_sl_price(
                 symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
             )
         else:
-            # 30 minutes have not passed, schedule a job
-            remaining_minutes = 30 - time_elapsed_minutes
+            # Required time has not passed, schedule a job
+            remaining_minutes = SL_UPDATE_DELAY_MINUTES - time_elapsed_minutes
             log_print(
                 f"[TP1_TRACK][{current_time}][{symbol}] ⏰ Only {time_elapsed_minutes:.2f} minutes elapsed "
-                f"(need 30 min), scheduling SL update in {remaining_minutes:.2f} minutes"
+                f"(need {SL_UPDATE_DELAY_MINUTES} min), scheduling SL update in {remaining_minutes:.2f} minutes"
             )
 
             # Store pending update
@@ -805,7 +806,7 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
                 f"Symbol: {symbol}\n"
                 f"TP1 Triggered: ✅\n"
                 f"Time elapsed: {time_elapsed_minutes:.1f} minutes\n"
-                f"Required: 30 minutes\n"
+                f"Required: {SL_UPDATE_DELAY_MINUTES} minutes\n"
                 f"SL will be updated in: {remaining_minutes:.1f} minutes\n"
                 f"New SL Price: {new_sl_price:,.4f}\n"
                 f"```",
@@ -902,7 +903,7 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
             f"entry={entry_price:.6f}, side={side}"
         )
 
-        # Check if 30 minutes have passed
+        # Check if SL_UPDATE_DELAY_MINUTES have passed
         entry_time = await get_position_entry_time(symbol)
         if entry_time:
             time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
@@ -913,10 +914,10 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
                 f"Time elapsed: {time_elapsed_minutes:.2f} minutes"
             )
 
-            if time_elapsed_minutes >= 30:
+            if time_elapsed_minutes >= SL_UPDATE_DELAY_MINUTES:
                 # Update SL
                 log_print(
-                    f"[TP1_TRACK][{check_time}][{symbol}] ✅ 30 minutes passed, updating SL now"
+                    f"[TP1_TRACK][{check_time}][{symbol}] ✅ {SL_UPDATE_DELAY_MINUTES} minutes passed, updating SL now"
                 )
                 await update_sl_price(
                     symbol, new_sl_price, entry_price, side, size, time_elapsed_minutes
@@ -927,7 +928,7 @@ async def schedule_sl_update_after_delay(symbol: str, delay_minutes: float):
                 )
             else:
                 log_print(
-                    f"[TP1_TRACK][{check_time}][{symbol}] ⚠️ Still less than 30 minutes "
+                    f"[TP1_TRACK][{check_time}][{symbol}] ⚠️ Still less than {SL_UPDATE_DELAY_MINUTES} minutes "
                     f"({time_elapsed_minutes:.2f} min), skipping SL update"
                 )
         else:
@@ -1296,7 +1297,7 @@ async def handle_ws_message(item: dict):
                                 f"[TP1_TRACK][{current_time}][{symbol}] 🎯 TP1 CONFIRMED! "
                                 f"Calling set_sl_after_tp1..."
                             )
-                            # TP1 triggered, set SL after 30 minutes
+                            # TP1 triggered, set SL after SL_UPDATE_DELAY_MINUTES
                             await set_sl_after_tp1(symbol, order)
                             # Note: Don't remove position from Redis here - TP1 only partially closes the position
                             # Position will be removed when StopLoss is hit or position is fully closed
@@ -1470,7 +1471,7 @@ async def handle_ws_message(item: dict):
                         f"[TP1_TRACK][{current_time}][{symbol}] 🎯 Legacy handler: TP1 CONFIRMED! "
                         f"Calling set_sl_after_tp1..."
                     )
-                    # TP1 triggered, set SL after 30 minutes
+                    # TP1 triggered, set SL after SL_UPDATE_DELAY_MINUTES
                     await set_sl_after_tp1(symbol, data)
                     # Note: Don't remove position from Redis here - TP1 only partially closes the position
                     # Position will be removed when StopLoss is hit or position is fully closed
@@ -1598,7 +1599,7 @@ async def handle_ws_message(item: dict):
                             f"[TP1_TRACK][{current_time}][{symbol}] 🎯 Legacy handler (other): TP1 CONFIRMED! "
                             f"Calling set_sl_after_tp1..."
                         )
-                        # TP1 triggered, set SL after 30 minutes
+                        # TP1 triggered, set SL after SL_UPDATE_DELAY_MINUTES
                         await set_sl_after_tp1(symbol, data)
                         # Note: Don't remove position from Redis here - TP1 only partially closes the position
                         # Position will be removed when StopLoss is hit or position is fully closed
@@ -1713,7 +1714,9 @@ async def debug_redis_data() -> str:
 
                     time_elapsed = datetime.now(ZoneInfo("Asia/Tehran")) - entry_time
                     elapsed_minutes = time_elapsed.total_seconds() / 60.0
-                    remaining_minutes = max(0, 30 - elapsed_minutes)
+                    remaining_minutes = max(
+                        0, SL_UPDATE_DELAY_MINUTES - elapsed_minutes
+                    )
 
                     result_lines.append(
                         f"    Entry Time: {entry_time.strftime('%Y-%m-%d %H:%M:%S')}"
