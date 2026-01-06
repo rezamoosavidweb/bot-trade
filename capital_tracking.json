@@ -342,6 +342,13 @@
       "opened_at": "2026-01-06T13:09:08.740519+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "JUPUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-06T14:22:28.964608+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
