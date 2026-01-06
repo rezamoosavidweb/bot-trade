@@ -326,6 +326,20 @@
       "symbol": "CAKEUSDT",
       "capital_used": 299.98,
       "opened_at": "2026-01-06T11:27:07.243572+03:30",
+      "closed_at": "2026-01-06T13:20:01.206263+03:30",
+      "duration_seconds": 6773.962691
+    },
+    {
+      "symbol": "SKYUSDT",
+      "capital_used": 299.89,
+      "opened_at": "2026-01-06T12:45:11.431153+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "SOLUSDT",
+      "capital_used": 298.01,
+      "opened_at": "2026-01-06T13:09:08.740519+03:30",
       "closed_at": null,
       "duration_seconds": null
     }
