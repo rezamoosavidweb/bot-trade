@@ -20,8 +20,13 @@ from api import (
     amend_order,
     get_sl_order_id,
 )
-from cache import remove_open_position
-from cache import refresh_transaction_log
+from cache import (
+    remove_open_position,
+    remove_position_entry_time,
+    remove_position_tp_prices,
+    remove_pending_sl_update,
+    refresh_transaction_log,
+)
 from capital_tracker import get_capital_report
 from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
 from ws_message_formatter import debug_redis_data
@@ -68,11 +73,21 @@ def register_command_handlers():
             "🛑 Cancel Orders: /cancel\n"
             "❌ Close Positions: /close_positions\n"
             "📄 Capital Report: /capital_report\n"
-            "📄 Transactions: /transactions\n"
+            "📄 Transactions: /transactions [limit] or [start_date] [end_date] [limit]\n"
+            "   Example: /transactions 100 or /transactions 2025-01-05 2025-01-06\n"
             "🛑 Cancel Waiting: /cancel_waiting\n"
             "📊 Liquidity Report: /liquidity_report\n"
-            "📋 Logs: /logs\n"
+            "📋 Logs: /logs SYMBOL START_DATE [START_TIME] [END_DATE] [END_TIME]\n"
+            "   Example: /logs BTCUSDT 2025-01-05 08:00 20:00\n"
             "🔍 Redis Data: /debug_redis\n"
+            "✏️ Amend TP/SL: /amend SYMBOL sl=VALUE tp=VALUE\n"
+            "   Example: /amend BTCUSDT sl=50000 tp=52000\n"
+            "🧹 Clear Position Cache: /clear_position SYMBOL\n"
+            "   Example: /clear_position BTCUSDT\n"
+            "🧹 Clear Schedule Cache: /clear_schedule SYMBOL\n"
+            "   Example: /clear_schedule BTCUSDT\n"
+            "🧹 Clear All Cache: /clear_all SYMBOL\n"
+            "   Example: /clear_all BTCUSDT\n"
         )
         await event.respond(message)
 
@@ -852,7 +867,7 @@ def register_command_handlers():
     @telClient.on(events.NewMessage(pattern=r"^/debug_redis$"))
     async def debug_redis_handler(event):
         """
-        نمایش تمام داده‌های مربوط به پوزیشن‌های باز و schedule های SL از Redis.
+        Display all data related to open positions and SL schedules from Redis.
         """
         try:
             await event.respond("⏳ Fetching Redis data...")
@@ -908,6 +923,60 @@ def register_command_handlers():
 
             traceback.print_exc()
 
+    # ---------- /clear_position ----------
+    @telClient.on(events.NewMessage(pattern=r"^/clear_position\s+([A-Za-z0-9]+)$"))
+    async def clear_position_handler(event):
+        """
+        Clear position data from Redis:
+        - open_positions
+        - position_entry_time
+        - position_tp_prices
+        """
+        try:
+            symbol = event.pattern_match.group(1).upper()
+            await remove_open_position(symbol)
+            await remove_position_entry_time(symbol)
+            await remove_position_tp_prices(symbol)
+            await event.respond(
+                f"🧹 Position data cleared for {symbol} (open_positions, entry_time, tp_prices)."
+            )
+        except Exception as e:
+            await event.respond(f"❌ Error clearing position data: {e}")
+
+    # ---------- /clear_schedule ----------
+    @telClient.on(events.NewMessage(pattern=r"^/clear_schedule\s+([A-Za-z0-9]+)$"))
+    async def clear_schedule_handler(event):
+        """
+        Clear pending SL schedules (pending_sl_update) from Redis.
+        """
+        try:
+            symbol = event.pattern_match.group(1).upper()
+            await remove_pending_sl_update(symbol)
+            await event.respond(
+                f"🧹 Pending SL schedule cleared for {symbol} (pending_sl_update)."
+            )
+        except Exception as e:
+            await event.respond(f"❌ Error clearing pending schedule: {e}")
+
+    # ---------- /clear_all ----------
+    @telClient.on(events.NewMessage(pattern=r"^/clear_all\s+([A-Za-z0-9]+)$"))
+    async def clear_all_handler(event):
+        """
+        Clear both position data and SL schedule for a symbol simultaneously.
+        """
+        try:
+            symbol = event.pattern_match.group(1).upper()
+            await remove_open_position(symbol)
+            await remove_position_entry_time(symbol)
+            await remove_position_tp_prices(symbol)
+            await remove_pending_sl_update(symbol)
+            await event.respond(
+                f"🧹 All cached data cleared for {symbol} "
+                "(open_positions, entry_time, tp_prices, pending_sl_update)."
+            )
+        except Exception as e:
+            await event.respond(f"❌ Error clearing all cached data: {e}")
+
     # ---------- /amend ----------
     @telClient.on(events.NewMessage(pattern=r"^/amend(?: (.+))?$"))
     async def amend_handler(event):
@@ -927,10 +996,10 @@ def register_command_handlers():
             args = event.pattern_match.group(1)
             if not args:
                 await event.respond(
-                    "❌ لطفاً نماد و حد سود/ضرر جدید را وارد کنید.\n\n"
-                    "**فرمت:**\n"
+                    "❌ Please provide symbol and new SL/TP values.\n\n"
+                    "**Format:**\n"
                     "`/amend SYMBOL sl=VALUE tp=VALUE`\n\n"
-                    "**مثال‌ها:**\n"
+                    "**Examples:**\n"
                     "`/amend BTCUSDT sl=50000`\n"
                     "`/amend BTCUSDT tp=52000`\n"
                     "`/amend BTCUSDT sl=50000 tp=52000`"
@@ -940,8 +1009,8 @@ def register_command_handlers():
             parts = args.strip().split()
             if len(parts) < 2:
                 await event.respond(
-                    "❌ فرمت نامعتبر.\n"
-                    "**فرمت صحیح:** `/amend SYMBOL sl=VALUE tp=VALUE`"
+                    "❌ Invalid format.\n"
+                    "**Correct format:** `/amend SYMBOL sl=VALUE tp=VALUE`"
                 )
                 return
 
@@ -960,7 +1029,7 @@ def register_command_handlers():
                 try:
                     fval = float(val)
                 except ValueError:
-                    await event.respond(f"❌ مقدار نامعتبر برای `{key}`: `{val}`")
+                    await event.respond(f"❌ Invalid value for `{key}`: `{val}`")
                     return
 
                 if key in ["sl", "stoploss", "stop_loss"]:
@@ -970,8 +1039,8 @@ def register_command_handlers():
 
             if sl_value is None and tp_value is None:
                 await event.respond(
-                    "❌ هیچ مقدار SL یا TP معتبری پیدا نشد.\n"
-                    "مثال: `/amend BTCUSDT sl=50000 tp=52000`"
+                    "❌ No valid SL or TP value found.\n"
+                    "Example: `/amend BTCUSDT sl=50000 tp=52000`"
                 )
                 return
 
@@ -985,7 +1054,7 @@ def register_command_handlers():
                     break
 
             if not position:
-                await event.respond(f"❌ هیچ پوزیشن بازی برای {symbol} پیدا نشد.")
+                await event.respond(f"❌ No open position found for {symbol}.")
                 return
 
             size = safe_float(position.get("size", 0))
