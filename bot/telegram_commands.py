@@ -120,6 +120,9 @@ def register_command_handlers():
 
             msg = "📊 **Open Positions:**\n\n"
 
+            # Get pending orders first (needed for TP extraction in Partial TP mode)
+            pending = get_pending_orders(settleCoin="USDT")
+
             positions = get_positions(settleCoin="USDT")
             if not positions:
                 msg += "No open positions.\n"
@@ -158,8 +161,39 @@ def register_command_handlers():
                     # Format mark price
                     mark_str = format_price(str(mark_price)) if mark_price > 0 else "-"
 
-                    # Format TP
+                    # Format TP - Check pending orders for Partial TP
                     tp_str = format_price(take_profit) if take_profit else "-"
+
+                    # If TP is empty, try to get from pending orders (Partial TP mode)
+                    if not take_profit or take_profit == "" or take_profit == "0":
+                        # Get pending orders for this symbol
+                        symbol_pending_orders = [
+                            o
+                            for o in pending
+                            if o.get("symbol") == symbol
+                            and o.get("stopOrderType") == "PartialTakeProfit"
+                        ]
+
+                        if symbol_pending_orders:
+                            # Extract trigger prices and sort them
+                            tp_prices = []
+                            for tp_order in symbol_pending_orders:
+                                trigger = tp_order.get("trigger_price") or tp_order.get(
+                                    "triggerPrice"
+                                )
+                                if trigger and trigger != "-" and trigger != "0":
+                                    try:
+                                        tp_prices.append(float(trigger))
+                                    except (ValueError, TypeError):
+                                        pass
+
+                            if tp_prices:
+                                # Sort TP prices (ascending for Buy, descending for Sell)
+                                tp_prices.sort(reverse=(side == "Sell"))
+                                # Format as "TP1 / TP2" or "TP1, TP2, TP3"
+                                tp_str = " / ".join(
+                                    [format_price(str(tp)) for tp in tp_prices]
+                                )
 
                     # Format SL
                     sl_str = format_price(stop_loss) if stop_loss else "-"
@@ -199,7 +233,6 @@ def register_command_handlers():
                     if position_count < len(valid_positions):
                         msg += "─────────────────────\n"
 
-            pending = get_pending_orders(settleCoin="USDT")
             msg += "\n\=============================\n"
             msg += "⏳ **Pending Orders:**\n"
             if not pending:
