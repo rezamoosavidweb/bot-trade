@@ -16,6 +16,9 @@ from api import (
     close_all_positions,
     get_account_info,
     get_transaction_log,
+    set_trading_stop,
+    amend_order,
+    get_sl_order_id,
 )
 from cache import remove_open_position
 from cache import refresh_transaction_log
@@ -901,6 +904,127 @@ def register_command_handlers():
             error_msg = f"❌ Error fetching Redis data: {e}"
             await event.respond(error_msg)
             log_print(f"[ERROR] Error in debug_redis_handler: {e}")
+            import traceback
+
+            traceback.print_exc()
+
+    # ---------- /amend ----------
+    @telClient.on(events.NewMessage(pattern=r"^/amend(?: (.+))?$"))
+    async def amend_handler(event):
+        """
+        Update SL/TP for an open position or its TP/SL orders.
+
+        Usage examples:
+        - /amend BTCUSDT sl=50000
+        - /amend BTCUSDT tp=52000
+        - /amend BTCUSDT sl=50000 tp=52000
+
+        Notes:
+        - Works on the CURRENT open position (one-way mode, positionIdx=0).
+        - Uses set_trading_stop for full-position TP/SL updates.
+        """
+        try:
+            args = event.pattern_match.group(1)
+            if not args:
+                await event.respond(
+                    "❌ لطفاً نماد و حد سود/ضرر جدید را وارد کنید.\n\n"
+                    "**فرمت:**\n"
+                    "`/amend SYMBOL sl=VALUE tp=VALUE`\n\n"
+                    "**مثال‌ها:**\n"
+                    "`/amend BTCUSDT sl=50000`\n"
+                    "`/amend BTCUSDT tp=52000`\n"
+                    "`/amend BTCUSDT sl=50000 tp=52000`"
+                )
+                return
+
+            parts = args.strip().split()
+            if len(parts) < 2:
+                await event.respond(
+                    "❌ فرمت نامعتبر.\n"
+                    "**فرمت صحیح:** `/amend SYMBOL sl=VALUE tp=VALUE`"
+                )
+                return
+
+            symbol = parts[0].upper()
+            sl_value = None
+            tp_value = None
+
+            for p in parts[1:]:
+                if "=" not in p:
+                    continue
+                key, val = p.split("=", 1)
+                key = key.lower().strip()
+                val = val.strip()
+                if not val:
+                    continue
+                try:
+                    fval = float(val)
+                except ValueError:
+                    await event.respond(f"❌ مقدار نامعتبر برای `{key}`: `{val}`")
+                    return
+
+                if key in ["sl", "stoploss", "stop_loss"]:
+                    sl_value = fval
+                elif key in ["tp", "takeprofit", "take_profit"]:
+                    tp_value = fval
+
+            if sl_value is None and tp_value is None:
+                await event.respond(
+                    "❌ هیچ مقدار SL یا TP معتبری پیدا نشد.\n"
+                    "مثال: `/amend BTCUSDT sl=50000 tp=52000`"
+                )
+                return
+
+            # Get current position to know size and side
+            positions = get_positions(symbol=symbol)
+            position = None
+            for p in positions:
+                size = safe_float(p.get("size", 0))
+                if size > 0:
+                    position = p
+                    break
+
+            if not position:
+                await event.respond(f"❌ هیچ پوزیشن بازی برای {symbol} پیدا نشد.")
+                return
+
+            size = safe_float(position.get("size", 0))
+            side = position.get("side", "-")
+
+            # Use set_trading_stop to update full-position TP/SL
+            kwargs = {}
+            if tp_value is not None:
+                kwargs["tp"] = tp_value
+            if sl_value is not None:
+                kwargs["sl"] = sl_value
+
+            set_trading_stop(
+                symbol=symbol,
+                positionIdx=0,
+                tpslMode="Full",
+                tpSize=size if tp_value is not None else None,
+                slSize=size if sl_value is not None else None,
+                **kwargs,
+            )
+
+            msg = (
+                f"✅ **Amend Sent**\n\n"
+                f"```\n"
+                f"Symbol: {symbol}\n"
+                f"Side: {side}\n"
+                f"Size: {size}\n"
+            )
+            if sl_value is not None:
+                msg += f"New SL: {sl_value}\n"
+            if tp_value is not None:
+                msg += f"New TP: {tp_value}\n"
+            msg += "```\n"
+
+            await event.respond(msg)
+
+        except Exception as e:
+            await event.respond(f"❌ Error in /amend: {e}")
+            log_print(f"[ERROR] Error in amend_handler: {e}")
             import traceback
 
             traceback.print_exc()

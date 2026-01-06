@@ -595,17 +595,17 @@ async def format_position_closed(data: dict, closed_pnl: float) -> str:
 async def set_sl_after_tp1(symbol: str, tp_data: dict):
     """
     Set SL for remaining position after TP1 is triggered.
-    
-    SL calculation:
-    - For Buy (Long): entry * (1 - 0.0015) - sets SL 0.15% below entry
-    - For Sell (Short): entry * (1 + 0.0015) - sets SL 0.15% above entry
-    
+
+    SL calculation (break-even + fee protection):
+    - For Buy (Long): entry * (1 + 0.0015) - sets SL 0.15% ABOVE entry
+    - For Sell (Short): entry * (1 - 0.0015) - sets SL 0.15% BELOW entry
+
     Validation:
     - For signals with small entry-to-TP1 distance, validates that SL is:
       * Below TP1 and below entry for Buy orders
       * Above TP1 and above entry for Sell orders
     - If validation fails, adjusts SL to be 0.1% below/above TP1 accordingly
-    
+
     Only sets SL if 30 minutes have passed since entry time.
     If not, schedules a job to check after 30 minutes.
     """
@@ -674,60 +674,63 @@ async def set_sl_after_tp1(symbol: str, tp_data: dict):
             f"[TP1_TRACK][{current_time}][{symbol}] TP info: entry={entry_price}, side={tp_info.get('side', 'N/A')}"
         )
 
-        # Get TP1 price for validation
+        # Get TP1 price for validation (we want SL between entry and TP1)
         tp1_price = float(tp_info.get("tp1", 0))
 
         # Calculate new SL price based on entry price
         # Note: This is a break-even or trailing stop strategy after TP1 is hit
+        # Goal:
+        #   - Buy: SL should be ABOVE entry (برای BUY بالاتر از entry برای پوشش کارمزد)
+        #   - Sell: SL should be BELOW entry (برای SELL پایین‌تر از entry برای پوشش کارمزد)
         if side == "Buy":
-            # For Long positions: SL should be below entry price
-            # Using entry * (1 - 0.0015) to set SL 0.15% below entry
-            new_sl_price = entry_price * (1 - 0.0015)
-        else:  # Sell
-            # For Short positions: SL should be above entry price
+            # For Long positions: SL should be above entry price
             # Using entry * (1 + 0.0015) to set SL 0.15% above entry
             new_sl_price = entry_price * (1 + 0.0015)
+        else:  # Sell
+            # For Short positions: SL should be below entry price
+            # Using entry * (1 - 0.0015) to set SL 0.15% below entry
+            new_sl_price = entry_price * (1 - 0.0015)
 
         # Validate and adjust SL for signals with small entry-to-TP1 distance
         # Problem: When entry and TP1 are very close (e.g., 0.00013 difference),
-        # the calculated SL might be above TP1 (for Buy) or below TP1 (for Sell),
+        # the calculated SL might go beyond TP1 or back to loss,
         # which is invalid and could cause immediate stop loss trigger
         if tp1_price > 0:
             if side == "Buy":
-                # For Buy: Ensure SL is below TP1 and below entry
-                if new_sl_price >= tp1_price:
-                    # If calculated SL is above or equal to TP1, adjust to be slightly below TP1
+                # For Buy: Ensure SL is BETWEEN entry and TP1
+                #  - Above entry (break-even + fee)
+                #  - Not beyond TP1 (تا جای ممکن نزدیک TP1 ولی قبل از آن)
+                if new_sl_price > tp1_price:
+                    # If calculated SL is above TP1, adjust to be slightly below TP1
                     # This prevents SL from being triggered immediately after TP1
-                    new_sl_price = tp1_price * (1 - 0.001)  # 0.1% below TP1
+                    new_sl_price = tp1_price * (1 - 0.0005)  # 0.1% below TP1
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above TP1 "
                         f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% below TP1)"
                     )
-                # Also ensure SL is below entry price (safety check)
-                if new_sl_price >= entry_price:
-                    # If somehow SL is above entry, set it slightly below entry
-                    new_sl_price = entry_price * (1 - 0.001)  # 0.1% below entry
+                # Else: SL already between entry and TP1 (نیازی به اصلاح نیست)
+                else:
                     log_print(
-                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was above entry "
-                        f"({entry_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% below entry)"
+                        f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL in valid Buy range "
+                        f"(entry={entry_price:.6f} < SL={new_sl_price:.6f} < tp1={tp1_price:.6f})"
                     )
             else:  # Sell
-                # For Sell: Ensure SL is above TP1 and above entry
-                if new_sl_price <= tp1_price:
-                    # If calculated SL is below or equal to TP1, adjust to be slightly above TP1
+                # For Sell: Ensure SL is BETWEEN TP1 and entry
+                #  - Below entry (break-even + fee)
+                #  - Not below TP1 (تا جای ممکن نزدیک TP1 ولی بالاتر از آن)
+                if new_sl_price < tp1_price:
+                    # If calculated SL is below TP1, adjust to be slightly above TP1
                     # This prevents SL from being triggered immediately after TP1
-                    new_sl_price = tp1_price * (1 + 0.001)  # 0.1% above TP1
+                    new_sl_price = tp1_price * (1 + 0.0005)  # 0.1% above TP1
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below TP1 "
                         f"({tp1_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% above TP1)"
                     )
-                # Also ensure SL is above entry price (safety check)
-                if new_sl_price <= entry_price:
-                    # If somehow SL is below entry, set it slightly above entry
-                    new_sl_price = entry_price * (1 + 0.001)  # 0.1% above entry
+                # Else: SL already between TP1 and entry (نیازی به اصلاح نیست)
+                else:
                     log_print(
-                        f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Calculated SL was below entry "
-                        f"({entry_price:.6f}), adjusting to {new_sl_price:.6f} (0.1% above entry)"
+                        f"[TP1_TRACK][{current_time}][{symbol}] ✅ SL in valid Sell range "
+                        f"(tp1={tp1_price:.6f} < SL={new_sl_price:.6f} < entry={entry_price:.6f})"
                     )
 
         log_print(
@@ -1249,7 +1252,28 @@ async def handle_ws_message(item: dict):
                         f"stopOrderType={stop_order_type}"
                     )
 
-                    if order_status in ["Filled", "Triggered"] and stop_order_type in [
+                    # Handle StopLoss orders that close the position
+                    if (
+                        order_status == "Filled"
+                        and stop_order_type == "StopLoss"
+                        and order.get("closeOnTrigger")
+                        and order.get("reduceOnly")
+                    ):
+                        # StopLoss filled and closed the position - remove from Redis
+                        log_print(
+                            f"[TP1_TRACK][{current_time}][{symbol}] 🛑 StopLoss Filled - Position closed, "
+                            f"removing from tracking"
+                        )
+                        await remove_open_position(symbol)
+                        await remove_position_entry_time(symbol)
+                        await remove_position_tp_prices(symbol)
+                        await remove_pending_sl_update(symbol)
+                        track_position_closed(symbol)
+
+                    elif order_status in [
+                        "Filled",
+                        "Triggered",
+                    ] and stop_order_type in [
                         "TakeProfit",
                         "PartialTakeProfit",
                     ]:
@@ -1274,18 +1298,8 @@ async def handle_ws_message(item: dict):
                             )
                             # TP1 triggered, set SL after 30 minutes
                             await set_sl_after_tp1(symbol, order)
-
-                            # If position closed, remove from tracking
-                            if order.get("closeOnTrigger") and order.get("reduceOnly"):
-                                log_print(
-                                    f"[TP1_TRACK][{current_time}][{symbol}] Position closed "
-                                    f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
-                                )
-                                await remove_open_position(symbol)
-                                await remove_position_entry_time(symbol)
-                                await remove_position_tp_prices(symbol)
-                                await remove_pending_sl_update(symbol)
-                                track_position_closed(symbol)
+                            # Note: Don't remove position from Redis here - TP1 only partially closes the position
+                            # Position will be removed when StopLoss is hit or position is fully closed
                         else:
                             log_print(
                                 f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Not TP1 (got {tp_level}), "
@@ -1295,7 +1309,7 @@ async def handle_ws_message(item: dict):
                         log_print(
                             f"[TP1_TRACK][{current_time}][{symbol}] ⏭️ Skipped: "
                             f"orderStatus={order_status}, stopOrderType={stop_order_type} "
-                            f"(not a filled/triggered TP order)"
+                            f"(not a filled/triggered TP order or closing SL order)"
                         )
                 except Exception as e:
                     # Log error but don't block message sending
@@ -1424,7 +1438,25 @@ async def handle_ws_message(item: dict):
                 f"triggerPrice={trigger_price}"
             )
 
-            if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
+            # Handle StopLoss orders that close the position
+            if (
+                order_status == "Filled"
+                and stop_order_type == "StopLoss"
+                and data.get("closeOnTrigger")
+                and data.get("reduceOnly")
+            ):
+                # StopLoss filled and closed the position - remove from Redis
+                log_print(
+                    f"[TP1_TRACK][{current_time}][{symbol}] 🛑 Legacy handler: StopLoss Filled - Position closed, "
+                    f"removing from tracking"
+                )
+                await remove_open_position(symbol)
+                await remove_position_entry_time(symbol)
+                await remove_position_tp_prices(symbol)
+                await remove_pending_sl_update(symbol)
+                track_position_closed(symbol)
+
+            elif stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                 tp_level = await identify_tp_sl_level(
                     symbol, stop_order_type, trigger_price
                 )
@@ -1440,24 +1472,13 @@ async def handle_ws_message(item: dict):
                     )
                     # TP1 triggered, set SL after 30 minutes
                     await set_sl_after_tp1(symbol, data)
+                    # Note: Don't remove position from Redis here - TP1 only partially closes the position
+                    # Position will be removed when StopLoss is hit or position is fully closed
                 else:
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler: Not TP1 "
                         f"(got {tp_level}), skipping SL update"
                     )
-
-            # If position closed, remove from open_positions and related data
-            if data.get("closeOnTrigger") and data.get("reduceOnly"):
-                log_print(
-                    f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler: Position closed "
-                    f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
-                )
-                await remove_open_position(symbol)
-                await remove_position_entry_time(symbol)
-                await remove_position_tp_prices(symbol)
-                await remove_pending_sl_update(symbol)  # Remove pending update
-                # Track position closed for capital tracking
-                track_position_closed(symbol)
 
     elif ws_type == "sl_tp_created":
         log_print(
@@ -1539,8 +1560,25 @@ async def handle_ws_message(item: dict):
             if text:
                 await telClient.send_message(TARGET_CHANNEL, text)
 
+                # Handle StopLoss orders that close the position
+                if (
+                    order_status == "Filled"
+                    and stop_order_type == "StopLoss"
+                    and data.get("closeOnTrigger")
+                    and data.get("reduceOnly")
+                ):
+                    # StopLoss filled and closed the position - remove from Redis
+                    log_print(
+                        f"[TP1_TRACK][{current_time}][{symbol}] 🛑 Legacy handler (other): StopLoss Filled - Position closed, "
+                        f"removing from tracking"
+                    )
+                    await remove_open_position(symbol)
+                    await remove_position_entry_time(symbol)
+                    await remove_position_tp_prices(symbol)
+                    await remove_pending_sl_update(symbol)
+
                 # Check if TP1 was triggered and update SL if needed
-                if stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
+                elif stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                     trigger_price = safe_float(data.get("triggerPrice", 0))
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other) TP check: "
@@ -1562,21 +1600,13 @@ async def handle_ws_message(item: dict):
                         )
                         # TP1 triggered, set SL after 30 minutes
                         await set_sl_after_tp1(symbol, data)
+                        # Note: Don't remove position from Redis here - TP1 only partially closes the position
+                        # Position will be removed when StopLoss is hit or position is fully closed
                     else:
                         log_print(
                             f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler (other): Not TP1 "
                             f"(got {tp_level}), skipping SL update"
                         )
-
-                if data.get("closeOnTrigger") and data.get("reduceOnly"):
-                    log_print(
-                        f"[TP1_TRACK][{current_time}][{symbol}] Legacy handler (other): Position closed "
-                        f"(closeOnTrigger=True, reduceOnly=True), removing from tracking"
-                    )
-                    await remove_open_position(symbol)
-                    await remove_position_entry_time(symbol)
-                    await remove_position_tp_prices(symbol)
-                    await remove_pending_sl_update(symbol)  # Remove pending update
 
 
 # ---------------- DEBUG FUNCTION ---------------- #
