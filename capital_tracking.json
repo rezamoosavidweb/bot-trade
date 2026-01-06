@@ -349,6 +349,20 @@
       "opened_at": "2026-01-06T14:22:28.964608+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "UNIUSDT",
+      "capital_used": 299.8,
+      "opened_at": "2026-01-06T15:02:18.516041+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ORDIUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-06T16:10:09.427079+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
