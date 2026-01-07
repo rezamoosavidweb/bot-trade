@@ -424,6 +424,34 @@
       "symbol": "DOTUSDT",
       "capital_used": 299.74,
       "opened_at": "2026-01-07T15:40:09.885502+03:30",
+      "closed_at": "2026-01-07T17:33:57.269246+03:30",
+      "duration_seconds": 6827.383744
+    },
+    {
+      "symbol": "POLUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-07T17:18:12.142369+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "SOLUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-07T18:09:06.586407+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "RENDERUSDT",
+      "capital_used": 299.86,
+      "opened_at": "2026-01-07T18:35:08.053244+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "BTCUSDT",
+      "capital_used": 293.56,
+      "opened_at": "2026-01-07T18:36:07.254575+03:30",
       "closed_at": null,
       "duration_seconds": null
     }
