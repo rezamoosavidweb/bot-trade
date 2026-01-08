@@ -454,6 +454,62 @@
       "opened_at": "2026-01-07T18:36:07.254575+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "HBARUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-07T22:18:07.694041+03:30",
+      "closed_at": "2026-01-07T22:39:52.257819+03:30",
+      "duration_seconds": 1304.563778
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-07T23:30:15.148540+03:30",
+      "closed_at": "2026-01-08T04:43:01.796456+03:30",
+      "duration_seconds": 18766.647916
+    },
+    {
+      "symbol": "GRTUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-08T03:25:06.464589+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "DOTUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-08T04:25:07.786365+03:30",
+      "closed_at": "2026-01-08T07:14:09.029789+03:30",
+      "duration_seconds": 10141.243424
+    },
+    {
+      "symbol": "HBARUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-08T06:01:06.326475+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ENSUSDT",
+      "capital_used": 299.88,
+      "opened_at": "2026-01-08T06:04:06.787899+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ADAUSDT",
+      "capital_used": 299.86,
+      "opened_at": "2026-01-08T07:40:08.099624+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-08T08:18:07.033249+03:30",
+      "closed_at": "2026-01-08T09:47:20.181284+03:30",
+      "duration_seconds": 5353.148035
     }
   ],
   "rejected_orders": [],
