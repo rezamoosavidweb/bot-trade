@@ -14,6 +14,7 @@ from api import (
     get_pending_orders,
     get_closed_pnl,
     close_all_positions,
+    close_position_by_symbol,
     get_account_info,
     get_transaction_log,
     set_trading_stop,
@@ -72,6 +73,8 @@ def register_command_handlers():
             "💰 Wallet Balance: /wallet\n"
             "🛑 Cancel Orders: /cancel\n"
             "❌ Close Positions: /close_positions\n"
+            "🔴 Close Symbol: /close SYMBOL\n"
+            "   Example: /close BTCUSDT\n"
             "📄 Capital Report: /capital_report\n"
             "📄 Transactions: /transactions [limit] or [start_date] [end_date] [limit]\n"
             "   Example: /transactions 100 or /transactions 2025-01-05 2025-01-06\n"
@@ -407,6 +410,49 @@ def register_command_handlers():
 
         except Exception as e:
             await event.respond(f"❌ Error closing positions: {e}")
+
+    # ---------- /close SYMBOL ----------
+    @telClient.on(events.NewMessage(pattern=r"^/close (.+)$"))
+    async def close_symbol_handler(event):
+        try:
+            symbol = event.pattern_match.group(1).strip().upper()
+
+            if not symbol:
+                await event.respond(
+                    "❌ Please provide a symbol. Example: /close BTCUSDT"
+                )
+                return
+
+            results = close_position_by_symbol(symbol)
+
+            if not results:
+                await event.respond(f"📌 No open positions for {symbol} to close.")
+                return
+
+            # Remove closed positions from open_positions
+            closed_symbols = [r["symbol"] for r in results]
+            for closed_symbol in closed_symbols:
+                await remove_open_position(closed_symbol)
+
+            # Update transaction log cache
+            try:
+                await refresh_transaction_log()
+            except Exception as cache_error:
+                print(f"[WARN] Failed to refresh transaction log cache: {cache_error}")
+
+            msg = f"✅ Closed positions for {symbol}:\n\n"
+            for r in results:
+                if "error" in r:
+                    msg += f"❌ {r['symbol']} | {r['side']} | {r['size']} | Error: {r['error']}\n"
+                else:
+                    msg += f"✅ {r['symbol']} | {r['side']} | {r['size']}\n"
+
+            msg += f"\n🔄 Cache updated. Removed {len(closed_symbols)} symbol(s) from open positions."
+
+            await event.respond(msg)
+
+        except Exception as e:
+            await event.respond(f"❌ Error closing position: {e}")
 
     @telClient.on(events.NewMessage(pattern=r"^/transactions(?: (.+))?$"))
     async def transactions_handler(event):

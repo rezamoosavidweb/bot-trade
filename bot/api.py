@@ -104,6 +104,58 @@ def close_all_positions(settleCoin="USDT"):
     return closed_positions
 
 
+def close_position_by_symbol(symbol: str):
+    """
+    Close all open positions for a specific symbol.
+    Uses reduce-only market orders to safely close positions.
+    
+    Args:
+        symbol: Trading symbol (e.g., "BTCUSDT")
+    
+    Returns:
+        List of closed positions with their details
+    """
+    positions_list = get_positions(symbol=symbol)
+    
+    if not positions_list:
+        log_print(f"[INFO] No open positions for {symbol} to close.")
+        return []
+    
+    closed_positions = []
+    
+    for pos in positions_list:
+        pos_symbol = pos.get("symbol")
+        side = pos.get("side")
+        size = float(pos.get("size", 0))
+        
+        if size == 0:
+            continue  # Ignore empty positions
+        
+        # Determine opposite side to close position
+        close_side = "Sell" if side == "Buy" else "Buy"
+        
+        try:
+            order = bybitClient.place_order(
+                category="linear",
+                symbol=pos_symbol,
+                side=close_side,
+                orderType="Market",
+                qty=str(size),
+                reduceOnly=True,
+            )
+            closed_positions.append(
+                {"symbol": pos_symbol, "side": side, "size": size, "orderResult": order}
+            )
+            log_print(f"[SUCCESS] Closed position {pos_symbol} | {side} | size: {size}")
+        except Exception as e:
+            log_print(f"[ERROR] Failed to close position {pos_symbol}: {e}")
+            closed_positions.append(
+                {"symbol": pos_symbol, "side": side, "size": size, "error": str(e)}
+            )
+    
+    return closed_positions
+
+
 # ---------------- ORDERS ---------------- #
 def get_pending_orders(settleCoin: str):
     """Retrieve all pending/open orders for a given settleCoin."""
