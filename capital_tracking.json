@@ -445,8 +445,8 @@
       "symbol": "RENDERUSDT",
       "capital_used": 299.86,
       "opened_at": "2026-01-07T18:35:08.053244+03:30",
-      "closed_at": null,
-      "duration_seconds": null
+      "closed_at": "2026-01-11T16:14:00.841710+03:30",
+      "duration_seconds": 337132.788466
     },
     {
       "symbol": "BTCUSDT",
@@ -510,6 +510,545 @@
       "opened_at": "2026-01-08T08:18:07.033249+03:30",
       "closed_at": "2026-01-08T09:47:20.181284+03:30",
       "duration_seconds": 5353.148035
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "capital_used": 299.86,
+      "opened_at": "2026-01-08T11:08:08.617190+03:30",
+      "closed_at": "2026-01-08T19:13:54.286153+03:30",
+      "duration_seconds": 29145.668963
+    },
+    {
+      "symbol": "APEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-08T19:44:23.018828+03:30",
+      "closed_at": "2026-01-11T19:18:50.286574+03:30",
+      "duration_seconds": 257667.267746
+    },
+    {
+      "symbol": "SUIUSDT",
+      "capital_used": 299.9,
+      "opened_at": "2026-01-08T21:06:07.013990+03:30",
+      "closed_at": "2026-01-14T01:40:57.509481+03:30",
+      "duration_seconds": 448490.495491
+    },
+    {
+      "symbol": "XPLUSDT",
+      "capital_used": 299.62,
+      "opened_at": "2026-01-08T23:42:11.413425+03:30",
+      "closed_at": "2026-01-09T06:58:30.795308+03:30",
+      "duration_seconds": 26179.381883
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-08T23:42:22.951222+03:30",
+      "closed_at": "2026-01-09T00:27:34.684406+03:30",
+      "duration_seconds": 2711.733184
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.81,
+      "opened_at": "2026-01-09T01:30:11.777302+03:30",
+      "closed_at": "2026-01-09T05:34:00.689232+03:30",
+      "duration_seconds": 14628.91193
+    },
+    {
+      "symbol": "TAOUSDT",
+      "capital_used": 299.21,
+      "opened_at": "2026-01-09T05:29:06.830586+03:30",
+      "closed_at": "2026-01-19T03:16:18.099492+03:30",
+      "duration_seconds": 856031.268906
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.84,
+      "opened_at": "2026-01-09T10:06:08.614635+03:30",
+      "closed_at": "2026-01-09T12:19:13.315984+03:30",
+      "duration_seconds": 7984.701349
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "capital_used": 299.89,
+      "opened_at": "2026-01-09T12:09:10.440053+03:30",
+      "closed_at": "2026-01-09T16:58:39.764679+03:30",
+      "duration_seconds": 17369.324626
+    },
+    {
+      "symbol": "XLMUSDT",
+      "capital_used": 299.81,
+      "opened_at": "2026-01-09T13:06:07.794599+03:30",
+      "closed_at": "2026-01-09T19:05:22.526272+03:30",
+      "duration_seconds": 21554.731673
+    },
+    {
+      "symbol": "DASHUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-09T17:10:09.849516+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "RUNEUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-09T19:15:16.269172+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-09T19:18:07.485170+03:30",
+      "closed_at": "2026-01-12T04:23:42.639087+03:30",
+      "duration_seconds": 205535.153917
+    },
+    {
+      "symbol": "ETCUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-09T19:30:22.758055+03:30",
+      "closed_at": "2026-01-09T23:03:05.055362+03:30",
+      "duration_seconds": 12762.297307
+    },
+    {
+      "symbol": "LINKUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-09T19:36:06.979767+03:30",
+      "closed_at": "2026-01-12T17:51:29.698448+03:30",
+      "duration_seconds": 252922.718681
+    },
+    {
+      "symbol": "SNXUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-09T20:55:16.736313+03:30",
+      "closed_at": "2026-01-10T06:08:24.650837+03:30",
+      "duration_seconds": 33187.914524
+    },
+    {
+      "symbol": "ALGOUSDT",
+      "capital_used": 299.73,
+      "opened_at": "2026-01-09T21:18:08.042339+03:30",
+      "closed_at": "2026-01-10T06:37:11.820881+03:30",
+      "duration_seconds": 33543.778542
+    },
+    {
+      "symbol": "JUPUSDT",
+      "capital_used": 299.92,
+      "opened_at": "2026-01-09T22:12:13.875160+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "CAKEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-10T01:27:15.913396+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ALGOUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-10T19:06:09.901162+03:30",
+      "closed_at": "2026-01-12T02:35:14.342106+03:30",
+      "duration_seconds": 113344.440944
+    },
+    {
+      "symbol": "TRUMPUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-11T00:42:08.494250+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "NEARUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-11T03:25:18.888529+03:30",
+      "closed_at": "2026-01-11T16:17:13.978991+03:30",
+      "duration_seconds": 46315.090462
+    },
+    {
+      "symbol": "ETHUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-11T09:40:07.233880+03:30",
+      "closed_at": "2026-01-12T17:54:06.129091+03:30",
+      "duration_seconds": 116038.895211
+    },
+    {
+      "symbol": "XLMUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-11T15:57:14.081392+03:30",
+      "closed_at": "2026-01-11T19:13:28.783403+03:30",
+      "duration_seconds": 11774.702011
+    },
+    {
+      "symbol": "SNXUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-11T20:21:06.481113+03:30",
+      "closed_at": "2026-01-11T21:07:33.238366+03:30",
+      "duration_seconds": 2786.757253
+    },
+    {
+      "symbol": "BTCUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-12T00:54:07.173160+03:30",
+      "closed_at": "2026-01-12T04:30:10.723295+03:30",
+      "duration_seconds": 12963.550135
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 299.59,
+      "opened_at": "2026-01-12T05:50:07.824238+03:30",
+      "closed_at": "2026-01-12T11:15:56.773306+03:30",
+      "duration_seconds": 19548.949068
+    },
+    {
+      "symbol": "APEUSDT",
+      "capital_used": 299.77,
+      "opened_at": "2026-01-12T07:38:07.793143+03:30",
+      "closed_at": "2026-01-12T12:07:30.236636+03:30",
+      "duration_seconds": 16162.443493
+    },
+    {
+      "symbol": "TIAUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-12T13:00:11.120603+03:30",
+      "closed_at": "2026-01-13T17:58:55.070760+03:30",
+      "duration_seconds": 104323.950157
+    },
+    {
+      "symbol": "ALGOUSDT",
+      "capital_used": 299.45,
+      "opened_at": "2026-01-12T15:12:07.966511+03:30",
+      "closed_at": "2026-01-13T18:00:17.642235+03:30",
+      "duration_seconds": 96489.675724
+    },
+    {
+      "symbol": "APEUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-12T15:54:11.245515+03:30",
+      "closed_at": "2026-01-12T16:37:27.362336+03:30",
+      "duration_seconds": 2596.116821
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-12T18:18:09.819219+03:30",
+      "closed_at": "2026-01-13T17:00:04.948843+03:30",
+      "duration_seconds": 81715.129624
+    },
+    {
+      "symbol": "XPLUSDT",
+      "capital_used": 299.63,
+      "opened_at": "2026-01-12T20:54:08.272107+03:30",
+      "closed_at": "2026-01-13T08:31:02.104189+03:30",
+      "duration_seconds": 41813.832082
+    },
+    {
+      "symbol": "NEARUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-12T22:40:08.770022+03:30",
+      "closed_at": "2026-01-13T05:34:19.738617+03:30",
+      "duration_seconds": 24850.968595
+    },
+    {
+      "symbol": "TONUSDT",
+      "capital_used": 299.86,
+      "opened_at": "2026-01-12T23:02:09.963303+03:30",
+      "closed_at": "2026-01-15T23:55:26.826575+03:30",
+      "duration_seconds": 262396.863272
+    },
+    {
+      "symbol": "APEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-12T23:40:20.552761+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.75,
+      "opened_at": "2026-01-13T00:34:10.710176+03:30",
+      "closed_at": "2026-01-13T15:05:28.031771+03:30",
+      "duration_seconds": 52277.321595
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.02,
+      "opened_at": "2026-01-13T13:45:09.140035+03:30",
+      "closed_at": "2026-01-13T14:30:47.205806+03:30",
+      "duration_seconds": 2738.065771
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "capital_used": 299.45,
+      "opened_at": "2026-01-14T00:57:05.052497+03:30",
+      "closed_at": "2026-01-14T10:30:23.285389+03:30",
+      "duration_seconds": 34398.232892
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 299.87,
+      "opened_at": "2026-01-14T03:26:05.389415+03:30",
+      "closed_at": "2026-01-14T04:35:11.315507+03:30",
+      "duration_seconds": 4145.926092
+    },
+    {
+      "symbol": "DOTUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-14T07:05:12.110622+03:30",
+      "closed_at": "2026-01-14T22:03:44.064652+03:30",
+      "duration_seconds": 53911.95403
+    },
+    {
+      "symbol": "LINKUSDT",
+      "capital_used": 299.74,
+      "opened_at": "2026-01-14T18:42:08.181468+03:30",
+      "closed_at": "2026-01-15T06:56:51.180479+03:30",
+      "duration_seconds": 44082.999011
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.72,
+      "opened_at": "2026-01-14T18:45:12.918692+03:30",
+      "closed_at": "2026-01-14T22:05:56.214996+03:30",
+      "duration_seconds": 12043.296304
+    },
+    {
+      "symbol": "VETUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-14T22:18:13.488622+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "XPLUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-15T01:54:13.818580+03:30",
+      "closed_at": "2026-01-15T05:20:11.414428+03:30",
+      "duration_seconds": 12357.595848
+    },
+    {
+      "symbol": "ROSEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-15T04:02:10.836963+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "BTCUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-15T08:48:06.566026+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.84,
+      "opened_at": "2026-01-15T09:35:08.066206+03:30",
+      "closed_at": "2026-01-15T19:53:39.778298+03:30",
+      "duration_seconds": 37111.712092
+    },
+    {
+      "symbol": "XPLUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-15T11:58:10.569528+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.71,
+      "opened_at": "2026-01-15T18:34:08.626352+03:30",
+      "closed_at": "2026-01-15T20:12:47.463161+03:30",
+      "duration_seconds": 5918.836809
+    },
+    {
+      "symbol": "SUIUSDT",
+      "capital_used": 293.8,
+      "opened_at": "2026-01-15T19:36:08.856357+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.94,
+      "opened_at": "2026-01-16T11:30:12.301189+03:30",
+      "closed_at": "2026-01-16T18:58:56.366241+03:30",
+      "duration_seconds": 26924.065052
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-16T15:30:20.339811+03:30",
+      "closed_at": "2026-01-16T16:02:59.416517+03:30",
+      "duration_seconds": 1959.076706
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.95,
+      "opened_at": "2026-01-16T18:46:09.403008+03:30",
+      "closed_at": "2026-01-16T23:43:53.539653+03:30",
+      "duration_seconds": 17864.136645
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.79,
+      "opened_at": "2026-01-16T19:30:21.477669+03:30",
+      "closed_at": "2026-01-16T21:43:03.768996+03:30",
+      "duration_seconds": 7962.291327
+    },
+    {
+      "symbol": "SEIUSDT",
+      "capital_used": 299.72,
+      "opened_at": "2026-01-16T22:12:15.894033+03:30",
+      "closed_at": "2026-01-17T18:05:54.347310+03:30",
+      "duration_seconds": 71618.453277
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-17T00:10:09.362814+03:30",
+      "closed_at": "2026-01-17T14:19:40.933209+03:30",
+      "duration_seconds": 50971.570395
+    },
+    {
+      "symbol": "NEARUSDT",
+      "capital_used": 299.92,
+      "opened_at": "2026-01-17T06:00:09.405326+03:30",
+      "closed_at": "2026-01-19T03:00:20.462492+03:30",
+      "duration_seconds": 162011.057166
+    },
+    {
+      "symbol": "RENDERUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-17T14:10:13.661237+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-17T14:34:05.687737+03:30",
+      "closed_at": "2026-01-17T15:00:26.954050+03:30",
+      "duration_seconds": 1581.266313
+    },
+    {
+      "symbol": "MANAUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-17T23:27:07.334249+03:30",
+      "closed_at": "2026-01-18T02:08:35.656273+03:30",
+      "duration_seconds": 9688.322024
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.75,
+      "opened_at": "2026-01-18T05:15:07.139774+03:30",
+      "closed_at": "2026-01-18T14:56:26.033161+03:30",
+      "duration_seconds": 34878.893387
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-18T07:55:06.904154+03:30",
+      "closed_at": "2026-01-18T11:55:50.874486+03:30",
+      "duration_seconds": 14443.970332
+    },
+    {
+      "symbol": "KASUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-18T09:42:08.167368+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "MANAUSDT",
+      "capital_used": 299.87,
+      "opened_at": "2026-01-18T11:06:08.236478+03:30",
+      "closed_at": "2026-01-18T11:14:22.776220+03:30",
+      "duration_seconds": 494.539742
+    },
+    {
+      "symbol": "MANAUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-18T11:33:07.131464+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "LTCUSDT",
+      "capital_used": 299.3,
+      "opened_at": "2026-01-18T21:35:13.458556+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "DOTUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-18T22:00:13.206035+03:30",
+      "closed_at": "2026-01-19T02:58:31.707322+03:30",
+      "duration_seconds": 17898.501287
+    },
+    {
+      "symbol": "DOTUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-19T18:45:11.393641+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "NEARUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-19T22:05:09.243393+03:30",
+      "closed_at": "2026-01-19T23:22:21.248628+03:30",
+      "duration_seconds": 4632.005235
+    },
+    {
+      "symbol": "TAOUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-19T22:10:08.015618+03:30",
+      "closed_at": "2026-01-20T08:31:13.159020+03:30",
+      "duration_seconds": 37265.143402
+    },
+    {
+      "symbol": "ALGOUSDT",
+      "capital_used": 299.92,
+      "opened_at": "2026-01-20T04:48:07.973186+03:30",
+      "closed_at": "2026-01-20T09:47:54.190362+03:30",
+      "duration_seconds": 17986.217176
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.87,
+      "opened_at": "2026-01-20T10:10:07.851344+03:30",
+      "closed_at": "2026-01-20T12:04:43.788959+03:30",
+      "duration_seconds": 6875.937615
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.96,
+      "opened_at": "2026-01-20T14:42:12.696962+03:30",
+      "closed_at": "2026-01-20T18:33:00.927696+03:30",
+      "duration_seconds": 13848.230734
+    },
+    {
+      "symbol": "TONUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-20T19:54:14.013656+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "MOVEUSDT",
+      "capital_used": 299.9,
+      "opened_at": "2026-01-21T05:14:14.739070+03:30",
+      "closed_at": "2026-01-21T15:53:10.336747+03:30",
+      "duration_seconds": 38335.597677
+    },
+    {
+      "symbol": "TIAUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-21T07:30:11.189475+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
