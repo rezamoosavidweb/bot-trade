@@ -142,17 +142,18 @@ async def handle_telegram_signal(item):
     qty_step = symbol_info.get("qty_step", 1)
 
     # Calculate TP1 (40%) and TP2 (60%)
-    tp1_qty = int(qty * 0.40)
-    tp2_qty = qty - tp1_qty  # Remaining 40%
+    tp1_qty = int(qty)
+    # tp1_qty = int(qty * 0.40)
+    # tp2_qty = qty - tp1_qty  # Remaining 40%
 
     # Normalize qty values with step size
     tp1_qty = normalize_qty(tp1_qty, qty_step)
-    tp2_qty = normalize_qty(tp2_qty, qty_step)
+    # tp2_qty = normalize_qty(tp2_qty, qty_step)
 
     # Ensure that tp1_qty + tp2_qty = qty
-    if tp1_qty + tp2_qty != qty:
+    # if tp1_qty + tp2_qty != qty:
         # If normalization caused changes, adjust tp2_qty
-        tp2_qty = normalize_qty(qty - tp1_qty, qty_step)
+        # tp2_qty = normalize_qty(qty - tp1_qty, qty_step)
 
     # Set TP1 with 60% of quantity
     set_trading_stop(
@@ -164,13 +165,13 @@ async def handle_telegram_signal(item):
     )
 
     # Set TP2 with 40% of quantity
-    set_trading_stop(
-        symbol=symbol,
-        tpslMode="Partial",
-        positionIdx=0,
-        tp=signal["targets"][1],
-        tpSize=str(tp2_qty),
-    )
+    # set_trading_stop(
+    #     symbol=symbol,
+    #     tpslMode="Partial",
+    #     positionIdx=0,
+    #     tp=signal["targets"][1],
+    #     tpSize=str(tp2_qty),
+    # )
 
     tp_message = f"TP1: {signal['targets'][0]}\nTP2: {signal['targets'][1]}"
 
@@ -180,7 +181,8 @@ async def handle_telegram_signal(item):
         f"Symbol: {symbol}\nSide: {signal['side']}\nEntry: {signal['entry']}\n"
         f"Qty: {qty}\nSL: {signal['sl']}\n{tp_message}\n"
         f"Leverage: {leverage}\n"
-        f"TP1 Qty: {tp1_qty} (40%)\nTP2 Qty: {tp2_qty} (60%)",
+        f"TP1 Qty: {tp1_qty} (100%)\n",
+        # f"TP1 Qty: {tp1_qty} (40%)\nTP2 Qty: {tp2_qty} (60%)",
     )
 
     log_print(f"[SUCCESS] Order placed and SL/TP configured for {symbol}")
