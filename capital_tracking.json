@@ -1047,6 +1047,76 @@
       "symbol": "TIAUSDT",
       "capital_used": 300.0,
       "opened_at": "2026-01-21T07:30:11.189475+03:30",
+      "closed_at": "2026-01-21T20:28:35.862402+03:30",
+      "duration_seconds": 46704.672927
+    },
+    {
+      "symbol": "INJUSDT",
+      "capital_used": 299.73,
+      "opened_at": "2026-01-21T20:02:08.120147+03:30",
+      "closed_at": "2026-01-21T20:14:54.931536+03:30",
+      "duration_seconds": 766.811389
+    },
+    {
+      "symbol": "XLMUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-21T22:42:08.649699+03:30",
+      "closed_at": "2026-01-22T00:24:12.708569+03:30",
+      "duration_seconds": 6124.05887
+    },
+    {
+      "symbol": "LINKUSDT",
+      "capital_used": 299.39,
+      "opened_at": "2026-01-22T00:06:21.975361+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "TAOUSDT",
+      "capital_used": 299.6,
+      "opened_at": "2026-01-22T00:09:07.220245+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ETHUSDT",
+      "capital_used": 299.7,
+      "opened_at": "2026-01-22T00:20:10.118474+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "QNTUSDT",
+      "capital_used": 299.67,
+      "opened_at": "2026-01-22T02:06:16.007300+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "BTCUSDT",
+      "capital_used": 299.56,
+      "opened_at": "2026-01-23T05:36:07.914641+03:30",
+      "closed_at": "2026-01-23T20:11:23.531395+03:30",
+      "duration_seconds": 52515.616754
+    },
+    {
+      "symbol": "ORDIUSDT",
+      "capital_used": 299.99,
+      "opened_at": "2026-01-23T06:40:13.582888+03:30",
+      "closed_at": "2026-01-23T18:17:12.376172+03:30",
+      "duration_seconds": 41818.793284
+    },
+    {
+      "symbol": "MOVEUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-23T09:22:06.984799+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "FILUSDT",
+      "capital_used": 299.4,
+      "opened_at": "2026-01-23T18:50:10.872685+03:30",
       "closed_at": null,
       "duration_seconds": null
     }
@@ -1073,6 +1143,13 @@
       "max_concurrent_capital": 299.9,
       "avg_concurrent_capital": 99.91916666666667,
       "total_capital_hours": 1187.2925970650306
+    },
+    "2026-01-21": {
+      "total_positions": 3,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 599.9,
+      "avg_concurrent_capital": 299.9565217391304,
+      "total_capital_hours": 7149.467777515908
     }
   },
   "weekly_stats": {
@@ -1082,15 +1159,22 @@
       "max_concurrent_capital": 1199.78,
       "avg_concurrent_capital": 94.21224358974358,
       "total_capital_hours": 13939.057320098787
+    },
+    "2026-W04": {
+      "total_positions": 10,
+      "total_rejected_orders": 0,
+      "max_concurrent_capital": 1199.8600000000001,
+      "avg_concurrent_capital": 523.8898591549296,
+      "total_capital_hours": 13865.520639811972
     }
   },
   "monthly_stats": {
     "2026-01": {
-      "total_positions": 12,
+      "total_positions": 151,
       "total_rejected_orders": 0,
-      "max_concurrent_capital": 1199.78,
-      "avg_concurrent_capital": 174.96559523809523,
-      "total_capital_hours": 13939.057320098787
+      "max_concurrent_capital": 9885.059999999998,
+      "avg_concurrent_capital": 5451.731650099422,
+      "total_capital_hours": 415516.09836474503
     }
   }
 }
