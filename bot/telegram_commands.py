@@ -25,12 +25,14 @@ from cache import (
     remove_open_position,
     remove_position_entry_time,
     remove_position_tp_prices,
+    remove_position_remaining_size,
     remove_pending_sl_update,
     refresh_transaction_log,
+    clear_all_redis_bot_data,
 )
 from capital_tracker import get_capital_report
 from liquidity_analyzer import get_liquidity_report, analyze_symbol_liquidity
-from ws_message_formatter import debug_redis_data
+from ws_message_formatter import debug_redis_data, notify_redis_symbol_removed
 
 
 def safe_float(value, default=0.0):
@@ -89,8 +91,9 @@ def register_command_handlers():
             "   Example: /clear_position BTCUSDT\n"
             "🧹 Clear Schedule Cache: /clear_schedule SYMBOL\n"
             "   Example: /clear_schedule BTCUSDT\n"
-            "🧹 Clear All Cache: /clear_all SYMBOL\n"
-            "   Example: /clear_all BTCUSDT\n"
+            "🧹 Clear All Cache: /clear_all [SYMBOL]\n"
+            "   /clear_all BTCUSDT - clear one symbol\n"
+            "   /clear_all - clear all Redis data\n"
         )
         await event.respond(message)
 
@@ -389,10 +392,12 @@ def register_command_handlers():
                 await event.respond("📌 No open positions to close.")
                 return
 
-            # Remove closed positions from open_positions
+            # Remove closed positions from open_positions and remaining size
             closed_symbols = [r["symbol"] for r in results]
             for symbol in closed_symbols:
                 await remove_open_position(symbol)
+                await remove_position_remaining_size(symbol)
+                await notify_redis_symbol_removed(symbol, "/close_positions")
 
             # Update transaction log cache
             try:
@@ -429,10 +434,12 @@ def register_command_handlers():
                 await event.respond(f"📌 No open positions for {symbol} to close.")
                 return
 
-            # Remove closed positions from open_positions
+            # Remove closed positions from open_positions and remaining size
             closed_symbols = [r["symbol"] for r in results]
             for closed_symbol in closed_symbols:
                 await remove_open_position(closed_symbol)
+                await remove_position_remaining_size(closed_symbol)
+                await notify_redis_symbol_removed(closed_symbol, "/close")
 
             # Update transaction log cache
             try:
@@ -1010,14 +1017,16 @@ def register_command_handlers():
         - open_positions
         - position_entry_time
         - position_tp_prices
+        - position_remaining_size
         """
         try:
             symbol = event.pattern_match.group(1).upper()
             await remove_open_position(symbol)
             await remove_position_entry_time(symbol)
             await remove_position_tp_prices(symbol)
+            await remove_position_remaining_size(symbol)
             await event.respond(
-                f"🧹 Position data cleared for {symbol} (open_positions, entry_time, tp_prices)."
+                f"🧹 Position data cleared for {symbol} (open_positions, entry_time, tp_prices, remaining_size)."
             )
         except Exception as e:
             await event.respond(f"❌ Error clearing position data: {e}")
@@ -1038,23 +1047,35 @@ def register_command_handlers():
             await event.respond(f"❌ Error clearing pending schedule: {e}")
 
     # ---------- /clear_all ----------
-    @telClient.on(events.NewMessage(pattern=r"^/clear_all\s+([A-Za-z0-9]+)$"))
+    @telClient.on(events.NewMessage(pattern=r"^/clear_all(?:\s+([A-Za-z0-9]+))?$"))
     async def clear_all_handler(event):
         """
-        Clear both position data and SL schedule for a symbol simultaneously.
+        With SYMBOL: clear position data and SL schedule for that symbol.
+        Without SYMBOL: clear all bot Redis data (open_positions, entry_times,
+        tp_prices, remaining_sizes, pending_sl_updates, symbol_info, transaction_log).
         """
         try:
-            symbol = event.pattern_match.group(1).upper()
-            await remove_open_position(symbol)
-            await remove_position_entry_time(symbol)
-            await remove_position_tp_prices(symbol)
-            await remove_pending_sl_update(symbol)
-            await event.respond(
-                f"🧹 All cached data cleared for {symbol} "
-                "(open_positions, entry_time, tp_prices, pending_sl_update)."
-            )
+            symbol_match = event.pattern_match.group(1)
+            if symbol_match:
+                symbol = symbol_match.strip().upper()
+                await remove_open_position(symbol)
+                await remove_position_entry_time(symbol)
+                await remove_position_tp_prices(symbol)
+                await remove_position_remaining_size(symbol)
+                await remove_pending_sl_update(symbol)
+                await event.respond(
+                    f"🧹 All cached data cleared for {symbol} "
+                    "(open_positions, entry_time, tp_prices, remaining_size, pending_sl_update)."
+                )
+            else:
+                deleted = await clear_all_redis_bot_data()
+                await event.respond(
+                    f"🧹 All Redis data cleared ({deleted} keys): "
+                    "open_positions, entry_times, tp_prices, remaining_sizes, "
+                    "pending_sl_updates, symbol_info, transaction_log."
+                )
         except Exception as e:
-            await event.respond(f"❌ Error clearing all cached data: {e}")
+            await event.respond(f"❌ Error clearing cached data: {e}")
 
     # ---------- /amend ----------
     @telClient.on(events.NewMessage(pattern=r"^/amend(?: (.+))?$"))

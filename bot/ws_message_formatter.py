@@ -24,6 +24,9 @@ from cache import (
     remove_position_entry_time,
     get_position_tp_prices,
     remove_position_tp_prices,
+    get_position_remaining_sizes,
+    subtract_position_remaining_size,
+    remove_position_remaining_size,
     set_pending_sl_update,
     get_pending_sl_update,
     remove_pending_sl_update,
@@ -332,6 +335,48 @@ def safe_float(value, default=0.0):
         return float(value)
     except (ValueError, TypeError):
         return default
+
+
+async def notify_redis_symbol_removed(symbol: str, reason: str):
+    """Send Telegram message when symbol is removed from Redis (position closed)."""
+    try:
+        msg = (
+            f"🔄 **Redis updated:** `{symbol}` removed from cache\n"
+            f"_(position fully closed – {reason})_"
+        )
+        await telClient.send_message(TARGET_CHANNEL, msg)
+    except Exception as e:
+        log_print(f"[WARN] Failed to send Redis-update notification: {e}")
+
+
+async def on_tp_filled_update_remaining_and_maybe_remove(
+    symbol: str, filled_qty: float, log_prefix: str = ""
+) -> bool:
+    """
+    On TP Filled: subtract filled_qty from Redis remaining size (no API).
+    If remaining <= 0, remove symbol from Redis and track closed.
+    Independent of TP1/TP2/TP3; Redis-only.
+    """
+    try:
+        closed = await subtract_position_remaining_size(symbol, filled_qty)
+        if not closed:
+            return False
+        log_print(
+            f"[TP1_TRACK]{log_prefix}[{symbol}] ✅ Position fully closed (remaining=0), "
+            "removing from Redis cache"
+        )
+        await remove_open_position(symbol)
+        await remove_position_entry_time(symbol)
+        await remove_position_tp_prices(symbol)
+        await remove_pending_sl_update(symbol)
+        track_position_closed(symbol)
+        await notify_redis_symbol_removed(symbol, "TP")
+        return True
+    except Exception as e:
+        log_print(
+            f"[TP1_TRACK]{log_prefix}[{symbol}] ❌ Error on TP fill update/remove: {e}"
+        )
+        return False
 
 
 def format_fee_detail(cum_fee_detail: dict) -> str:
@@ -1268,8 +1313,10 @@ async def handle_ws_message(item: dict):
                         await remove_open_position(symbol)
                         await remove_position_entry_time(symbol)
                         await remove_position_tp_prices(symbol)
+                        await remove_position_remaining_size(symbol)
                         await remove_pending_sl_update(symbol)
                         track_position_closed(symbol)
+                        await notify_redis_symbol_removed(symbol, "SL")
 
                     elif order_status in [
                         "Filled",
@@ -1305,6 +1352,14 @@ async def handle_ws_message(item: dict):
                             log_print(
                                 f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Not TP1 (got {tp_level}), "
                                 f"skipping SL update"
+                            )
+                        # On Filled TP: subtract filled qty from Redis remaining; remove if closed (no API)
+                        if order_status == "Filled":
+                            filled_qty = safe_float(
+                                order.get("cumExecQty") or order.get("qty", 0)
+                            )
+                            await on_tp_filled_update_remaining_and_maybe_remove(
+                                symbol, filled_qty, f"[{current_time}] "
                             )
                     else:
                         log_print(
@@ -1396,8 +1451,10 @@ async def handle_ws_message(item: dict):
         await remove_open_position(symbol)
         await remove_position_entry_time(symbol)
         await remove_position_tp_prices(symbol)
+        await remove_position_remaining_size(symbol)
         # Track position closed for capital tracking
         track_position_closed(symbol)
+        await notify_redis_symbol_removed(symbol, "close_position")
         text = await format_position_closed(data, closed_pnl)
         await telClient.send_message(TARGET_CHANNEL, text)
         log_print(
@@ -1454,8 +1511,10 @@ async def handle_ws_message(item: dict):
                 await remove_open_position(symbol)
                 await remove_position_entry_time(symbol)
                 await remove_position_tp_prices(symbol)
+                await remove_position_remaining_size(symbol)
                 await remove_pending_sl_update(symbol)
                 track_position_closed(symbol)
+                await notify_redis_symbol_removed(symbol, "SL")
 
             elif stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
                 tp_level = await identify_tp_sl_level(
@@ -1479,6 +1538,14 @@ async def handle_ws_message(item: dict):
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler: Not TP1 "
                         f"(got {tp_level}), skipping SL update"
+                    )
+                # On Filled TP: subtract filled qty from Redis remaining; remove if closed (no API)
+                if order_status == "Filled":
+                    filled_qty = safe_float(
+                        data.get("cumExecQty") or data.get("qty", 0)
+                    )
+                    await on_tp_filled_update_remaining_and_maybe_remove(
+                        symbol, filled_qty, f"[{current_time}] "
                     )
 
     elif ws_type == "sl_tp_created":
@@ -1528,8 +1595,10 @@ async def handle_ws_message(item: dict):
                 await remove_open_position(symbol)
                 await remove_position_entry_time(symbol)
                 await remove_position_tp_prices(symbol)
+                await remove_position_remaining_size(symbol)
                 # Track position closed for capital tracking
                 track_position_closed(symbol)
+                await notify_redis_symbol_removed(symbol, "market close")
                 text = await format_position_closed(data, closed_pnl)
                 await telClient.send_message(TARGET_CHANNEL, text)
                 log_print(
@@ -1576,7 +1645,10 @@ async def handle_ws_message(item: dict):
                     await remove_open_position(symbol)
                     await remove_position_entry_time(symbol)
                     await remove_position_tp_prices(symbol)
+                    await remove_position_remaining_size(symbol)
                     await remove_pending_sl_update(symbol)
+                    track_position_closed(symbol)
+                    await notify_redis_symbol_removed(symbol, "SL")
 
                 # Check if TP1 was triggered and update SL if needed
                 elif stop_order_type in ["TakeProfit", "PartialTakeProfit"]:
@@ -1607,6 +1679,14 @@ async def handle_ws_message(item: dict):
                         log_print(
                             f"[TP1_TRACK][{current_time}][{symbol}] ⚠️ Legacy handler (other): Not TP1 "
                             f"(got {tp_level}), skipping SL update"
+                        )
+                    # On Filled TP: subtract filled qty from Redis remaining; remove if closed (no API)
+                    if order_status == "Filled":
+                        filled_qty = safe_float(
+                            data.get("cumExecQty") or data.get("qty", 0)
+                        )
+                        await on_tp_filled_update_remaining_and_maybe_remove(
+                            symbol, filled_qty, f"[{current_time}] "
                         )
 
 
@@ -1678,7 +1758,18 @@ async def debug_redis_data() -> str:
             result_lines.append("  (empty)")
         result_lines.append("")
 
-        # 3. TP Prices
+        # 3. Remaining Sizes (Redis-only, no API)
+        result_lines.append("📐 REMAINING SIZES:")
+        result_lines.append("-" * 60)
+        remaining_sizes = await get_position_remaining_sizes()
+        if remaining_sizes:
+            for sym, size in sorted(remaining_sizes.items()):
+                result_lines.append(f"  {sym}: {size}")
+        else:
+            result_lines.append("  (empty)")
+        result_lines.append("")
+
+        # 4. TP Prices
         result_lines.append("🎯 TP PRICES:")
         result_lines.append("-" * 60)
         tp_prices_all = await get_position_tp_prices()
@@ -1696,7 +1787,7 @@ async def debug_redis_data() -> str:
             result_lines.append("  (empty)")
         result_lines.append("")
 
-        # 4. Pending SL Updates (Scheduled)
+        # 5. Pending SL Updates (Scheduled)
         result_lines.append("⏳ PENDING SL UPDATES (Scheduled):")
         result_lines.append("-" * 60)
         pending_updates = await get_pending_sl_updates()

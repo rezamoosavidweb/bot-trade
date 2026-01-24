@@ -41,6 +41,7 @@ TRANSACTION_LOG_KEY = "bybit:transaction_log"
 OPEN_POSITIONS_KEY = "bot:open_positions"
 POSITION_ENTRY_TIMES_KEY = "bot:position_entry_times"
 POSITION_TP_PRICES_KEY = "bot:position_tp_prices"
+POSITION_REMAINING_SIZES_KEY = "bot:position_remaining_sizes"
 PENDING_SL_UPDATES_KEY = "bot:pending_sl_updates"
 
 
@@ -300,6 +301,87 @@ async def remove_position_tp_prices(symbol: str):
         log_print(f"[CACHE][ERROR] Failed to remove TP prices for {symbol}: {e}")
 
 
+# ---------------- POSITION REMAINING SIZE (Redis-only, no API) ---------------- #
+async def _get_position_remaining_sizes():
+    """Internal: get full remaining-sizes dict from Redis."""
+    if not REDIS_AVAILABLE:
+        return {}
+    try:
+        data = await get_cache(POSITION_REMAINING_SIZES_KEY)
+        return data if data else {}
+    except Exception as e:
+        log_print(f"[CACHE][ERROR] Failed to get position remaining sizes: {e}")
+        return {}
+
+
+async def set_position_remaining_size(symbol: str, size: float):
+    """Store initial/remaining position size for symbol (Redis only, no API)."""
+    if not REDIS_AVAILABLE:
+        return
+    try:
+        sizes = await _get_position_remaining_sizes()
+        sizes[symbol] = float(size)
+        await set_cache(POSITION_REMAINING_SIZES_KEY, sizes, expire=86400 * 7)
+    except Exception as e:
+        log_print(f"[CACHE][ERROR] Failed to set position remaining size for {symbol}: {e}")
+
+
+async def get_position_remaining_size(symbol: str) -> float | None:
+    """Get remaining position size for symbol from Redis. None if not tracked."""
+    sizes = await _get_position_remaining_sizes()
+    val = sizes.get(symbol)
+    if val is None:
+        return None
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return None
+
+
+async def get_position_remaining_sizes():
+    """Get all position remaining sizes from Redis (for debug)."""
+    return await _get_position_remaining_sizes()
+
+
+async def subtract_position_remaining_size(symbol: str, amount: float) -> bool:
+    """
+    Subtract amount from remaining size in Redis.
+    Returns True if position is now closed (remaining <= 0), False otherwise.
+    No API call.
+    """
+    if not REDIS_AVAILABLE:
+        return False
+    try:
+        sizes = await _get_position_remaining_sizes()
+        current = sizes.get(symbol)
+        if current is None:
+            return False
+        new_val = float(current) - float(amount)
+        if new_val <= 0:
+            sizes.pop(symbol, None)
+            await set_cache(POSITION_REMAINING_SIZES_KEY, sizes, expire=86400 * 7)
+            return True
+        sizes[symbol] = new_val
+        await set_cache(POSITION_REMAINING_SIZES_KEY, sizes, expire=86400 * 7)
+        return False
+    except Exception as e:
+        log_print(f"[CACHE][ERROR] Failed to subtract position remaining size for {symbol}: {e}")
+        return False
+
+
+async def remove_position_remaining_size(symbol: str):
+    """Remove remaining size for symbol from Redis (e.g. on SL or manual close)."""
+    if not REDIS_AVAILABLE:
+        return
+    try:
+        sizes = await _get_position_remaining_sizes()
+        if symbol in sizes:
+            sizes.pop(symbol, None)
+            await set_cache(POSITION_REMAINING_SIZES_KEY, sizes, expire=86400 * 7)
+    except Exception as e:
+        log_print(f"[CACHE][ERROR] Failed to remove position remaining size for {symbol}: {e}")
+
+
 async def set_pending_sl_update(symbol: str, update_info: dict):
     """Set pending SL update info for a symbol in Redis."""
     if not REDIS_AVAILABLE:
@@ -368,3 +450,35 @@ async def remove_pending_sl_update(symbol: str):
         log_print(
             f"[CACHE][ERROR] Failed to remove pending SL update for {symbol}: {e}"
         )
+
+
+# ---------------- CLEAR ALL BOT REDIS DATA ---------------- #
+BOT_REDIS_KEYS = [
+    OPEN_POSITIONS_KEY,
+    POSITION_ENTRY_TIMES_KEY,
+    POSITION_TP_PRICES_KEY,
+    POSITION_REMAINING_SIZES_KEY,
+    PENDING_SL_UPDATES_KEY,
+    SYMBOL_INFO_KEY,
+    TRANSACTION_LOG_KEY,
+]
+
+
+async def clear_all_redis_bot_data() -> int:
+    """
+    Delete all bot-related Redis keys (open_positions, entry_times, tp_prices,
+    remaining_sizes, pending_sl_updates, symbol_info, transaction_log).
+    Returns number of keys deleted.
+    """
+    if not REDIS_AVAILABLE or redis is None:
+        return 0
+    try:
+        deleted = 0
+        for key in BOT_REDIS_KEYS:
+            n = await redis.delete(key)
+            deleted += n
+        log_print(f"[CACHE] Cleared all bot Redis data ({deleted} keys)")
+        return deleted
+    except Exception as e:
+        log_print(f"[CACHE][ERROR] Failed to clear all Redis data: {e}")
+        return 0

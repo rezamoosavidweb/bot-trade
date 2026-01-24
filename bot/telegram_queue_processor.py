@@ -12,6 +12,7 @@ from cache import (
     is_position_open as is_position_open_redis,
     set_position_entry_time,
     set_position_tp_prices,
+    set_position_remaining_size,
 )
 from bybit_client import (
     calculate_fixed_trade,
@@ -135,6 +136,7 @@ async def handle_telegram_signal(item):
     if len(signal["targets"]) >= 3:
         tp_prices["tp3"] = signal["targets"][2]
     await set_position_tp_prices(symbol, tp_prices)
+    await set_position_remaining_size(symbol, qty)
 
     # Set TP1 and TP2 with distribution 60% and 40%
     # Get qty_step for normalization
