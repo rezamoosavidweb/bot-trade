@@ -10,8 +10,56 @@ import jdatetime
 api_id = 27396957
 api_hash = "53e16a90d89a28a0a67bb95ca3dff324"
 
-source_channel = "CryptoSignalsGolden"  # کانالی که می‌خواهید بررسی شود
+
+source_channel = -1001448000337 #https://bit.ly/m/AiGoldenCrypto
 target_channel = -1003589742902  # MyTestTrade - ID عددی کانال
+
+
+async def resolve_source_chat(client: TelegramClient, chat):
+    """
+    تلاش برای resolve کردن کانال/چت ورودی.
+    پشتیبانی از: username، @username، لینک t.me، و آیدی عددی (int/str).
+    """
+    if chat is None:
+        return None
+
+    # numeric id as string
+    if isinstance(chat, str):
+        stripped = chat.strip()
+        if stripped.lstrip("-").isdigit():
+            chat = int(stripped)
+
+    candidates = []
+    if isinstance(chat, str):
+        s = chat.strip()
+        candidates.append(s)
+        # t.me link -> username part
+        if "t.me/" in s:
+            username = s.split("t.me/", 1)[1].split("/", 1)[0].strip()
+            if username:
+                candidates.append(username)
+                candidates.append(f"@{username.lstrip('@')}")
+        # plain username -> @username
+        if s and not s.startswith("@") and "://" not in s and "/" not in s:
+            candidates.append(f"@{s}")
+    else:
+        candidates.append(chat)
+
+    last_exc = None
+    for cand in candidates:
+        try:
+            return await client.get_entity(cand)
+        except Exception as e:
+            last_exc = e
+            continue
+
+    print(
+        "❌ خطا: کانال/چت مبدا قابل resolve نیست.\n"
+        f"   مقدار source_channel: {source_channel!r}\n"
+        "   راه‌حل: username صحیح (مثلاً @SomeChannel) یا آیدی عددی کانال (-100...) را وارد کنید.\n"
+        f"   جزئیات خطا: {last_exc}"
+    )
+    return None
 
 
 async def safe_send_message(client, channel, text):
@@ -261,9 +309,9 @@ BATCH_SIZE = 30  # تعداد پیام‌ها برای محاسبه میانگی
 
 
 # --- پردازش پیام‌های گذشته ---
-async def process_old_messages():
+async def process_old_messages(source_entity):
     global message_results
-    async for message in client.iter_messages(source_channel, limit=None):
+    async for message in client.iter_messages(source_entity, limit=None):
         text = message.message
 
         # ⛔ اگر پیام متن نداشت، رد شو
@@ -311,8 +359,6 @@ async def process_old_messages():
                 continue
 
 
-# --- پردازش پیام‌های جدید ---
-@client.on(events.NewMessage(chats=source_channel))
 async def new_message_handler(event):
     global message_results
     text = event.message.message
@@ -362,8 +408,15 @@ async def new_message_handler(event):
 
 # --- اجرای کلاینت ---
 async def main():
+    await client.start()
+    source_entity = await resolve_source_chat(client, source_channel)
+    if source_entity is None:
+        return
+
+    client.add_event_handler(new_message_handler, events.NewMessage(chats=source_entity))
+
     print("Processing old messages...")
-    await process_old_messages()
+    await process_old_messages(source_entity)
     print("Listening for new messages...")
     await client.run_until_disconnected()
 

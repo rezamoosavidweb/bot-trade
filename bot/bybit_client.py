@@ -11,6 +11,7 @@ from cache import get_symbol_info as get_cached_symbol_info
 from api import get_wallet_balance, get_positions
 import asyncio
 from logger import log_print
+from decimal import Decimal, ROUND_DOWN, InvalidOperation
 
 
 # ---------------- SYMBOL INFO ---------------- #
@@ -51,9 +52,20 @@ async def is_position_open(symbol: str) -> bool:
 # ---------------- TRADE CALCULATION ---------------- #
 def normalize_qty(qty, step):
     """Adjust quantity based on step size."""
-    precision = len(str(step).split(".")[1]) if "." in str(step) else 0
-    qty = int(qty / step) * step
-    return round(qty, precision)
+    try:
+        step_dec = Decimal(str(step))
+        qty_dec = Decimal(str(qty))
+        if step_dec <= 0:
+            return float(qty)
+        normalized = (qty_dec / step_dec).to_integral_value(rounding=ROUND_DOWN) * step_dec
+        # Quantize to step's decimal places (e.g. 0.1 -> 1 decimal)
+        normalized = normalized.quantize(step_dec, rounding=ROUND_DOWN)
+        return float(normalized)
+    except (InvalidOperation, ValueError, TypeError):
+        # Fallback to previous float-based behavior
+        precision = len(str(step).split(".")[1]) if "." in str(step) else 0
+        qty = int(float(qty) / float(step)) * float(step)
+        return round(qty, precision)
 
 
 async def calculate_fixed_trade(symbol, entry, sl):

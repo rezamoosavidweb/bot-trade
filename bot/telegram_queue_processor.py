@@ -144,7 +144,9 @@ async def handle_telegram_signal(item):
     qty_step = symbol_info.get("qty_step", 1)
 
     # Calculate TP1 (40%) and TP2 (60%)
-    tp1_qty = int(qty)
+    # Close the full size on TP1 (do NOT truncate decimals)
+    # qty is already normalized in calculate_fixed_trade(), but we re-normalize for safety.
+    tp1_qty = qty
     # tp1_qty = int(qty * 0.40)
     # tp2_qty = qty - tp1_qty  # Remaining 40%
 
