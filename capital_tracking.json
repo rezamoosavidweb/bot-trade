@@ -1119,6 +1119,27 @@
       "opened_at": "2026-01-23T18:50:10.872685+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "CHZUSDT",
+      "capital_used": 299.98,
+      "opened_at": "2026-01-23T21:20:13.950377+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "SOLUSDT",
+      "capital_used": 299.58,
+      "opened_at": "2026-01-24T12:33:07.268377+03:30",
+      "closed_at": null,
+      "duration_seconds": null
+    },
+    {
+      "symbol": "ASTERUSDT",
+      "capital_used": 299.97,
+      "opened_at": "2026-01-24T13:48:07.944406+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
