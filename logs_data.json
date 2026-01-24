@@ -1,1134 +1,6 @@
 {
   "logs": [
     {
-      "timestamp": "2026-01-08T07:12:47.344772+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:12:47][HBARUSDT] Order #2/2: orderId=0bb6391a-7ea5-4288-8d71-6ef096bf3985, orderStatus=Deactivated, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:12:47.376810+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:12:47][HBARUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:12:56.173293+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:12:56",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:12:58.890527+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:12:58",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.348873+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.384816+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 136 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.437360+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.468363+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.498922+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.533555+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.569485+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 137 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.626123+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.656933+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.691096+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] Order #1/1: orderId=8cec99ef-bca5-4247-adb2-7cd5ec1cb3e1, orderStatus=Triggered, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.726114+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 3 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.773000+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] ⏭️ Skipped: orderStatus=Triggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.804328+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.925611+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08] Processing 3 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.954517+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] Order #1/3: orderId=8cec99ef-bca5-4247-adb2-7cd5ec1cb3e1, orderStatus=Filled, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:08.985333+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] 🛑 StopLoss Filled - Position closed, removing from tracking",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:09.037357+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] Order #2/3: orderId=34f9441f-2ddc-4a53-8e54-4b8cb8aae839, orderStatus=Deactivated, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:09.066813+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:09.098202+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] Order #3/3: orderId=b8100488-40d9-4c2e-98c1-82701cff7987, orderStatus=Deactivated, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:14:09.128687+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:14:08][DOTUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:15:01.450230+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:15:01",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:15:02.381420+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:15:02",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:15:03.317214+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:15:03",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:15:06.324945+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 07:15:06",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:07.405835+03:30",
-      "level": "INFO",
-      "message": "[INFO] Signal detected / 2026-01-08 | 07:40:07",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:07.690887+03:30",
-      "level": "WARN",
-      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:07.730296+03:30",
-      "level": "INFO",
-      "message": "[INFO] Detected signal / ADAUSDT / qty:3614.0 / entry:0.3966 / tp1:0.39245 / tp2:0.3883 / tp3:0.38415 / sl:0.4049 / leverage:4.78",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.109684+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.155594+03:30",
-      "level": "INFO",
-      "message": "[CAPITAL_TRACKER] Position opened: ADAUSDT, Capital: $299.86",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.197538+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 138 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.266819+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.303821+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.392080+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.428026+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 139 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.482403+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.514102+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.560137+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.595973+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 140 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.637039+03:30",
-      "level": "INFO",
-      "message": "[SUCCESS] Order placed and SL/TP configured for ADAUSDT",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.684962+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.722472+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.760926+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.864820+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08] Processing 2 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.899391+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08][ADAUSDT] Order #1/2: orderId=3aa95e3b-1dea-4298-ba36-899254776a26, orderStatus=Filled, stopOrderType=",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.929802+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08][ADAUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.960288+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08][ADAUSDT] Order #2/2: orderId=46c91af2-2a3c-431f-ab87-79295dafced1, orderStatus=Untriggered, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:08.992500+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:08][ADAUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.023914+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.160335+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.194662+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09][ADAUSDT] Order #1/1: orderId=113803ba-bdb8-47d7-a03e-108c0e26d2bc, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.228403+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09][ADAUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.266569+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.388144+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.422376+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09][ADAUSDT] Order #1/1: orderId=81401389-b551-40ba-96c6-1cdd288a9084, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T07:40:09.461115+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 07:40:09][ADAUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:02:59.307300+03:30",
-      "level": "INFO",
-      "message": "[CACHE] 642 symbols cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:02:59.531328+03:30",
-      "level": "INFO",
-      "message": "[CACHE] Transaction log cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:06.308835+03:30",
-      "level": "INFO",
-      "message": "[INFO] Signal detected / 2026-01-08 | 08:18:06",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:06.603782+03:30",
-      "level": "WARN",
-      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:06.640678+03:30",
-      "level": "INFO",
-      "message": "[INFO] Detected signal / QNTUSDT / qty:46.87 / entry:76.28 / tp1:76.6 / tp2:76.92 / tp3:77.24 / sl:75.64 / leverage:11.92",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.016586+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.064583+03:30",
-      "level": "INFO",
-      "message": "[CAPITAL_TRACKER] Position opened: QNTUSDT, Capital: $299.94",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.099728+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 141 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.177464+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.210785+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.282315+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.325290+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 142 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.380135+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.414447+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.463377+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.497757+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 143 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.529474+03:30",
-      "level": "INFO",
-      "message": "[SUCCESS] Order placed and SL/TP configured for QNTUSDT",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.586734+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.623316+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.661786+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.746217+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07] Processing 2 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.778089+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07][QNTUSDT] Order #1/2: orderId=53e34e21-19b7-4030-83a1-24261231f760, orderStatus=Filled, stopOrderType=",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.812419+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07][QNTUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.862950+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07][QNTUSDT] Order #2/2: orderId=9c4606e6-5667-44ac-ab4a-cbe14ea3e462, orderStatus=Untriggered, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.897581+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07][QNTUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:07.929311+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:07] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.049482+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.082318+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08][QNTUSDT] Order #1/1: orderId=8cac6bbf-1c1c-4008-97fb-b450a3cdde34, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.113835+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08][QNTUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.148128+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.259370+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.291804+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08][QNTUSDT] Order #1/1: orderId=e4747375-a15d-4ec5-beaa-7cde86b4ca4d, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:18:08.324648+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:18:08][QNTUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.552178+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.589130+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 144 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.643215+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.723528+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.758444+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.803349+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.858386+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 145 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.926735+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.963252+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:26.996913+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26][GRTUSDT] Order #1/1: orderId=1bd3069e-1875-4ceb-9fea-36746dde2626, orderStatus=Triggered, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.043122+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.077952+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26][GRTUSDT] ✅ TP order detected: status=Triggered, type=PartialTakeProfit, triggerPrice=0.0413",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.127133+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] identify_tp_sl_level called: stop_order_type=PartialTakeProfit, trigger_price=0.0413",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.178453+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] TP info found: {'entry': 0.0407, 'tp1': 0.041, 'tp2': 0.0413, 'sl': 0.0401, 'side': 'Buy', 'tp3': 0.0416}, tolerance=0.001",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.212037+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] Comparing trigger_price=0.0413 with tp1=0.041, tp2=0.0413, tp3=0.0416",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.246097+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] ✅ MATCHED TP2! trigger=0.0413, tp2=0.0413, diff=0.0000%",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.280939+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26][GRTUSDT] TP level identified: TP2",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.313180+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:26][GRTUSDT] ⚠️ Not TP1 (got TP2), skipping SL update",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.346613+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.505916+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27] Processing 2 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.542372+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] Order #1/2: orderId=1bd3069e-1875-4ceb-9fea-36746dde2626, orderStatus=Filled, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.577185+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] ✅ TP order detected: status=Filled, type=PartialTakeProfit, triggerPrice=0.0413",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.614139+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] identify_tp_sl_level called: stop_order_type=PartialTakeProfit, trigger_price=0.0413",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.651148+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] TP info found: {'entry': 0.0407, 'tp1': 0.041, 'tp2': 0.0413, 'sl': 0.0401, 'side': 'Buy', 'tp3': 0.0416}, tolerance=0.001",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.690611+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] Comparing trigger_price=0.0413 with tp1=0.041, tp2=0.0413, tp3=0.0416",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.734731+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] ✅ MATCHED TP2! trigger=0.0413, tp2=0.0413, diff=0.0000%",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.770979+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] TP level identified: TP2",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.806546+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] ⚠️ Not TP1 (got TP2), skipping SL update",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.841717+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] Order #2/2: orderId=6f7947ec-af53-44aa-a508-6a880c7fecb8, orderStatus=Deactivated, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:27.880487+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 08:51:27][GRTUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T08:51:28.002810+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 08:51:27",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:03:00.439793+03:30",
-      "level": "INFO",
-      "message": "[CACHE] 642 symbols cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:03:00.667497+03:30",
-      "level": "INFO",
-      "message": "[CACHE] Transaction log cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:07.533325+03:30",
-      "level": "INFO",
-      "message": "[INFO] Signal detected / 2026-01-08 | 09:05:07",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:07.750992+03:30",
-      "level": "WARN",
-      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:07.791589+03:30",
-      "level": "INFO",
-      "message": "[CACHE][MISS] FETUSDT, fetching from API",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:07.996290+03:30",
-      "level": "INFO",
-      "message": "[INFO] Detected signal / FETUSDT / qty:3999.0 / entry:0.2781 / tp1:0.28185 / tp2:0.2856 / tp3:0.28935 / sl:0.2706 / leverage:3.71",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:08.942589+03:30",
-      "level": "INFO",
-      "message": "[CACHE] 642 symbols cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:05:09.014221+03:30",
-      "level": "ERROR",
-      "message": "[FATAL] Failed to send error to Telegram:",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:36:27.486519+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 09:36:27",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.400750+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.455947+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 146 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.521607+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.558397+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.599268+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.653296+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:19] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.689503+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 147 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.749844+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.786406+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:19] Processing 1 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.820221+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 3 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.851771+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:19][QNTUSDT] Order #1/1: orderId=9c4606e6-5667-44ac-ab4a-cbe14ea3e462, orderStatus=Triggered, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.884551+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:19][QNTUSDT] ⏭️ Skipped: orderStatus=Triggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:19.922033+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:19] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.075536+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20] Processing 3 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.108796+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] Order #1/3: orderId=9c4606e6-5667-44ac-ab4a-cbe14ea3e462, orderStatus=Filled, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.143126+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] 🛑 StopLoss Filled - Position closed, removing from tracking",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.190262+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] Order #2/3: orderId=8cac6bbf-1c1c-4008-97fb-b450a3cdde34, orderStatus=Deactivated, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.231028+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.269196+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] Order #3/3: orderId=e4747375-a15d-4ec5-beaa-7cde86b4ca4d, orderStatus=Deactivated, stopOrderType=PartialTakeProfit",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:47:20.308634+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 09:47:20][QNTUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:48:00.401329+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 09:48:00",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:48:01.094034+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 09:48:01",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T09:48:01.420919+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 09:48:01",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:01:42.493619+03:30",
-      "level": "INFO",
-      "message": "================================\n",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:01:42.542072+03:30",
-      "level": "INFO",
-      "message": "[CACHE] Redis connected",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:01:43.887099+03:30",
-      "level": "INFO",
-      "message": "[CACHE] 642 symbols cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:01:44.122586+03:30",
-      "level": "INFO",
-      "message": "[CACHE] Transaction log cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:01:44.275234+03:30",
-      "level": "INFO",
-      "message": "[INFO] Telegram client started",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.091600+03:30",
-      "level": "INFO",
-      "message": "[SUCCESS] Closed position BTCUSDT | Sell | size: 0.045",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.151114+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.202244+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 148 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.267296+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.302758+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.363105+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.401001+03:30",
-      "level": "INFO",
-      "message": "[CACHE] Transaction log cached",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.488999+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44] Processing 2 order(s) for TP1 check",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.524042+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44][BTCUSDT] Order #1/2: orderId=9ca8f3d5-bbc8-43f1-b9f5-ae089ebf5177, orderStatus=Filled, stopOrderType=",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.558914+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44][BTCUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.594400+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44][BTCUSDT] Order #2/2: orderId=cd06cfce-3824-435e-984c-4e01374a31fe, orderStatus=Deactivated, stopOrderType=StopLoss",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:04:44.631423+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:04:44][BTCUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:19:57.804604+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 10:19:57",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:20:12.846891+03:30",
-      "level": "INFO",
-      "message": "[INFO] Signal detected / 2026-01-08 | 10:20:12",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:20:13.142373+03:30",
-      "level": "WARN",
-      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:20:13.178383+03:30",
-      "level": "INFO",
-      "message": "[INFO] Already in position: GRTUSDT",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:20:15.486057+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 10:20:15",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:21:34.197046+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 10:21:34",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:21:35.070519+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 10:21:35",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:24:29.748474+03:30",
-      "level": "INFO",
-      "message": "[INFO] Non-signal message ignored / 2026-01-08 | 10:24:29",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.089999+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.135920+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 149 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.197224+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.235927+03:30",
-      "level": "INFO",
-      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.276764+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.315103+03:30",
-      "level": "INFO",
-      "message": "[TP1_TRACK][2026-01-08 10:27:18] ========== handle_ws_message called: msg_type=ws_message ==========",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.365045+03:30",
-      "level": "DEBUG",
-      "message": "[WS][DEBUG] Loaded existing file with 150 messages",
-      "context": ""
-    },
-    {
-      "timestamp": "2026-01-08T10:27:18.436421+03:30",
-      "level": "INFO",
-      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
-      "context": ""
-    },
-    {
       "timestamp": "2026-01-08T10:27:18.478514+03:30",
       "level": "INFO",
       "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
@@ -59998,6 +58870,1134 @@
       "timestamp": "2026-01-24T14:35:08.734541+03:30",
       "level": "INFO",
       "message": "[INFO] Telegram client started",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T14:51:29.122646+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 14:51:29",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:17.898648+03:30",
+      "level": "INFO",
+      "message": "[SUCCESS] Closed position SOLUSDT | Sell | size: 0.3",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.057329+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.249310+03:30",
+      "level": "WARN",
+      "message": "[WS][WARN] Error reading existing file, starting fresh: Expecting value: line 2 column 1 (char 1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.379816+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.510445+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.633958+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:18.760457+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:19.016064+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:19.158116+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18][SOLUSDT] Order #1/2: orderId=3632dfff-b89c-493e-8255-c4e141b1255e, orderStatus=Filled, stopOrderType=",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:19.303344+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18][SOLUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:19.427752+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18][SOLUSDT] Order #2/2: orderId=65404504-3b5f-4701-9599-7f027b3d8d27, orderStatus=Deactivated, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:19.552511+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 15:10:18][SOLUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:47.460181+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 15:10:47] ========== Fetching Redis data ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:47.639919+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 15:10:47] Redis data fetched successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:47.855064+03:30",
+      "level": "INFO",
+      "message": "[INFO] Redis debug data sent successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:10:55.830878+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Cleared all bot Redis data (6 keys)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:11:00.536903+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 15:11:00] ========== Fetching Redis data ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:11:00.664886+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 15:11:00] Redis data fetched successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:11:00.859689+03:30",
+      "level": "INFO",
+      "message": "[INFO] Redis debug data sent successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:35:11.234534+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 654 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:35:12.041980+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T15:50:47.330652+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 15:50:47",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:06.328250+03:30",
+      "level": "INFO",
+      "message": "[INFO] Signal detected / 2026-01-24 | 16:03:06",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:06.756300+03:30",
+      "level": "WARN",
+      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:06.904002+03:30",
+      "level": "INFO",
+      "message": "[INFO] Detected signal / POLUSDT / qty:24584.0 / entry:0.12752 / tp1:0.12813 / tp2:0.12874 / tp3:0.12935 / sl:0.1263 / leverage:10.45",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:07.723465+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:07.857969+03:30",
+      "level": "INFO",
+      "message": "[CAPITAL_TRACKER] Position opened: POLUSDT, Capital: $300.00",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:07.984929+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 1 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.126698+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.324235+03:30",
+      "level": "INFO",
+      "message": "[SUCCESS] Order placed and SL/TP configured for POLUSDT",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.477366+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.602693+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.725943+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:08.877244+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 2 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.012539+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.142315+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.268796+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08][POLUSDT] Order #1/2: orderId=d5c0a0af-81f1-46e8-a9b4-742dec7a7d81, orderStatus=Filled, stopOrderType=",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.394399+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.520836+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08][POLUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.649481+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08][POLUSDT] Order #2/2: orderId=ba780be2-061a-4ea1-85d2-bd7b4c336f7a, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.777760+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:08][POLUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:09.946926+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:09] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:10.158976+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:10] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:10.283997+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:10][POLUSDT] Order #1/1: orderId=0c237860-87cb-4427-af0a-dec91432d1aa, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:03:10.407770+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:03:10][POLUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:15:14.899574+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 16:15:14] ========== Fetching Redis data ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:15:15.037130+03:30",
+      "level": "INFO",
+      "message": "[DEBUG_REDIS][2026-01-24 16:15:14] Redis data fetched successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:15:15.261834+03:30",
+      "level": "INFO",
+      "message": "[INFO] Redis debug data sent successfully",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:14.711800+03:30",
+      "level": "INFO",
+      "message": "[INFO] Signal detected / 2026-01-24 | 16:20:14",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:15.131581+03:30",
+      "level": "WARN",
+      "message": "[WARN] position check failed: list indices must be integers or slices, not str",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:15.263392+03:30",
+      "level": "INFO",
+      "message": "[INFO] Detected signal / NEARUSDT / qty:2727.2 / entry:1.51 / tp1:1.5045 / tp2:1.499 / tp3:1.4935 / sl:1.521 / leverage:13.73",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:15.739202+03:30",
+      "level": "INFO",
+      "message": "[CAPITAL_TRACKER] Position opened: NEARUSDT, Capital: $299.93",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:15.867225+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:15.998008+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 3 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.133301+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.279290+03:30",
+      "level": "INFO",
+      "message": "[SUCCESS] Order placed and SL/TP configured for NEARUSDT",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.437042+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.598354+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.726959+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.852789+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 4 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:16.983027+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.109043+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.237017+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16][NEARUSDT] Order #1/2: orderId=e80f77da-a67b-4ea3-9c5e-52d6ada53c9f, orderStatus=Filled, stopOrderType=",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.370579+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.504931+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16][NEARUSDT] ⏭️ Skipped: orderStatus=Filled, stopOrderType= (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.638885+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16][NEARUSDT] Order #2/2: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.763903+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:16][NEARUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:17.889010+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:17] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:18.096450+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:18] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:18.228005+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:18][NEARUSDT] Order #1/1: orderId=702fb60c-e98c-4720-8710-16ef4cc14ae4, orderStatus=Untriggered, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:20:18.354085+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:20:18][NEARUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:35:13.517949+03:30",
+      "level": "INFO",
+      "message": "[CACHE] 654 symbols cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:35:13.881558+03:30",
+      "level": "INFO",
+      "message": "[CACHE] Transaction log cached",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:39.771227+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:39.957178+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 5 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.091568+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.216725+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.343154+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.480208+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.605238+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 6 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.736398+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:40.875231+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.003060+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40][NEARUSDT] Order #1/1: orderId=702fb60c-e98c-4720-8710-16ef4cc14ae4, orderStatus=Triggered, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.124260+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.248403+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40][NEARUSDT] ✅ TP order detected: status=Triggered, type=PartialTakeProfit, triggerPrice=1.5045",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.376043+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:41][NEARUSDT] identify_tp_sl_level called: stop_order_type=PartialTakeProfit, trigger_price=1.5045",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.504040+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:41][NEARUSDT] TP info found: {'entry': 1.51, 'tp1': 1.5045, 'tp2': 1.499, 'sl': 1.521, 'side': 'Sell', 'tp3': 1.4935}, tolerance=0.001",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.630978+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:41][NEARUSDT] Comparing trigger_price=1.5045 with tp1=1.5045, tp2=1.499, tp3=1.4935",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.757271+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:41][NEARUSDT] ✅ MATCHED TP1! trigger=1.5045, tp1=1.5045, diff=0.0000%",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:41.881447+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40][NEARUSDT] TP level identified: TP1",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.004229+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:40][NEARUSDT] 🎯 TP1 CONFIRMED! Calling set_sl_after_tp1...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.128972+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] 🚀 set_sl_after_tp1 called with tp_data: orderId=702fb60c-e98c-4720-8710-16ef4cc14ae4, orderStatus=Triggered, closeOnTrigger=True, reduceOnly=True",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.251524+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] Entry time: 2026-01-24 16:20:15, Time elapsed: 24.44 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.674592+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] Position found: side=Sell, size=0.2",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.821421+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] TP info: entry=1.51, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:42.947889+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] ⚠️ Calculated SL was above TP1 (1.504500), adjusting to 1.503748 (0.05% below TP1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.071555+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] Calculated new SL: 1.503748 (entry=1.510000, tp1=1.504500, side=Sell)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.194005+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:42][NEARUSDT] ⏰ Only 24.44 minutes elapsed (need 45 min), scheduling SL update in 20.56 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.320057+03:30",
+      "level": "INFO",
+      "message": "[INFO] Created async task for SL update: NEARUSDT, task_id=128126956845376, delay=20.6 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.445071+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:43][NEARUSDT] ⏰ schedule_sl_update_after_delay started: delay=20.56 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.569951+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:43][NEARUSDT] Waiting 1234 seconds (20.56 minutes) before checking SL update",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:43.788805+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:43] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.035261+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.162823+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] Order #1/2: orderId=702fb60c-e98c-4720-8710-16ef4cc14ae4, orderStatus=Filled, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.331892+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] ✅ TP order detected: status=Filled, type=PartialTakeProfit, triggerPrice=1.5045",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.456529+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] identify_tp_sl_level called: stop_order_type=PartialTakeProfit, trigger_price=1.5045",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.581558+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] TP info found: {'entry': 1.51, 'tp1': 1.5045, 'tp2': 1.499, 'sl': 1.521, 'side': 'Sell', 'tp3': 1.4935}, tolerance=0.001",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.710735+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] Comparing trigger_price=1.5045 with tp1=1.5045, tp2=1.499, tp3=1.4935",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.837843+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] ✅ MATCHED TP1! trigger=1.5045, tp1=1.5045, diff=0.0000%",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:44.964307+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] TP level identified: TP1",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.090021+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] 🎯 TP1 CONFIRMED! Calling set_sl_after_tp1...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.217174+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] 🚀 set_sl_after_tp1 called with tp_data: orderId=702fb60c-e98c-4720-8710-16ef4cc14ae4, orderStatus=Filled, closeOnTrigger=True, reduceOnly=True",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.379430+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] Entry time: 2026-01-24 16:20:15, Time elapsed: 24.49 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.678565+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] Position found: side=Sell, size=0.2",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.810706+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] TP info: entry=1.51, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:45.935074+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] ⚠️ Calculated SL was above TP1 (1.504500), adjusting to 1.503748 (0.05% below TP1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.061166+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] Calculated new SL: 1.503748 (entry=1.510000, tp1=1.504500, side=Sell)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.189313+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:45][NEARUSDT] ⏰ Only 24.49 minutes elapsed (need 45 min), scheduling SL update in 20.51 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.315618+03:30",
+      "level": "INFO",
+      "message": "[INFO] Created async task for SL update: NEARUSDT, task_id=128126956844608, delay=20.5 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.456467+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:46][NEARUSDT] ⏰ schedule_sl_update_after_delay started: delay=20.51 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.593956+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:46][NEARUSDT] Waiting 1230 seconds (20.51 minutes) before checking SL update",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:46.908590+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] Order #2/2: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:47.036371+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 16:44:44][NEARUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T16:44:48.354567+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 16:44:48",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:17.223915+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ Delay completed, checking SL update",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:17.350005+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ Delay completed, checking SL update",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:17.478826+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Pending SL update found: {'entry_time': datetime.datetime(2026, 1, 24, 16, 20, 15, 839486, tzinfo=zoneinfo.ZoneInfo(key='Asia/Tehran')), 'new_sl_price': 1.50374775, 'entry_price': 1.51, 'side': 'Sell'}",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:17.878901+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ Position still open: size=0.2, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.009697+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Pending SL update found: {'entry_time': datetime.datetime(2026, 1, 24, 16, 20, 15, 839486, tzinfo=zoneinfo.ZoneInfo(key='Asia/Tehran')), 'new_sl_price': 1.50374775, 'entry_price': 1.51, 'side': 'Sell'}",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.325760+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ Position still open: size=0.2, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.450114+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Update info: new_sl=1.503748, entry=1.510000, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.573328+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Update info: new_sl=1.503748, entry=1.510000, side=Sell",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.699140+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Entry time: 2026-01-24 16:20:15, Time elapsed: 45.05 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.822718+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ 45 minutes passed, updating SL now",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:18.953463+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:18][NEARUSDT] 🔄 update_sl_price called: new_sl=1.503748, entry=1.510000, side=Sell, size=0.2, elapsed=45.05 min",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:19.084878+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:18][NEARUSDT] Waiting 1 second for SL order to be available...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:19.211566+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] Entry time: 2026-01-24 16:20:15, Time elapsed: 45.06 minutes",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:19.349046+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ 45 minutes passed, updating SL now",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:19.484221+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:19][NEARUSDT] 🔄 update_sl_price called: new_sl=1.503748, entry=1.510000, side=Sell, size=0.2, elapsed=45.06 min",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:19.615369+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:19][NEARUSDT] Waiting 1 second for SL order to be available...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:20.212374+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:18][NEARUSDT] Getting SL order ID (retry_count=3)...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:20.518122+03:30",
+      "level": "INFO",
+      "message": "[INFO] Found SL order ID for NEARUSDT: e5e18916-c65a-4b62-a292-31f535ea0b6a (attempt 1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:20.647782+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:18][NEARUSDT] ✅ SL order found: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, attempting to amend...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:20.952653+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:18][NEARUSDT] ✅ SL updated via amend: new_sl=1.503748, entry=1.510000, side=Sell, size=0.2, orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.077997+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.209144+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:19][NEARUSDT] Getting SL order ID (retry_count=3)...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.359541+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 7 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.520664+03:30",
+      "level": "INFO",
+      "message": "[INFO] Found SL order ID for NEARUSDT: e5e18916-c65a-4b62-a292-31f535ea0b6a (attempt 1)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.668761+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.796550+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:19][NEARUSDT] ✅ SL order found: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, attempting to amend...",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:21.919618+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.095824+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:19][NEARUSDT] ✅ SL updated via amend: new_sl=1.503748, entry=1.510000, side=Sell, size=0.2, orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.219942+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.357809+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:22] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.517490+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 8 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.655474+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ SL update completed and pending update removed",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.786792+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:22.932893+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:22] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.062264+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.192228+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:22][NEARUSDT] Order #1/1: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.315306+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:22][NEARUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.470037+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:17][NEARUSDT] ✅ SL update completed and pending update removed",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.594161+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:23] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.817510+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:23] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:23.987639+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:23][NEARUSDT] Order #1/1: orderId=e5e18916-c65a-4b62-a292-31f535ea0b6a, orderStatus=Untriggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:05:24.113890+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:05:23][NEARUSDT] ⏭️ Skipped: orderStatus=Untriggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:30.973338+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.105410+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 9 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.232355+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.357707+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 1 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.483805+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 17:30:31",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.612308+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Attempting to save WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.739625+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:31] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:31.872193+03:30",
+      "level": "DEBUG",
+      "message": "[WS][DEBUG] Loaded existing file with 10 messages",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.001709+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 17:30:31",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.132054+03:30",
+      "level": "INFO",
+      "message": "[WS][SUCCESS] Saved WS message to /home/ubuntu/github/bot-trade/ws_data.json",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.260355+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32] Processing 1 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.386985+03:30",
+      "level": "INFO",
+      "message": "[WS][INFO] Processing 2 order(s) in WebSocket message",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.515707+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] Order #1/1: orderId=ba780be2-061a-4ea1-85d2-bd7b4c336f7a, orderStatus=Triggered, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.650006+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] ⏭️ Skipped: orderStatus=Triggered, stopOrderType=StopLoss (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.773106+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32] ========== handle_ws_message called: msg_type=ws_message ==========",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:32.989011+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32] Processing 2 order(s) for TP1 check",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:33.113838+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] Order #1/2: orderId=ba780be2-061a-4ea1-85d2-bd7b4c336f7a, orderStatus=Filled, stopOrderType=StopLoss",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:33.237940+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] 🛑 StopLoss Filled - Position closed, removing from tracking",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:33.448552+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] Order #2/2: orderId=0c237860-87cb-4427-af0a-dec91432d1aa, orderStatus=Deactivated, stopOrderType=PartialTakeProfit",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:33.579572+03:30",
+      "level": "INFO",
+      "message": "[TP1_TRACK][2026-01-24 17:30:32][POLUSDT] ⏭️ Skipped: orderStatus=Deactivated, stopOrderType=PartialTakeProfit (not a filled/triggered TP order or closing SL order)",
+      "context": ""
+    },
+    {
+      "timestamp": "2026-01-24T17:30:37.002722+03:30",
+      "level": "INFO",
+      "message": "[INFO] Non-signal message ignored / 2026-01-24 | 17:30:36",
       "context": ""
     }
   ]
