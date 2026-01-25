@@ -1140,6 +1140,20 @@
       "opened_at": "2026-01-24T13:48:07.944406+03:30",
       "closed_at": null,
       "duration_seconds": null
+    },
+    {
+      "symbol": "POLUSDT",
+      "capital_used": 300.0,
+      "opened_at": "2026-01-24T16:03:07.689358+03:30",
+      "closed_at": "2026-01-24T17:30:33.338093+03:30",
+      "duration_seconds": 5245.648735
+    },
+    {
+      "symbol": "NEARUSDT",
+      "capital_used": 299.93,
+      "opened_at": "2026-01-24T16:20:15.707131+03:30",
+      "closed_at": null,
+      "duration_seconds": null
     }
   ],
   "rejected_orders": [],
