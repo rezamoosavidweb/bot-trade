@@ -3,6 +3,7 @@ WebSocket Message Formatter
 Handles formatting and processing of Bybit WebSocket order messages.
 """
 
+import asyncio
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from config import (
@@ -33,6 +34,7 @@ from cache import (
     get_pending_sl_updates,
     get_position_entry_times,
 )
+from bybit_client import get_symbol_info
 
 
 # ---------------- ENUMS ---------------- #
@@ -389,6 +391,211 @@ def format_fee_detail(cum_fee_detail: dict) -> str:
     return ", ".join(fees) if fees else "—"
 
 
+# ---------------- PRICE ADJUSTMENT HELPERS ---------------- #
+def normalize_price(price: float, tick_size: float) -> float:
+    """Normalize price to tick size."""
+    if tick_size <= 0:
+        return price
+    try:
+        from decimal import Decimal, ROUND_HALF_UP
+        tick_dec = Decimal(str(tick_size))
+        price_dec = Decimal(str(price))
+        normalized = (price_dec / tick_dec).quantize(Decimal('1'), rounding=ROUND_HALF_UP) * tick_dec
+        return float(normalized)
+    except (ValueError, TypeError):
+        # Fallback to simple rounding
+        precision = len(str(tick_size).split(".")[1]) if "." in str(tick_size) else 0
+        return round(price, precision)
+
+
+async def adjust_sl_tp_for_filled_price(
+    symbol: str,
+    side: str,
+    original_entry: float,
+    filled_price: float,
+    original_sl: float,
+    original_tp1: float,
+    original_tp2: float = None,
+    original_tp3: float = None,
+) -> dict | None:
+    """
+    Adjust SL and TP prices when filled price differs from original entry.
+    Maintains the same profit/loss ratios.
+    
+    Returns dict with adjusted prices or None if no adjustment needed.
+    """
+    # Check if adjustment is needed (filled price differs from entry)
+    price_diff = filled_price - original_entry
+    if abs(price_diff) < 0.0001:  # Very small difference, no adjustment needed
+        return None
+    
+    try:
+        # Get symbol info for tick_size
+        symbol_info = await get_symbol_info(symbol)
+        tick_size = symbol_info.get("tick_size", 0.0001)
+        
+        # Calculate adjusted prices
+        # The difference between entry and filled price is added to all levels
+        new_sl = normalize_price(original_sl + price_diff, tick_size)
+        new_tp1 = normalize_price(original_tp1 + price_diff, tick_size)
+        new_tp2 = None
+        new_tp3 = None
+        
+        if original_tp2 is not None:
+            new_tp2 = normalize_price(original_tp2 + price_diff, tick_size)
+        if original_tp3 is not None:
+            new_tp3 = normalize_price(original_tp3 + price_diff, tick_size)
+        
+        log_print(
+            f"[SL_TP_ADJUST][{symbol}] Entry adjusted: {original_entry} -> {filled_price} "
+            f"(diff: {price_diff:.6f})\n"
+            f"  SL: {original_sl} -> {new_sl}\n"
+            f"  TP1: {original_tp1} -> {new_tp1}\n"
+            f"  TP2: {original_tp2} -> {new_tp2 if new_tp2 else 'N/A'}\n"
+            f"  TP3: {original_tp3} -> {new_tp3 if new_tp3 else 'N/A'}"
+        )
+        
+        return {
+            "sl": new_sl,
+            "tp1": new_tp1,
+            "tp2": new_tp2,
+            "tp3": new_tp3,
+            "original_entry": original_entry,
+            "filled_price": filled_price,
+            "price_diff": price_diff,
+        }
+    except Exception as e:
+        log_print(f"[SL_TP_ADJUST][{symbol}] Error adjusting SL/TP: {e}")
+        return None
+
+
+async def update_sl_tp_after_fill(
+    symbol: str,
+    side: str,
+    filled_price: float,
+    qty: float,
+) -> bool:
+    """
+    Update SL and TP after order is filled if filled price differs from entry.
+    Returns True if update was successful, False otherwise.
+    """
+    try:
+        # Get original TP prices from cache
+        tp_prices = await get_position_tp_prices(symbol)
+        if not tp_prices:
+            log_print(f"[SL_TP_ADJUST][{symbol}] No TP prices found in cache, skipping adjustment")
+            return False
+        
+        original_entry = tp_prices.get("entry")
+        original_sl = tp_prices.get("sl")
+        original_tp1 = tp_prices.get("tp1")
+        original_tp2 = tp_prices.get("tp2")
+        original_tp3 = tp_prices.get("tp3")
+        cached_side = tp_prices.get("side")
+        
+        if not original_entry or not original_sl or not original_tp1:
+            log_print(f"[SL_TP_ADJUST][{symbol}] Missing required price data in cache")
+            return False
+        
+        # Calculate adjusted prices
+        adjusted = await adjust_sl_tp_for_filled_price(
+            symbol=symbol,
+            side=side or cached_side,
+            original_entry=float(original_entry),
+            filled_price=float(filled_price),
+            original_sl=float(original_sl),
+            original_tp1=float(original_tp1),
+            original_tp2=float(original_tp2) if original_tp2 else None,
+            original_tp3=float(original_tp3) if original_tp3 else None,
+        )
+        
+        if not adjusted:
+            log_print(f"[SL_TP_ADJUST][{symbol}] No adjustment needed")
+            return False
+        
+        # Get symbol info for qty normalization
+        symbol_info = await get_symbol_info(symbol)
+        qty_step = symbol_info.get("qty_step", 1)
+        
+        # Normalize qty
+        from bybit_client import normalize_qty
+        normalized_qty = normalize_qty(qty, qty_step)
+        
+        # Update SL
+        try:
+            set_trading_stop(
+                symbol=symbol,
+                tpslMode="Full",
+                positionIdx=0,
+                sl=adjusted["sl"],
+            )
+            log_print(f"[SL_TP_ADJUST][{symbol}] ✅ SL updated to {adjusted['sl']}")
+        except Exception as e:
+            log_print(f"[SL_TP_ADJUST][{symbol}] ❌ Error updating SL: {e}")
+        
+        # Update TP1
+        try:
+            set_trading_stop(
+                symbol=symbol,
+                tpslMode="Partial",
+                positionIdx=0,
+                tp=adjusted["tp1"],
+                tpSize=str(normalized_qty),
+            )
+            log_print(f"[SL_TP_ADJUST][{symbol}] ✅ TP1 updated to {adjusted['tp1']}")
+        except Exception as e:
+            log_print(f"[SL_TP_ADJUST][{symbol}] ❌ Error updating TP1: {e}")
+        
+        # Update TP2 if exists
+        if adjusted["tp2"] is not None:
+            try:
+                # Get remaining size for TP2 (if TP1 takes full size, TP2 might not be needed)
+                # For now, we'll skip TP2 update as it depends on the TP strategy
+                log_print(f"[SL_TP_ADJUST][{symbol}] ℹ️ TP2 adjustment calculated: {adjusted['tp2']} (not updated)")
+            except Exception as e:
+                log_print(f"[SL_TP_ADJUST][{symbol}] ❌ Error updating TP2: {e}")
+        
+        # Update cache with new entry price (filled price)
+        tp_prices["entry"] = adjusted["filled_price"]
+        tp_prices["sl"] = adjusted["sl"]
+        tp_prices["tp1"] = adjusted["tp1"]
+        if adjusted["tp2"] is not None:
+            tp_prices["tp2"] = adjusted["tp2"]
+        if adjusted["tp3"] is not None:
+            tp_prices["tp3"] = adjusted["tp3"]
+        
+        from cache import set_position_tp_prices
+        await set_position_tp_prices(symbol, tp_prices)
+        
+        # Send notification to Telegram
+        adjustment_msg = (
+            f"🔄 **SL/TP Adjusted After Fill**\n\n"
+            f"```\n"
+            f"Symbol: {symbol}\n"
+            f"Side: {side or cached_side}\n"
+            f"Original Entry: {original_entry}\n"
+            f"Filled Price: {filled_price}\n"
+            f"Price Difference: {adjusted['price_diff']:.6f}\n\n"
+            f"Stop Loss: {original_sl} → {adjusted['sl']}\n"
+            f"TP1: {original_tp1} → {adjusted['tp1']}\n"
+        )
+        if adjusted["tp2"] is not None:
+            adjustment_msg += f"TP2: {original_tp2} → {adjusted['tp2']}\n"
+        if adjusted["tp3"] is not None:
+            adjustment_msg += f"TP3: {original_tp3} → {adjusted['tp3']}\n"
+        adjustment_msg += "```"
+        
+        await telClient.send_message(TARGET_CHANNEL, adjustment_msg)
+        
+        return True
+        
+    except Exception as e:
+        log_print(f"[SL_TP_ADJUST][{symbol}] ❌ Error in update_sl_tp_after_fill: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 # ---------------- MESSAGE FORMATTERS ---------------- #
 async def format_new_order_filled(data: dict) -> str:
     """Format message for new order filled."""
@@ -427,6 +634,18 @@ async def format_new_order_filled(data: dict) -> str:
             execution_price=execution_price,
             slippage=slippage,
         )
+        
+        # Adjust SL/TP if filled price differs from entry (only for fully filled orders)
+        if order_status == "Filled" and execution_price > 0 and side != "—":
+            # Run adjustment asynchronously (don't block message formatting)
+            asyncio.create_task(
+                update_sl_tp_after_fill(
+                    symbol=symbol,
+                    side=side,
+                    filled_price=execution_price,
+                    qty=qty,
+                )
+            )
 
     text = (
         f"{emoji} **Order Filled**\n\n"
@@ -1159,6 +1378,25 @@ async def format_full_ws_message(raw_message: dict, orders: list) -> str:
         reject_reason = format_reject_reason(order.get("rejectReason", "EC_NoError"))
         created_time = order.get("createdTime", "")
         updated_time = order.get("updatedTime", "")
+        
+        # Check if this is a filled market order and adjust SL/TP if needed
+        if (
+            order_status == "Filled"
+            and not stop_order_type
+            and symbol != "-"
+            and side != "-"
+            and avg_price > 0
+            and qty > 0
+        ):
+            # Run adjustment asynchronously (don't block message formatting)
+            asyncio.create_task(
+                update_sl_tp_after_fill(
+                    symbol=symbol,
+                    side=side,
+                    filled_price=avg_price,
+                    qty=qty,
+                )
+            )
 
         # Format timestamps
         created_time_str = format_timestamp(created_time) if created_time else "-"
@@ -1277,6 +1515,7 @@ async def handle_ws_message(item: dict):
                 traceback.print_exc()
 
             # Check if any TP1 was triggered and update SL if needed
+            # Also check if orders are filled and adjust SL/TP if needed
             # Use try-except to prevent errors from blocking message sending
             current_time = datetime.now(ZoneInfo("Asia/Tehran")).strftime(
                 "%Y-%m-%d %H:%M:%S"
@@ -1290,7 +1529,30 @@ async def handle_ws_message(item: dict):
                     order_status = order.get("orderStatus", "")
                     stop_order_type = order.get("stopOrderType", "")
                     symbol = order.get("symbol", "")
+                    side = order.get("side", "")
                     order_id = order.get("orderId", "N/A")
+                    
+                    # Check if this is a filled market order (not SL/TP) and adjust SL/TP if needed
+                    # Only adjust for filled market orders (not conditional SL/TP orders)
+                    if (
+                        order_status == "Filled"
+                        and not stop_order_type
+                        and symbol
+                        and side
+                    ):
+                        avg_price = safe_float(order.get("avgPrice", 0))
+                        qty = safe_float(order.get("qty", 0))
+                        
+                        if avg_price > 0 and qty > 0:
+                            # Run adjustment asynchronously (don't block message processing)
+                            asyncio.create_task(
+                                update_sl_tp_after_fill(
+                                    symbol=symbol,
+                                    side=side,
+                                    filled_price=avg_price,
+                                    qty=qty,
+                                )
+                            )
 
                     log_print(
                         f"[TP1_TRACK][{current_time}][{symbol}] Order #{idx+1}/{len(orders)}: "
