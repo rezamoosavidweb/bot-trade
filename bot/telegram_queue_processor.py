@@ -151,7 +151,7 @@ async def handle_telegram_signal(item):
     # tp2_qty = qty - tp1_qty  # Remaining 40%
 
     # Normalize qty values with step size
-    tp1_qty = normalize_qty(tp1_qty, qty_step)
+    # tp1_qty = normalize_qty(tp1_qty, qty_step)
     # tp2_qty = normalize_qty(tp2_qty, qty_step)
 
     # Ensure that tp1_qty + tp2_qty = qty
